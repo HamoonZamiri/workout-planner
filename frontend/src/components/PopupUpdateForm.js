@@ -1,47 +1,33 @@
 import React, {useState} from "react"
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
 
-export default function WorkoutForm(){
+export const PopupUpdateForm = ({ workout }) => {
     const {dispatch} = useWorkoutsContext()
-    const [title, setTitle] = useState("")
-    const [load, setLoad] = useState("")
-    const [reps, setReps] = useState("")
+    const [title, setTitle] = useState(workout.title)
+    const [load, setLoad] = useState(workout.load)
+    const [reps, setReps] = useState(workout.reps)
     const [error, setError] = useState(null)
     const [emptyFields, setEmptyFields] = useState([])
 
-    const handleSubmit = async (event) => {
-        event.preventDefault()
-        const workout = {title, load, reps}
 
-        const res = await fetch('/api/workouts', {
-            method: "POST",
-            body: JSON.stringify(workout),
-            headers: {
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const res = await fetch("/api/workouts/" + workout._id, {
+            method: "PATCH",
+            body: JSON.stringify({title, load, reps}),
+            headers:{
                 "Content-Type": "application/json"
             }
-        })
+        });
+        const json = await res.json();
 
-        const json = await res.json()
-
-        if(!res.ok) {
-            setError(json.error)
-            setEmptyFields(json.emptyFields)
-        }
         if(res.ok){
-            setError(null)
-            setEmptyFields([])
-            setTitle("")
-            setLoad("")
-            setReps("")
-            dispatch({type: "CREATE_WORKOUT", payload: json})
-            console.log("Workout Added")
+            dispatch({type: "UPDATE_WORKOUT", payload: {title, load, reps}});
         }
-
     }
-
     return (
         <form className="workout-form" onSubmit={handleSubmit}>
-            <h3>Add a New Workout</h3>
+            <h3>Update {workout.title}</h3>
             <label>Exercise Name:</label>
             <input
                 type="text"
@@ -50,7 +36,7 @@ export default function WorkoutForm(){
                 className={emptyFields && emptyFields.includes("title") ? "error" : ""}
             />
 
-        <label>Load (kg):</label>
+            <label>Load (kg):</label>
             <input
                 type="text"
                 onChange={(event) => setLoad(event.target.value)}
@@ -58,15 +44,15 @@ export default function WorkoutForm(){
                 className={emptyFields && emptyFields.includes("load") ? "error" : ""}
             />
 
-        <label># of Reps:</label>
+            <label># of Reps:</label>
             <input
                 type="text"
                 onChange={(event) => setReps(event.target.value)}
                 value={reps}
                 className={ emptyFields && emptyFields.includes("reps") ? "error" : "" }
             />
-        <button>Add Workout</button>
-        {error && <div className="error">{error}</div>}
+            <button>Update Workout</button>
+            {error && <div className="error">{error}</div>}
         </form>
     )
 }

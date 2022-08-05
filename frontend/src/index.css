@@ -34,6 +34,12 @@ header a {
   margin: 0 auto;
 }
 
+/* homepage */
+.home {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 100px;
+}
 
 .workout-details {
   background: #fff;
@@ -92,4 +98,15 @@ div.error {
   color: var(--error);
   border-radius: 4px;
   margin: 20px 0;
+}
+
+input.error {
+  border: 1px solid var(--error);
+}
+
+.popup-form {
+  border: 1px black;
+  margin-left: 500px;
+  height: 100px;
+  width: 200px;
 }

@@ -15,6 +15,10 @@ export function workoutsReducer(prevState, action) {
             return {
                 workouts: prevState.workouts.filter(w => w._id !== action.payload._id)
             }
+        case "UPDATE_WORKOUT":
+            return {
+                workouts: prevState.workouts.map(w => w._id === action.payload._id ? action.payload : w)
+            }
         default:
             return prevState
     }
