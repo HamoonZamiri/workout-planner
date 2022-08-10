@@ -2,7 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 dotenv.config();
-import {router} from "./routes/workouts.js"
+import {workout_router} from "./routes/workouts.js"
+import { user_router } from "./routes/user.js";
 
 //express app
 const app = express();
@@ -15,7 +16,8 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use("/api/workouts", router);
+app.use("/api/workouts", workout_router);
+app.use("/api/user", user_router);
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {

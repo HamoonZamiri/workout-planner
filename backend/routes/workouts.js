@@ -1,20 +1,23 @@
-import express from "express";
+import express, { Router } from "express";
 import {workout_schema} from "../models/workoutModel.js"
-export const router = express.Router();
+export const workout_router = express.Router();
 import {createWorkout, getWorkout, getWorkouts, deleteWorkout, updateWorkout} from "../controllers/workout_controller.js"
+import { requireAuth } from "../middleware/requireAuth.js";
 
+//Authorize user
+workout_router.use(requireAuth);
 //GET all workouts
-router.get("/", getWorkouts)
+workout_router.get("/", getWorkouts)
 
 //GET a single workout by id
-router.get("/:id", getWorkout)
+workout_router.get("/:id", getWorkout)
 
 //POST a new workout
 
-router.post("/", createWorkout)
+workout_router.post("/", createWorkout)
 
 //DELETE a workout
-router.delete("/:id", deleteWorkout)
+workout_router.delete("/:id", deleteWorkout)
 
 // UPDATE a workout
-router.patch("/:id", updateWorkout)
+workout_router.patch("/:id", updateWorkout)

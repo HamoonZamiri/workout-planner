@@ -1,32 +1,45 @@
 import React, {useState} from "react"
+import { useAuthContext } from "../hooks/useAuthContext"
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
 
-export const PopupUpdateForm = ({ workout }) => {
+export const PopupUpdateForm = ({ workout, setWorkoutUpdated }) => {
     const {dispatch} = useWorkoutsContext()
     const [title, setTitle] = useState(workout.title)
     const [load, setLoad] = useState(workout.load)
     const [reps, setReps] = useState(workout.reps)
     const [error, setError] = useState(null)
     const [emptyFields, setEmptyFields] = useState([])
-
+    const { user } = useAuthContext();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        if(!user){
+            setError("You must be logged in to add a workout");
+            return;
+        }
         const res = await fetch("/api/workouts/" + workout._id, {
             method: "PATCH",
             body: JSON.stringify({title, load, reps}),
             headers:{
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${user.token}`
             }
         });
         const json = await res.json();
-
+        if(!res.ok) {
+            setError(json.error);
+            setEmptyFields(json.emptyFields);
+        }
         if(res.ok){
+            setError(null);
+            setEmptyFields([]);
             dispatch({type: "UPDATE_WORKOUT", payload: {title, load, reps}});
         }
+        setWorkoutUpdated(true);
+
     }
     return (
-        <form className="workout-form" onSubmit={handleSubmit}>
+        <form className="popup-form" onSubmit={handleSubmit}>
             <h3>Update {workout.title}</h3>
             <label>Exercise Name:</label>
             <input

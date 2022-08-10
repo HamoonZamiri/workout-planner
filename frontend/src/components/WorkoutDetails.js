@@ -3,17 +3,23 @@ import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
 import Popup from 'reactjs-popup'
 import formatDistanceToNow from 'date-fns/formatDistance'
 import { PopupUpdateForm } from './PopupUpdateForm'
+import { useAuthContext } from '../hooks/useAuthContext'
 
-const WorkoutDetails =  ({ workout }) => {
+const WorkoutDetails =  ({ workout, setWorkoutUpdated }) => {
     const loadInc = 5; //value to increment load by with buttons
     const repInc = 1; //value to increment reps by with buttons
-
-    const [rerender, setRerender] = React.useState(workout);
+    const { user } = useAuthContext()
 
     const { dispatch } = useWorkoutsContext()
     const handleClick = async () => {
+        if(!user){
+            return;
+        }
         const res = await fetch("/api/workouts/" + workout._id, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${user.token}`
+            }
         })
         const json = await res.json()
 
@@ -23,11 +29,15 @@ const WorkoutDetails =  ({ workout }) => {
         }
     }
     const handleIncrementLoad = async () => {
+        if(!user){
+            return;
+        }
         const res = await fetch("/api/workouts/" + workout._id, {
             method: "PATCH",
             body: JSON.stringify({...workout, load: workout.load + loadInc}),
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${user.token}`
             }
         })
         const json = await res.json()
@@ -37,11 +47,15 @@ const WorkoutDetails =  ({ workout }) => {
     }
 
     const handleDecrementLoad = async () => {
+        if(!user){
+            return;
+        }
         const res = await fetch("/api/workouts/" + workout._id, {
             method: "PATCH",
             body: JSON.stringify({...workout, load: workout.load - loadInc}),
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${user.token}`
             }
         })
         const json = await res.json()
@@ -51,11 +65,15 @@ const WorkoutDetails =  ({ workout }) => {
         }
     }
     const handleIncrementReps = async () => {
+        if(!user){
+            return;
+        }
         const res = await fetch("/api/workouts/" + workout._id, {
             method: "PATCH",
             body: JSON.stringify({...workout, reps: workout.reps + repInc}),
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${user.token}`
             }
         })
         const json = await res.json()
@@ -65,11 +83,15 @@ const WorkoutDetails =  ({ workout }) => {
     }
 
     const handleDecrementReps = async () => {
+        if(!user){
+            return;
+        }
         const res = await fetch("/api/workouts/" + workout._id, {
             method: "PATCH",
             body: JSON.stringify({...workout, reps: workout.reps - repInc}),
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${user.token}`
             }
         })
         const json = await res.json()
@@ -81,16 +103,20 @@ const WorkoutDetails =  ({ workout }) => {
         <div className="workout-details">
             <h4>{workout.title}</h4>
 
-            <p>
-                <strong>Load (kg): </strong>{workout.load}
-                <button onClick={handleDecrementLoad}>-</button><button onClick={handleIncrementLoad}>+</button>
-            </p>
-            <p><strong>Reps: </strong>{workout.reps}</p>
-            <button onClick={handleDecrementReps}>-</button><button onClick={handleIncrementReps}>+</button>
+            <div className="workout-load-details">
+                <p><strong>Load (kg): </strong>{workout.load}</p>
+                <button onClick={handleDecrementLoad}>-</button>
+                <button onClick={handleIncrementLoad}>+</button>
+            </div>
+            <div className="workout-reps-details">
+                <p><strong>Reps: </strong>{workout.reps}</p>
+                <button onClick={handleDecrementReps}>-</button>
+                <button onClick={handleIncrementReps}>+</button>
+            </div>
             <span className="material-symbols-outlined" onClick={handleClick}>delete</span>
-            <Popup trigger={<button>Edit Workout</button>} position="right">
-                <div className='popup-form'>
-                    <PopupUpdateForm workout={workout} />
+            <Popup trigger={<button className="edit-workout">Edit Workout</button>} position="right">
+                <div className='popup'>
+                    <PopupUpdateForm workout={workout} setWorkoutUpdated={setWorkoutUpdated}/>
                 </div>
             </Popup>
         </div>
