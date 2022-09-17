@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {useEffect } from "react"
 import { useAuthContext } from "../hooks/useAuthContext";
 
 import WorkoutDetails from "../components/WorkoutDetails"
