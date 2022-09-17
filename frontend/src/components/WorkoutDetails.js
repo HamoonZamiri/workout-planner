@@ -1,7 +1,6 @@
 import React from 'react'
 import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
 import Popup from 'reactjs-popup'
-import formatDistanceToNow from 'date-fns/formatDistance'
 import { PopupUpdateForm } from './PopupUpdateForm'
 import { useAuthContext } from '../hooks/useAuthContext'
 
