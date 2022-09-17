@@ -2,7 +2,7 @@ import React, {useState} from "react"
 import { useAuthContext } from "../hooks/useAuthContext"
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
 
-export const PopupUpdateForm = ({ workout, setWorkoutUpdated }) => {
+export const PopupUpdateForm = ({ workout }) => {
     const {dispatch} = useWorkoutsContext()
     const [title, setTitle] = useState(workout.title)
     const [load, setLoad] = useState(workout.load)
@@ -35,8 +35,6 @@ export const PopupUpdateForm = ({ workout, setWorkoutUpdated }) => {
             setEmptyFields([]);
             dispatch({type: "UPDATE_WORKOUT", payload: {title, load, reps}});
         }
-        setWorkoutUpdated(true);
-
     }
     return (
         <form className="popup-form" onSubmit={handleSubmit}>

@@ -7,8 +7,6 @@ import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
 
 const Home = () => {
     const {workouts, dispatch} = useWorkoutsContext();
-    // eslint-disable-next-line no-unused-vars
-    const [workoutUpdated, setWorkoutUpdated] = useState(false);
     const { user } = useAuthContext();
     useEffect(() => {
         const fetchWorkouts = async () => {
@@ -25,7 +23,6 @@ const Home = () => {
         if(user){
             fetchWorkouts();
         }
-        setWorkoutUpdated(false);
     }, [dispatch, user, workouts])
 
 
@@ -33,7 +30,7 @@ const Home = () => {
         <div className="home">
             <div className="workouts">
                 {workouts && workouts.map((workout) => {
-                   return <WorkoutDetails key={workout._id} workout={workout} setWorkoutUpdated={setWorkoutUpdated} />
+                   return <WorkoutDetails key={workout._id} workout={workout} />
                 })}
                 <WorkoutForm />
             </div>

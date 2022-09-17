@@ -4,7 +4,7 @@ import Popup from 'reactjs-popup'
 import { PopupUpdateForm } from './PopupUpdateForm'
 import { useAuthContext } from '../hooks/useAuthContext'
 
-const WorkoutDetails =  ({ workout, setWorkoutUpdated }) => {
+const WorkoutDetails =  ({ workout }) => {
     const loadInc = 5; //value to increment load by with buttons
     const repInc = 1; //value to increment reps by with buttons
     const { user } = useAuthContext()
@@ -115,7 +115,7 @@ const WorkoutDetails =  ({ workout, setWorkoutUpdated }) => {
             <span className="material-symbols-outlined" onClick={handleClick}>delete</span>
             <Popup trigger={<button className="edit-workout">Edit Workout</button>} position="right">
                 <div className='popup'>
-                    <PopupUpdateForm workout={workout} setWorkoutUpdated={setWorkoutUpdated}/>
+                    <PopupUpdateForm workout={workout}/>
                 </div>
             </Popup>
         </div>
