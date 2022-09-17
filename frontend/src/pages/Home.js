@@ -7,6 +7,7 @@ import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
 
 const Home = () => {
     const {workouts, dispatch} = useWorkoutsContext();
+    // eslint-disable-next-line no-unused-vars
     const [workoutUpdated, setWorkoutUpdated] = useState(false);
     const { user } = useAuthContext();
     useEffect(() => {
