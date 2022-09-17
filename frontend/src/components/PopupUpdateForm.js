@@ -17,7 +17,7 @@ export const PopupUpdateForm = ({ workout, setWorkoutUpdated }) => {
             setError("You must be logged in to add a workout");
             return;
         }
-        const res = await fetch("/api/workouts/" + workout._id, {
+        const res = await fetch("https://fitlog-workout-planner.herokuapp.com/api/workouts/" + workout._id, {
             method: "PATCH",
             body: JSON.stringify({title, load, reps}),
             headers:{

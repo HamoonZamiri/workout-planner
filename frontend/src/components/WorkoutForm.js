@@ -19,7 +19,7 @@ export default function WorkoutForm(){
         }
         const workout = {title, load, reps}
 
-        const res = await fetch('/api/workouts', {
+        const res = await fetch('https://fitlog-workout-planner.herokuapp.com/api/workouts', {
             method: "POST",
             body: JSON.stringify(workout),
             headers: {

@@ -14,7 +14,7 @@ const WorkoutDetails =  ({ workout, setWorkoutUpdated }) => {
         if(!user){
             return;
         }
-        const res = await fetch("/api/workouts/" + workout._id, {
+        const res = await fetch("https://fitlog-workout-planner.herokuapp.com/api/workouts/" + workout._id, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${user.token}`
@@ -31,7 +31,7 @@ const WorkoutDetails =  ({ workout, setWorkoutUpdated }) => {
         if(!user){
             return;
         }
-        const res = await fetch("/api/workouts/" + workout._id, {
+        const res = await fetch("https://fitlog-workout-planner.herokuapp.com/api/workouts/" + workout._id, {
             method: "PATCH",
             body: JSON.stringify({...workout, load: workout.load + loadInc}),
             headers: {
@@ -49,7 +49,7 @@ const WorkoutDetails =  ({ workout, setWorkoutUpdated }) => {
         if(!user){
             return;
         }
-        const res = await fetch("/api/workouts/" + workout._id, {
+        const res = await fetch("https://fitlog-workout-planner.herokuapp.com/api/workouts/" + workout._id, {
             method: "PATCH",
             body: JSON.stringify({...workout, load: workout.load - loadInc}),
             headers: {
@@ -67,7 +67,7 @@ const WorkoutDetails =  ({ workout, setWorkoutUpdated }) => {
         if(!user){
             return;
         }
-        const res = await fetch("/api/workouts/" + workout._id, {
+        const res = await fetch("https://fitlog-workout-planner.herokuapp.com/api/workouts/" + workout._id, {
             method: "PATCH",
             body: JSON.stringify({...workout, reps: workout.reps + repInc}),
             headers: {
@@ -85,7 +85,7 @@ const WorkoutDetails =  ({ workout, setWorkoutUpdated }) => {
         if(!user){
             return;
         }
-        const res = await fetch("/api/workouts/" + workout._id, {
+        const res = await fetch("https://fitlog-workout-planner.herokuapp.com/api/workouts/" + workout._id, {
             method: "PATCH",
             body: JSON.stringify({...workout, reps: workout.reps - repInc}),
             headers: {
