@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import cors from "cors";
 dotenv.config();
 import {workout_router} from "./routes/workouts.js"
 import { user_router } from "./routes/user.js";
@@ -9,8 +10,8 @@ import { user_router } from "./routes/user.js";
 const app = express();
 
 //middleware
-app.use(express.json())
-
+app.use(express.json());
+app.use(cors());
 app.use((req, res, next) => {
     console.log(`url: ${req.path} method: ${req.method}`);
     next();
