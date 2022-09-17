@@ -7,6 +7,7 @@ import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
 
 const Home = () => {
     const {workouts, dispatch} = useWorkoutsContext();
+    const [workoutUpdated, setWorkoutUpdated] = useState(false);
     const { user } = useAuthContext();
     useEffect(() => {
         const fetchWorkouts = async () => {
