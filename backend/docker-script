@@ -1,0 +1,4 @@
+#!/bin/bash
+docker build -f ./Dockerfile -t workout-planner .
+docker tag workout-planner hamoonzamiri/workout-planner:1.0.1
+docker push hamoonzamiri/workout-planner:1.0.1
