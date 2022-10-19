@@ -4,13 +4,14 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import WorkoutDetails from "../components/WorkoutDetails"
 import WorkoutForm from "../components/WorkoutForm"
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
+import { api_base } from "../utils";
 
 const Home = () => {
     const {workouts, dispatch} = useWorkoutsContext();
     const { user } = useAuthContext();
     useEffect(() => {
         const fetchWorkouts = async () => {
-            const res = await fetch('https://fitlog-workout-planner.herokuapp.com/api/workouts', {
+            const res = await fetch(api_base + "api/workouts", {
                 headers: {
                     "Authorization": `Bearer ${user.token}`
                 }
