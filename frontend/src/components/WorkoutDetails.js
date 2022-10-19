@@ -3,6 +3,7 @@ import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
 import Popup from 'reactjs-popup'
 import { PopupUpdateForm } from './PopupUpdateForm'
 import { useAuthContext } from '../hooks/useAuthContext'
+import { api_base } from '../utils'
 
 const WorkoutDetails =  ({ workout }) => {
     const loadInc = 5; //value to increment load by with buttons
@@ -14,16 +15,16 @@ const WorkoutDetails =  ({ workout }) => {
         if(!user){
             return;
         }
-        const res = await fetch("https://fitlog-workout-planner.herokuapp.com/api/workouts/" + workout._id, {
+        const res = await fetch(api_base + "api/workouts/" + workout._id, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${user.token}`
             }
         })
-        const json = await res.json()
+        //const json = await res.json()
 
         if(res.ok){
-            dispatch({type: "DELETE_WORKOUT", payload: json})
+            dispatch({type: "DELETE_WORKOUT", payload: workout})
 
         }
     }
@@ -31,7 +32,7 @@ const WorkoutDetails =  ({ workout }) => {
         if(!user){
             return;
         }
-        const res = await fetch("https://fitlog-workout-planner.herokuapp.com/api/workouts/" + workout._id, {
+        const res = await fetch(api_base + "api/workouts/" + workout._id, {
             method: "PATCH",
             body: JSON.stringify({...workout, load: workout.load + loadInc}),
             headers: {
@@ -39,9 +40,9 @@ const WorkoutDetails =  ({ workout }) => {
                 "Authorization": `Bearer ${user.token}`
             }
         })
-        const json = await res.json()
+        //const json = await res.json()
         if(res.ok){
-            dispatch({type: "UPDATE_WORKOUT", payload: {...json, load: json.load + loadInc}});
+            dispatch({type: "UPDATE_WORKOUT", payload: {...workout, load: workout.load + loadInc}});
         }
     }
 
@@ -49,7 +50,7 @@ const WorkoutDetails =  ({ workout }) => {
         if(!user){
             return;
         }
-        const res = await fetch("https://fitlog-workout-planner.herokuapp.com/api/workouts/" + workout._id, {
+        const res = await fetch(api_base + "api/workouts/" + workout._id, {
             method: "PATCH",
             body: JSON.stringify({...workout, load: workout.load - loadInc}),
             headers: {
@@ -57,17 +58,17 @@ const WorkoutDetails =  ({ workout }) => {
                 "Authorization": `Bearer ${user.token}`
             }
         })
-        const json = await res.json()
+        //const json = await res.json()
 
         if (res.ok){
-            dispatch({type: "UPDATE_WORKOUT", payload: {...json, load: json.load - loadInc}});
+            dispatch({type: "UPDATE_WORKOUT", payload: {...workout, load: workout.load - loadInc}});
         }
     }
     const handleIncrementReps = async () => {
         if(!user){
             return;
         }
-        const res = await fetch("https://fitlog-workout-planner.herokuapp.com/api/workouts/" + workout._id, {
+        const res = await fetch(api_base + "api/workouts/" + workout._id, {
             method: "PATCH",
             body: JSON.stringify({...workout, reps: workout.reps + repInc}),
             headers: {
@@ -75,9 +76,9 @@ const WorkoutDetails =  ({ workout }) => {
                 "Authorization": `Bearer ${user.token}`
             }
         })
-        const json = await res.json()
+        //const json = await res.json()
         if(res.ok){
-            dispatch({type: "UPDATE_WORKOUT", payload: {...json, reps: json.reps + repInc}});
+            dispatch({type: "UPDATE_WORKOUT", payload: {...workout, reps: workout.reps + repInc}});
         }
     }
 
@@ -85,7 +86,7 @@ const WorkoutDetails =  ({ workout }) => {
         if(!user){
             return;
         }
-        const res = await fetch("https://fitlog-workout-planner.herokuapp.com/api/workouts/" + workout._id, {
+        const res = await fetch(api_base + "api/workouts/" + workout._id, {
             method: "PATCH",
             body: JSON.stringify({...workout, reps: workout.reps - repInc}),
             headers: {
@@ -93,9 +94,9 @@ const WorkoutDetails =  ({ workout }) => {
                 "Authorization": `Bearer ${user.token}`
             }
         })
-        const json = await res.json()
+        //const json = await res.json()
         if (res.ok){
-            dispatch({type: "UPDATE_WORKOUT", payload: {...json, reps: json.reps - repInc}});
+            dispatch({type: "UPDATE_WORKOUT", payload: {...workout, reps: workout.reps - repInc}});
         }
     }
     return (

@@ -1,6 +1,7 @@
 import React, {useState} from "react"
 import { useAuthContext } from "../hooks/useAuthContext"
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
+import { api_base } from "../utils"
 
 export const PopupUpdateForm = ({ workout }) => {
     const {dispatch} = useWorkoutsContext()
@@ -17,7 +18,7 @@ export const PopupUpdateForm = ({ workout }) => {
             setError("You must be logged in to add a workout");
             return;
         }
-        const res = await fetch("https://fitlog-workout-planner.herokuapp.com/api/workouts/" + workout._id, {
+        const res = await fetch(api_base + "api/workouts/" + workout._id, {
             method: "PATCH",
             body: JSON.stringify({title, load, reps}),
             headers:{

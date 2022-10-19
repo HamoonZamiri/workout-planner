@@ -1,6 +1,7 @@
 import React, {useState} from "react"
 import { useAuthContext } from "../hooks/useAuthContext"
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
+import { api_base } from "../utils"
 
 export default function WorkoutForm(){
     const {dispatch} = useWorkoutsContext()
@@ -19,7 +20,7 @@ export default function WorkoutForm(){
         }
         const workout = {title, load, reps}
 
-        const res = await fetch('https://fitlog-workout-planner.herokuapp.com/api/workouts', {
+        const res = await fetch(api_base + "api/workouts", {
             method: "POST",
             body: JSON.stringify(workout),
             headers: {

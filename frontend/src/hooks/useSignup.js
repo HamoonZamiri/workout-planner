@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { api_base } from "../utils";
 import { useAuthContext } from "./useAuthContext";
 
 export const useSignup = () => {
@@ -10,7 +11,7 @@ export const useSignup = () => {
         setIsLoading(true);
         setError(null);
 
-        const res = await fetch("https://fitlog-workout-planner.herokuapp.com/api/user/signup", {
+        const res = await fetch(api_base + "api/user/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
