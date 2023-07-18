@@ -11,9 +11,9 @@ export const Navbar = () => {
     }
     return (
         <header>
-            <div className="container">
-                <Link to="/">
-                    <h1>Workout Buddy</h1>
+            <div className="flex justify-between p-6">
+                <Link className="hover:text-slate-400" to="/">
+                    <h1 className="font-semibold text-4xl">FitLog</h1>
                 </Link>
                 <nav>
                    {user && (<div>
@@ -21,9 +21,9 @@ export const Navbar = () => {
                         <button onClick={handleClick}>Logout</button>
                     </div>)}
                     {!user && (
-                    <div>
-                        <Link to="/login">Login</Link>
-                        <Link to="/signup">Signup</Link>
+                    <div className="flex gap-4">
+                        <Link className="hover:text-slate-400" to="/login">Login</Link>
+                        <Link className="hover:text-slate-400" to="/signup">Signup</Link>
                     </div>)
                     }
                 </nav>
