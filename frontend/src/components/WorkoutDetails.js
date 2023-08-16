@@ -4,6 +4,7 @@ import Popup from 'reactjs-popup'
 import { PopupUpdateForm } from './PopupUpdateForm'
 import { useAuthContext } from '../hooks/useAuthContext'
 import { api_base } from '../utils'
+import {AiFillPlusCircle, AiFillMinusCircle} from "react-icons/ai"
 
 const WorkoutDetails =  ({ workout }) => {
     const loadInc = 5; //value to increment load by with buttons
@@ -100,25 +101,32 @@ const WorkoutDetails =  ({ workout }) => {
         }
     }
     return (
-        <div className="workout-details">
-            <h4>{workout.title}</h4>
+        <div className="grid grid-cols-1 bg-slate-100 border-solid
+        border-inherit border-4 rounded-md p-2 w-full">
+            <h4 className="text-xl font-semibold flex justify-center">{workout.title}</h4>
 
-            <div className="workout-load-details">
+            <div className="flex gap-4 justify-center">
                 <p><strong>Load (kg): </strong>{workout.load}</p>
-                <button onClick={handleDecrementLoad}>-</button>
-                <button onClick={handleIncrementLoad}>+</button>
-            </div>
-            <div className="workout-reps-details">
-                <p><strong>Reps: </strong>{workout.reps}</p>
-                <button onClick={handleDecrementReps}>-</button>
-                <button onClick={handleIncrementReps}>+</button>
-            </div>
-            <span className="material-symbols-outlined" onClick={handleClick}>delete</span>
-            <Popup trigger={<button className="edit-workout">Edit Workout</button>} position="right">
-                <div className='popup'>
-                    <PopupUpdateForm workout={workout}/>
+                <div className="flex gap-1">
+                    <div className="cursor-pointer flex items-center" onClick={handleDecrementLoad}><AiFillMinusCircle /></div>
+                    <div className="cursor-pointer flex items-center" onClick={handleIncrementLoad}><AiFillPlusCircle /></div>
                 </div>
-            </Popup>
+            </div>
+            <div className="flex gap-4 justify-center">
+                <p><strong>Reps: </strong>{workout.reps}</p>
+                <div className="flex gap-1">
+                    <div className="cursor-pointer flex items-center" onClick={handleDecrementReps}><AiFillMinusCircle /></div>
+                    <div className="cursor-pointer flex items-center" onClick={handleIncrementReps}><AiFillPlusCircle /></div>
+                </div>
+            </div>
+            <div className="flex justify-center">
+                <span className="material-symbols-outlined cursor-pointer" onClick={handleClick}>delete</span>
+                <Popup trigger={<button className="">Edit Workout</button>}>
+                    <div className='popup'>
+                        <PopupUpdateForm workout={workout}/>
+                    </div>
+                </Popup>
+            </div>
         </div>
     )
 

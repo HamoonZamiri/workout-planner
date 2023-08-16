@@ -28,15 +28,16 @@ const Home = () => {
 
 
     return (
-        <div className="home">
-            <div className="workouts">
+        <div className="mt-1">
+            <h2 className="font-semibold text-2xl">Exercises:</h2>
+            <div className="flex flex-col overflow-x-auto sm:flex-row gap-2 mb-4">
                 {workouts && workouts.map((workout) => {
-                   return <WorkoutDetails key={workout._id} workout={workout} />
+                return <WorkoutDetails key={workout._id} workout={workout} />
                 })}
+            </div>
+            <div className="flex justify-center">
                 <WorkoutForm />
             </div>
-
-
         </div>
     )
 }

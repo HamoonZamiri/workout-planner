@@ -10,10 +10,10 @@ export const Navbar = () => {
         logout();
     }
     return (
-        <header>
+        <header className="bg-blue-100">
             <div className="flex justify-between p-6">
                 <Link className="hover:text-slate-400" to="/">
-                    <h1 className="font-semibold text-4xl">FitLog</h1>
+                    <h1 className="font-semibold text-3xl sm:text-4xl">FitLog</h1>
                 </Link>
                 <nav>
                    {user && (<div className="flex gap-4">

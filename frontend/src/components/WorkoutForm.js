@@ -48,33 +48,45 @@ export default function WorkoutForm(){
     }
 
     return (
-        <form className="workout-form" onSubmit={handleSubmit}>
-            <h3>Add a New Workout</h3>
-            <label>Exercise Name:</label>
-            <input
-                type="text"
-                onChange={(event) => setTitle(event.target.value)}
-                value={title}
-                className={emptyFields && emptyFields.includes("title") ? "error" : ""}
-            />
+        <form className="grid grid-cols-1 gap-8" onSubmit={handleSubmit}>
+            <h3 className="font-semibold text-2xl">Add a New Exercise</h3>
+            <div>
+                <label>Exercise Name:</label>
+                <input
+                    className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
+                    type="text"
+                    onChange={(event) => setTitle(event.target.value)}
+                    value={title}
+                    // className={emptyFields && emptyFields.includes("title") ? "error" : ""}
+                />
+            </div>
 
-        <label>Load (kg):</label>
+        <div>
+            <label>Load (kg):</label>
+                <input
+                    className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
+                    type="text"
+                    onChange={(event) => setLoad(event.target.value)}
+                    value={load}
+                    // className={emptyFields && emptyFields.includes("load") ? "error" : ""}
+                />
+        </div>
+        <div>
+            <label># of Reps:</label>
             <input
-                type="text"
-                onChange={(event) => setLoad(event.target.value)}
-                value={load}
-                className={emptyFields && emptyFields.includes("load") ? "error" : ""}
-            />
-
-        <label># of Reps:</label>
-            <input
+                className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+                placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
                 type="text"
                 onChange={(event) => setReps(event.target.value)}
                 value={reps}
-                className={ emptyFields && emptyFields.includes("reps") ? "error" : "" }
+                // className={ emptyFields && emptyFields.includes("reps") ? "error" : "" }
             />
-        <button>Add Workout</button>
+        </div>
+        <button className="w-full h-8 bg-blue-100 hover:bg-blue-200">Add Workout</button>
         {error && <div className="error">{error}</div>}
+
         </form>
     )
 }
