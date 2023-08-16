@@ -16,7 +16,7 @@ export const Navbar = () => {
                     <h1 className="font-semibold text-4xl">FitLog</h1>
                 </Link>
                 <nav>
-                   {user && (<div>
+                   {user && (<div className="flex gap-4">
                         <span>{user.email}</span>
                         <button onClick={handleClick}>Logout</button>
                     </div>)}

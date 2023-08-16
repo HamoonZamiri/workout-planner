@@ -12,7 +12,7 @@ const Login = () => {
     }
     return (
         <div className="w-full flex flex-col items-center">
-            <h3 className="text-3xl font-semibold mb-6 ">Sign in to your account</h3>
+            <h3 className="text-3xl font-semibold mb-6 text-center">Sign in to your account</h3>
             <form className="w-4/5 sm:w-2/5" onSubmit={handleSubmit}>
                 <div className="mb-4">
                     <label className="">Email</label>

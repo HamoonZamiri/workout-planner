@@ -33,7 +33,7 @@ const Signup = () => {
                         value={password}
                     />
                 </div>
-                <button className="w-full h-8 bg-blue-100 hover:bg-blue-200" disabled={isLoading}>Login</button>
+                <button className="w-full h-8 bg-blue-100 hover:bg-blue-200" disabled={isLoading}>Signup</button>
                 {error && <div className="text-red-500">{error}</div>}
                 <div className="mt-10">
                     <h3 className="font-semibold">What does sign in offer?</h3>
