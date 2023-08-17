@@ -102,7 +102,7 @@ const WorkoutDetails =  ({ workout }) => {
     }
     return (
         <div className="grid grid-cols-1 bg-slate-100 border-solid
-        border-inherit border-4 rounded-md p-2 w-full">
+        border-inherit border-4 rounded-md p-2 sm:flex-shrink-0 sm:w-[350px]">
             <h4 className="text-xl font-semibold flex justify-center">{workout.title}</h4>
 
             <div className="flex gap-4 justify-center">

@@ -28,9 +28,9 @@ const Home = () => {
 
 
     return (
-        <div className="mt-1">
-            <h2 className="font-semibold text-2xl">Exercises:</h2>
-            <div className="flex flex-col overflow-x-auto sm:flex-row gap-2 mb-4">
+        <div className="mt-2 p-2">
+            <h2 className="font-semibold text-2xl w-full">Exercises:</h2>
+            <div className="flex flex-col overflow-x-scroll sm:flex-row sm:flex-shrink-0 max-w-screen gap-2 mb-4">
                 {workouts && workouts.map((workout) => {
                 return <WorkoutDetails key={workout._id} workout={workout} />
                 })}
