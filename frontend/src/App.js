@@ -12,7 +12,7 @@ import { useAuthContext } from "./hooks/useAuthContext";
 function App() {
   const { user } = useAuthContext();
   return (
-    <div className="font-mono">
+    <div className="font-sans">
       <BrowserRouter>
       <Navbar />
       <div className="">

@@ -7,7 +7,7 @@ import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
 import { api_base } from "../utils";
 
 const Home = () => {
-    const {workouts, dispatch} = useWorkoutsContext();
+    const {state, workouts, dispatch} = useWorkoutsContext();
     const { user } = useAuthContext();
     useEffect(() => {
         const fetchWorkouts = async () => {
@@ -24,7 +24,7 @@ const Home = () => {
         if(user){
             fetchWorkouts();
         }
-    }, [dispatch, user])
+    }, [state, dispatch, user])
 
 
     return (

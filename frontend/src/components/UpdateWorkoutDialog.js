@@ -4,13 +4,13 @@ import { useAuthContext } from "../hooks/useAuthContext.js";
 import { api_base } from "../utils.js";
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext.js";
 
-const UpdateWorkoutDialog = ({workout, open, setOpen}) => {
-    const {dispatch} = useWorkoutsContext()
+const UpdateWorkoutDialog = ({workout, open, setOpen }) => {
     const [title, setTitle] = useState(workout.title);
     const [load, setLoad] = useState(workout.load);
     const [reps, setReps] = useState(workout.reps);
     const [error, setError] = useState(null)
     const [emptyFields, setEmptyFields] = useState([])
+    const {dispatch} = useWorkoutsContext();
     const { user } = useAuthContext();
 
     const handleSubmit = async (event) => {
@@ -35,7 +35,7 @@ const UpdateWorkoutDialog = ({workout, open, setOpen}) => {
         if(res.ok){
             setError(null);
             setEmptyFields([]);
-            dispatch({type: "UPDATE_WORKOUT", payload: {title, load, reps}});
+            dispatch({type: "UPDATE_WORKOUT", payload: {_id: workout._id, title, load, reps}});
             setOpen(false);
         }
     }

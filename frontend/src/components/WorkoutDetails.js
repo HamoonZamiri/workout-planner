@@ -129,7 +129,7 @@ const WorkoutDetails =  ({ workout }) => {
                     <span className="material-symbols-outlined cursor-pointer" onClick={handleClick}>delete</span>
                 </div>
             </div>
-        <UpdateWorkoutDialog open={open} setOpen={setOpen} workout={workout} />
+        <UpdateWorkoutDialog open={open} setOpen={setOpen} workout={workout} dispatch={dispatch}/>
     </div>
     )
 
