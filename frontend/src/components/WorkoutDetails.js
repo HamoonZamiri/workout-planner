@@ -1,12 +1,13 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
-import Popup from 'reactjs-popup'
-import { PopupUpdateForm } from './PopupUpdateForm'
 import { useAuthContext } from '../hooks/useAuthContext'
 import { api_base } from '../utils'
 import {AiFillPlusCircle, AiFillMinusCircle} from "react-icons/ai"
+import UpdateWorkoutDialog from './UpdateWorkoutDialog.js'
+import { FaHammer } from "react-icons/fa"
 
 const WorkoutDetails =  ({ workout }) => {
+    const [open, setOpen] = useState(false);
     const loadInc = 5; //value to increment load by with buttons
     const repInc = 1; //value to increment reps by with buttons
     const { user } = useAuthContext()
@@ -101,33 +102,35 @@ const WorkoutDetails =  ({ workout }) => {
         }
     }
     return (
-        <div className="grid grid-cols-1 bg-slate-100 border-solid
-        border-inherit border-4 rounded-md p-2 sm:flex-shrink-0 sm:w-[350px]">
-            <h4 className="text-xl font-semibold flex justify-center">{workout.title}</h4>
+        // apparently the relative styling is necessary for the modal to be centred
+        <div className="relative">
+            <div
+                className="grid grid-cols-1 bg-slate-100 hover:bg-slate-200 border-solid
+                border-inherit border-4 rounded-md p-2 sm:flex-shrink-0 sm:w-[350px] "
+            >
+                <h4 className="text-xl font-semibold flex justify-center">{workout.title}</h4>
 
-            <div className="flex gap-4 justify-center">
-                <p><strong>Load (kg): </strong>{workout.load}</p>
-                <div className="flex gap-1">
-                    <div className="cursor-pointer flex items-center" onClick={handleDecrementLoad}><AiFillMinusCircle /></div>
-                    <div className="cursor-pointer flex items-center" onClick={handleIncrementLoad}><AiFillPlusCircle /></div>
-                </div>
-            </div>
-            <div className="flex gap-4 justify-center">
-                <p><strong>Reps: </strong>{workout.reps}</p>
-                <div className="flex gap-1">
-                    <div className="cursor-pointer flex items-center" onClick={handleDecrementReps}><AiFillMinusCircle /></div>
-                    <div className="cursor-pointer flex items-center" onClick={handleIncrementReps}><AiFillPlusCircle /></div>
-                </div>
-            </div>
-            <div className="flex justify-center">
-                <span className="material-symbols-outlined cursor-pointer" onClick={handleClick}>delete</span>
-                <Popup trigger={<button className="">Edit Workout</button>}>
-                    <div className='popup'>
-                        <PopupUpdateForm workout={workout}/>
+                <div className="flex gap-4 justify-center">
+                    <p><strong>Load (kg): </strong>{workout.load}</p>
+                    <div className="flex gap-1">
+                        <div className="cursor-pointer flex items-center" onClick={handleDecrementLoad}><AiFillMinusCircle /></div>
+                        <div className="cursor-pointer flex items-center" onClick={handleIncrementLoad}><AiFillPlusCircle /></div>
                     </div>
-                </Popup>
+                </div>
+                <div className="flex gap-4 justify-center">
+                    <p><strong>Reps: </strong>{workout.reps}</p>
+                    <div className="flex gap-1">
+                        <div className="cursor-pointer flex items-center" onClick={handleDecrementReps}><AiFillMinusCircle /></div>
+                        <div className="cursor-pointer flex items-center" onClick={handleIncrementReps}><AiFillPlusCircle /></div>
+                    </div>
+                </div>
+                <div className="flex justify-between">
+                    <FaHammer className="cursor-pointer" onClick={() => setOpen(true)} />
+                    <span className="material-symbols-outlined cursor-pointer" onClick={handleClick}>delete</span>
+                </div>
             </div>
-        </div>
+        <UpdateWorkoutDialog open={open} setOpen={setOpen} workout={workout} />
+    </div>
     )
 
 }

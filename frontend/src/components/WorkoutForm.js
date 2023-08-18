@@ -60,6 +60,7 @@ export default function WorkoutForm(){
                     value={title}
                     // className={emptyFields && emptyFields.includes("title") ? "error" : ""}
                 />
+                <p className="text-red-300">{emptyFields.includes("title") && "This field is required"}</p>
             </div>
 
         <div>
@@ -72,6 +73,7 @@ export default function WorkoutForm(){
                     value={load}
                     // className={emptyFields && emptyFields.includes("load") ? "error" : ""}
                 />
+                <p className="text-red-300">{emptyFields.includes("load") && "This field is required"}</p>
         </div>
         <div>
             <label># of Reps:</label>
@@ -83,9 +85,10 @@ export default function WorkoutForm(){
                 value={reps}
                 // className={ emptyFields && emptyFields.includes("reps") ? "error" : "" }
             />
+            <p className="text-red-300">{emptyFields.includes("reps") && "This field is required"}</p>
         </div>
-        <button className="w-full h-8 bg-blue-100 hover:bg-blue-200">Add Workout</button>
-        {error && <div className="error">{error}</div>}
+        <button className="w-full bg-blue-100 hover:bg-blue-200 rounded-lg h-10">Add Workout</button>
+        {error && <div className="text-red-300">{error}</div>}
 
         </form>
     )
