@@ -20,8 +20,9 @@ app.use((req, res, next) => {
 app.use("/api/workouts", workout_router);
 app.use("/api/user", user_router);
 app.get("/", (req, res) => {
-    res.send("Hello Heroku");
+    res.send("Health Check");
 });
+
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         app.listen(process.env.PORT || 4000, () => {
