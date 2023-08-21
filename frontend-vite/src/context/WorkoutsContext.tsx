@@ -38,7 +38,7 @@ const workoutsReducer = (prevState: WorkoutsContextType, action: ACTIONTYPE) => 
     }
 };
 
-export const WorkoutsContextProvider = ({ children }: {children: JSX.Element[]}) => {
+export const WorkoutsContextProvider = ({ children }: {children: JSX.Element}) => {
     const [state, dispatch] = useReducer(workoutsReducer, { workouts: [] });
     return (
         <WorkoutsContext.Provider value={{ state, dispatch }}>
