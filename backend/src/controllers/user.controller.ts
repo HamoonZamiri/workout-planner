@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { createToken, loginUser, signupUser } from "../services/user.service";
 import AppError from "../utils/AppError";
 
-const postLogin = async(req: Request, res: Response, next: NextFunction) => {
+export const postLogin = async(req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password } = req.body;
         const user = await loginUser(email, password);
@@ -17,7 +17,7 @@ const postLogin = async(req: Request, res: Response, next: NextFunction) => {
     }
 };
 
-const postSignup = async(req: Request, res: Response, next: NextFunction) => {
+export const postSignup = async(req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password } = req.body;
         const user = await signupUser(email, password);
