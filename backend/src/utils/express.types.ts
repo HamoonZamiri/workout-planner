@@ -5,5 +5,10 @@ type ResBody<T> = {
     message: string;
     data: T;
 }
-export type TypeSafeRequest<T, Q> = Request<{}, {}, T, Q> & {user: MongoDocument<Omit<User, "password">>} ; // testing out typing request and response
+type ReqUser = {
+    _id: string;
+    email: string;
+}
+
+export type TypeSafeRequest<T, Q> = Request<{}, {}, T, Q> & {user: ReqUser} ; // testing out typing request and response
 export type TypeSafeResponse<T> = Response<ResBody<T>>;

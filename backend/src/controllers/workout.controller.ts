@@ -38,7 +38,7 @@ export const createWorkoutHandler = async(req: TypeSafeRequest<CreateWorkoutRequ
             throw new Error(`Missing fields: ${emptyFields.join(", ")}`);
         }
         const user_id = req.user._id;
-        const workout = await createWorkout(title, load, reps, user_id.toString());
+        const workout = await createWorkout(title, load, reps, user_id);
     } catch (err) {
         next(err);
     }
