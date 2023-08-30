@@ -1,13 +1,12 @@
 {
   "name": "backend",
-  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js",
-    "dev": "nodemon server.js --ignore client"
+    "dev": "nodemon build/index.js",
+    "watch": "tsc -w"
   },
   "keywords": [],
   "author": "",

@@ -6,9 +6,9 @@ type ResBody<T> = {
     data: T;
 }
 type ReqUser = {
-    _id: string;
+    userId: string;
     email: string;
 }
 
-export type TypeSafeRequest<T, Q> = Request<{}, {}, T, Q> & {user: ReqUser} ; // testing out typing request and response
+export type TypeSafeRequest<P, T, Q> = Request<P, {}, T & ReqUser, Q> ; // testing out typing request and response
 export type TypeSafeResponse<T> = Response<ResBody<T>>;

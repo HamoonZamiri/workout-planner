@@ -4,12 +4,12 @@ import jwt from "jsonwebtoken";
 import { UserModel } from "../models/user.model";
 import {ObjectId} from "mongoose";
 
-export const createToken = (_id: string) => {
+const createToken = (_id: string) => {
     const token = jwt.sign({ _id }, process.env.JWT_SECRET!);
     return token;
 }
 
-export const signupUser = async(email: string, password: string) => {
+const signupUser = async(email: string, password: string) => {
     if(!email || !password){
         throw new Error("Email and Password are required");
     }
@@ -32,7 +32,7 @@ export const signupUser = async(email: string, password: string) => {
     return user;
 };
 
-export const loginUser = async(email: string, password: string) => {
+const loginUser = async(email: string, password: string) => {
     if(!email || !password){
         throw new Error("Email and Password are required");
     }
@@ -46,3 +46,10 @@ export const loginUser = async(email: string, password: string) => {
     }
     return user;
 };
+
+const UserService = {
+    createToken,
+    signupUser,
+    loginUser,
+}
+export default UserService;
