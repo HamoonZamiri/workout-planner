@@ -41,7 +41,7 @@ const WorkoutForm = () => {
             setTitle("")
             setLoad("")
             setReps("")
-            dispatch({type: "CREATE_WORKOUT", payload: json})
+            dispatch({type: "CREATE_WORKOUT", payload: json.data})
         }
     }
     return (

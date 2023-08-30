@@ -24,8 +24,8 @@ app.get("/", (req, res) => {
 });
 
 // routes
-app.use("/api/user", UserRouter);
-app.use("/api/workout", WorkoutRouter);
+app.use("/api/users", UserRouter);
+app.use("/api/workouts", WorkoutRouter);
 
 // error handling
 app.use(

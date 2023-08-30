@@ -1,13 +1,13 @@
 import jwt from "jsonwebtoken";
 import { UserModel } from "../user/models/user.model";
-import dotenv from "dotenv"
 import { NextFunction, Request, Response } from "express";
+import dotenv from "dotenv"
 dotenv.config();
 export const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
     const {authorization} = req.headers;
     if(!authorization) {
-        return res.status(401).json({error: "Authorization token required"});
-
+        res.status(401).json({error: "Authorization token required"});
+        return;
     }
     const token = authorization.split(" ")[1];
     try {

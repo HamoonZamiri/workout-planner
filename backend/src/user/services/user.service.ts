@@ -5,7 +5,7 @@ import { UserModel } from "../models/user.model";
 import {ObjectId} from "mongoose";
 
 const createToken = (_id: string) => {
-    const token = jwt.sign({ _id }, process.env.JWT_SECRET!);
+    const token = jwt.sign({ _id }, process.env.SECRET || "");
     return token;
 }
 
