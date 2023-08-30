@@ -1,6 +1,6 @@
 import Express from "express";
 import WorkoutController from "../controllers/workout.controller";
-import { requireAuth } from "../middleware/require.auth";
+import { requireAuth } from "../../middleware/require.auth";
 
 const WorkoutRouter = Express.Router();
 

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { User } from "../models/user.model";
+import { User } from "../user/models/user.model";
 import { MongoDocument } from "./mongoose.types";
 type ResBody<T> = {
     message: string;

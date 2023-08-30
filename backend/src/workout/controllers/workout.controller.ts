@@ -1,11 +1,11 @@
 import { NextFunction } from "express";
-import { TypeSafeRequest, TypeSafeResponse } from "../utils/express.types";
+import { TypeSafeRequest, TypeSafeResponse } from "../../utils/express.types";
 import WorkoutService from "../services/workout.service";
 import { Workout } from "../models/workout.model";
 import mongoose, { Document } from "mongoose";
 import { BeAnObject, IObjectWithTypegooseFunction } from "@typegoose/typegoose/lib/types";
-import { MongoDocument } from "../utils/mongoose.types";
-import { getEmptyFields } from "../utils/emptyfields";
+import { MongoDocument } from "../../utils/mongoose.types";
+import { getEmptyFields } from "../../utils/emptyfields";
 
 // type
 type CreateWorkoutRequestBody = {

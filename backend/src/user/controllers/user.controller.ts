@@ -1,8 +1,8 @@
 import { NextFunction } from "express";
 import UserService from "../services/user.service";
-import AppError from "../utils/AppError";
+import AppError from "../../utils/AppError";
 import { mongoose } from "@typegoose/typegoose";
-import { TypeSafeRequest, TypeSafeResponse } from "../utils/express.types";
+import { TypeSafeRequest, TypeSafeResponse } from "../../utils/express.types";
 
 // types
 type LoginRequestBody = {

@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from "express"
 import cors from "cors";
 import dotenv from "dotenv";
-import UserRouter from "./routes/user.routes";
-import WorkoutRouter from "./routes/workout.routes";
+import UserRouter from "./user/routes/user.routes";
+import WorkoutRouter from "./workout/routes/workout.routes";
 import AppError from "./utils/AppError";
 import { mongoose } from "@typegoose/typegoose";
 dotenv.config();
