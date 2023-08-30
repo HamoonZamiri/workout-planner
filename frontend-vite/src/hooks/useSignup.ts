@@ -11,7 +11,7 @@ export const useSignup = () => {
         setIsLoading(true);
         setError(null);
 
-        const res = await fetch(api_base + "/api/user/signup", {
+        const res = await fetch(api_base + "/api/users/signup", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
