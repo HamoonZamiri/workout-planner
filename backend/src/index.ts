@@ -6,7 +6,7 @@ import WorkoutRouter from "./workout/routes/workout.routes";
 import AppError from "./utils/AppError";
 import { mongoose } from "@typegoose/typegoose";
 dotenv.config();
-
+const lineSeperator = "----------------------------------------";
 const app = express();
 
 // middleware
@@ -14,7 +14,10 @@ app.use(express.json());
 app.use(cors());
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-    console.log(`url: ${req.path} method: ${req.method}`);
+    console.log(lineSeperator);
+    console.log(`url: ${req.path}`);
+    console.log(`method: ${req.method}`);
+    console.log(lineSeperator);
     next();
 })
 
