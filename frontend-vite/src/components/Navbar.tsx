@@ -12,7 +12,7 @@ export const Navbar = () => {
     }
 
     return (
-        <header className="bg-blue-100">
+        <header className="bg-blue-100 mb-4">
             <div className="flex justify-between p-6">
                 <Link className="hover:text-slate-400" to="/">
                     <h1 className="font-semibold text-3xl sm:text-4xl">FitLog</h1>
