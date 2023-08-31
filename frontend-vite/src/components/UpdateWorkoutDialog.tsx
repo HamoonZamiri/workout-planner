@@ -32,7 +32,7 @@ const UpdateWorkoutDialog = ({
 			return;
 		}
 		const res = await fetch(api_base + "/api/workouts/" + workout._id, {
-			method: "PATCH",
+			method: "PUT",
 			body: JSON.stringify({ title, load, reps }),
 			headers: {
 				"Content-Type": "application/json",
@@ -47,7 +47,7 @@ const UpdateWorkoutDialog = ({
 		if (res.ok) {
 			setError("");
 			setEmptyFields([]);
-            const updatedWorkout: Workout = {_id: workout._id, title, load: Number(load), reps: Number(reps), user_id: workout.user_id}
+            const updatedWorkout: Workout = json.data;
 			dispatch({
 				type: "UPDATE_WORKOUT",
 				payload: updatedWorkout,

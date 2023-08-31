@@ -13,14 +13,14 @@ const Home = () => {
 
     useEffect(() => {
         const fetchWorkouts = async () => {
-            const res = await fetch(api_base + "/api/workouts", {
+            const res = await fetch(api_base + "/api/workouts/mine ", {
                 headers: {
                     "Authorization": `Bearer ${user?.token}`
                 }
             })
             const json = await res.json()
             if (res.ok) {
-                dispatch({type: "SET_WORKOUTS", payload: json})
+                dispatch({type: "SET_WORKOUTS", payload: json.data})
             }
         }
         if(user){

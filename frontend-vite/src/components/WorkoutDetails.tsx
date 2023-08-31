@@ -28,11 +28,10 @@ const WorkoutDetails = ( { workout }: WorkoutDetailsProps) => {
                 "Authorization": `Bearer ${user.token}`
             }
         })
-        //const json = await res.json()
+        const json = await res.json()
 
         if(res.ok){
-            dispatch({type: "DELETE_WORKOUT", payload: workout})
-
+            dispatch({type: "DELETE_WORKOUT", payload: json.data})
         }
     }
 
@@ -41,16 +40,16 @@ const WorkoutDetails = ( { workout }: WorkoutDetailsProps) => {
             return;
         }
         const res = await fetch(api_base + "/api/workouts/" + workout._id, {
-            method: "PATCH",
+            method: "PUT",
             body: JSON.stringify(updatedWorkout),
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${user.token}`
             }
         })
-
+        const json = await res.json();
         if(res.ok){
-            dispatch({type: "UPDATE_WORKOUT", payload: updatedWorkout});
+            dispatch({type: "UPDATE_WORKOUT", payload: json.data});
         }
 
     }

@@ -11,7 +11,7 @@ export const useLogin = () => {
         setIsLoading(true);
         setError(null);
 
-        const res = await fetch(api_base + "/api/user/login", {
+        const res = await fetch(api_base + "/api/users/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -26,8 +26,8 @@ export const useLogin = () => {
         }
         else {
             setIsLoading(false);
-            localStorage.setItem("user", JSON.stringify(json));
-            dispatch({ type: "LOGIN", payload: json });
+            localStorage.setItem("user", JSON.stringify(json.data));
+            dispatch({ type: "LOGIN", payload: json.data });
         }
     }
 
