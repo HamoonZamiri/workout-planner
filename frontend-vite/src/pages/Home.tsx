@@ -4,13 +4,14 @@ import WorkoutDetails from "../components/WorkoutDetails"
 import WorkoutForm from "../components/WorkoutForm"
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
 import { api_base } from "../utils/constants";
+import { useLogout } from "../hooks/useLogout";
 
 const Home = () => {
     const {state, dispatch} = useWorkoutsContext();
     const { workouts } = state;
     const { state: authState } = useAuthContext();
     const { user } = authState;
-
+    const {logout} = useLogout();
     useEffect(() => {
         const fetchWorkouts = async () => {
             const res = await fetch(api_base + "/api/workouts/mine ", {
@@ -21,6 +22,9 @@ const Home = () => {
             const json = await res.json()
             if (res.ok) {
                 dispatch({type: "SET_WORKOUTS", payload: json.data})
+            }
+            if(res.status === 401) {
+                logout();
             }
         }
         if(user){
