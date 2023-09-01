@@ -16,13 +16,13 @@ Our workout planner application currently offers the following core features:
 
 ### Workout Management
 
-- **Create Workouts**: Users have the ability to create custom workout routines. They can define workout names, descriptions, and include exercises.
+- **Create Workouts**: Users have the ability to create custom workout routines. They can define workout names, load, number of reps.
 
 - **Read Workouts**: Users can view their created workouts, including exercise details, to review and follow their fitness plans.
 
-- **Update Workouts**: Modify and adjust existing workout routines as fitness goals evolve. Edit workout names, descriptions, and exercise lists.
+- **Update Workouts**: Modify and adjust existing workouts as fitness goals evolve. Edit workout names, descriptions, and exercise lists.
 
-- **Delete Workouts**: Users can remove workout routines that are no longer relevant or needed.
+- **Delete Workouts**: Users can remove workouts that are no longer relevant or needed.
 
 These features provide users with the foundation for planning and managing their fitness routines within our workout planner application. We are continuously working to enhance and expand our feature set to better serve our users' fitness needs. See the future of FitLog at the roadmap section of our readme!
 
