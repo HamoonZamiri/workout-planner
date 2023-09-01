@@ -56,6 +56,12 @@ With this deployment setup, we prioritize performance, scalability, and reliabil
 
 ## Roadmap
 
+### Testing (Unit and Integration)
+- Strengthen application reliability by incorporating comprehensive testing.
+  - **Unit Testing with Jest**: Implement unit tests to verify individual components, functions, and modules, ensuring their correctness and robustness.
+  - **Integration Testing with Cypress**: Perform integration tests to validate the interactions between different parts of the application, checking for proper functionality.
+  - **UI Testing with React Testing Library**: Conduct UI testing to ensure that user interfaces meet design expectations and that user interactions work as intended.
+
 ### Enhance User Profile Management
 - Implement a comprehensive UI and backend functionality for users to update their profiles, change passwords, manage email addresses, and add avatars using S3 buckets.
 
