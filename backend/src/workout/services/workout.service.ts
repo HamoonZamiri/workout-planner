@@ -42,7 +42,7 @@ const updateWorkout = async (userId: string, workoutId: string, workoutUpdate: P
 const deleteWorkout = async (userId: string, workoutId: string) => {
     const workout = await WorkoutModel.findById(workoutId);
     if (!workout) {
-        throw new Error("Workout was not found");
+        throw new Error("Workout was not found!");
     }
     if (workout.user_id !== userId) {
         throw new Error("User does not own this workout");

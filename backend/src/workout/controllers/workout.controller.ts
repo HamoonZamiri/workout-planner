@@ -83,9 +83,9 @@ const updateWorkoutHandler = async (req: TypeSafeRequest<{id: string}, UpdateWor
     }
 };
 
-const deleteWorkoutHandler = async (req: TypeSafeRequest<{workoutId: string}, {} , {}>, res: TypeSafeResponse<MongoDocument<Workout>>, next: NextFunction) => {
+const deleteWorkoutHandler = async (req: TypeSafeRequest<{id: string}, {} , {}>, res: TypeSafeResponse<MongoDocument<Workout>>, next: NextFunction) => {
     try {
-        const {workoutId} = req.params;
+        const workoutId = req.params.id;
         const deletedWorkout = await WorkoutService.deleteWorkout(req.body.userId, workoutId);
         if (!deletedWorkout) {
             throw new Error("Something went wrong while trying to delete the workout!");
