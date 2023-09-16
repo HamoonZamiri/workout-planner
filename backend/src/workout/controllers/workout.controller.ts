@@ -1,17 +1,17 @@
 import { NextFunction } from "express";
 import { TypeSafeRequest, TypeSafeResponse } from "../../utils/express.types";
 import WorkoutService from "../services/workout.service";
-import { Workout } from "../models/workout.model";
-import mongoose, { Document } from "mongoose";
-import { BeAnObject, IObjectWithTypegooseFunction } from "@typegoose/typegoose/lib/types";
-import { MongoDocument } from "../../utils/mongoose.types";
 import { getEmptyFields } from "../../utils/emptyfields";
+import { Workout } from "../entities/workout.entity";
+import { DeleteResult } from "typeorm";
 
 // type
 type CreateWorkoutRequestBody = {
     title: string;
     load: number;
     reps: number;
+    sets: number;
+    routineId: string;
 };
 
 type UpdateWorkoutRequestBody = {
@@ -21,25 +21,25 @@ type UpdateWorkoutRequestBody = {
     reps?: number;
 };
 
-const getAllWorkoutsHandler = async (req: TypeSafeRequest<{}, {}, {}>, res: TypeSafeResponse<MongoDocument<Workout>[]>, next: NextFunction) => {
+const getAllWorkoutsHandler = async (req: TypeSafeRequest<{}, {}, {}>, res: TypeSafeResponse<Workout[]>, next: NextFunction) => {
     try {
-        const workouts: MongoDocument<Workout>[] = await WorkoutService.findWorkouts();
+        const workouts = await WorkoutService.findWorkouts();
         res.status(200).json({ message: "Workouts found successfully", data: workouts })
     } catch (err) {
         next(err);
     }
 };
 
-const getWorkoutsByUserIdHandler = async (req: TypeSafeRequest<{}, {}, {}>, res: TypeSafeResponse<MongoDocument<Workout>[]>, next: NextFunction) => {
+const getWorkoutsByUserIdHandler = async (req: TypeSafeRequest<{}, {}, {}>, res: TypeSafeResponse<Workout[]>, next: NextFunction) => {
     try {
-        const workouts: MongoDocument<Workout>[] = await WorkoutService.findUserWorkouts(req.body.userId);
+        const workouts = await WorkoutService.findUserWorkouts(req.body.userId);
         res.status(200).json({ message: "Workouts found successfully", data: workouts })
     } catch (err) {
         next(err);
     }
 };
 
-const getWorkoutByIdHandler = async (req: TypeSafeRequest<{id: string}, {}, {}>, res: TypeSafeResponse<MongoDocument<Workout>>, next: NextFunction) => {
+const getWorkoutByIdHandler = async (req: TypeSafeRequest<{id: string}, {}, {}>, res: TypeSafeResponse<Workout>, next: NextFunction) => {
     try {
         const workout = await WorkoutService.findWorkoutById(req.params.id);
         res.status(200).json({ message: "Workout found successfully", data: workout })
@@ -50,15 +50,15 @@ const getWorkoutByIdHandler = async (req: TypeSafeRequest<{id: string}, {}, {}>,
 const createWorkoutHandler =
     async (
         req: TypeSafeRequest<{}, CreateWorkoutRequestBody, {}>,
-        res: TypeSafeResponse<MongoDocument<Workout>>,
+        res: TypeSafeResponse<Workout>,
         next: NextFunction) => {
         try {
-            const { title, load, reps } = req.body;
-            const emptyFields = getEmptyFields(req.body, ["title", "load", "reps"]);
+            const { title, load, sets, reps, routineId } = req.body;
+            const emptyFields = getEmptyFields(req.body, ["title", "load", "reps", "sets"]);
             if (emptyFields.length > 0) {
                 throw new Error(`Missing fields: ${emptyFields.join(", ")}`);
             }
-            const workout = await WorkoutService.createWorkout(title, load, reps, req.body.userId);
+            const workout = await WorkoutService.createWorkout(title, reps, load, sets, req.body.userId, routineId);
             res.status(201).json({ message: "Workout created successfully", data: workout });
         } catch (err) {
             next(err);
@@ -66,7 +66,7 @@ const createWorkoutHandler =
     }
 
 const updateWorkoutHandler = async (req: TypeSafeRequest<{id: string}, UpdateWorkoutRequestBody, {}>,
-    res: TypeSafeResponse<MongoDocument<Workout>>,
+    res: TypeSafeResponse<Workout>,
     next: NextFunction
     ) => {
     try {
@@ -83,7 +83,7 @@ const updateWorkoutHandler = async (req: TypeSafeRequest<{id: string}, UpdateWor
     }
 };
 
-const deleteWorkoutHandler = async (req: TypeSafeRequest<{id: string}, {} , {}>, res: TypeSafeResponse<MongoDocument<Workout>>, next: NextFunction) => {
+const deleteWorkoutHandler = async (req: TypeSafeRequest<{id: string}, {} , {}>, res: TypeSafeResponse<DeleteResult>, next: NextFunction) => {
     try {
         const workoutId = req.params.id;
         const deletedWorkout = await WorkoutService.deleteWorkout(req.body.userId, workoutId);

@@ -1,9 +1,10 @@
 export type Workout = {
-    _id: string,
+    id: string,
     title: string,
     reps: number,
     load: number,
-    user_id: string
+    sets: number,
+    userId: string
 }
 
 export type User = {

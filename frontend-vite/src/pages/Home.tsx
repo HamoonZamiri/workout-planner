@@ -38,7 +38,7 @@ const Home = () => {
             <h2 className="font-semibold text-2xl w-full">Exercises:</h2>
             <div className="flex flex-col overflow-x-scroll sm:flex-row sm:flex-shrink-0 max-w-screen gap-2 mb-4">
                 {workouts && workouts.map((workout) => {
-                return <WorkoutDetails key={workout._id} workout={workout} />
+                return <WorkoutDetails key={workout.id} workout={workout} />
                 })}
             </div>
             <div className="flex justify-center">

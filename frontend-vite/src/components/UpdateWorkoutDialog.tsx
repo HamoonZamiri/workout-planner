@@ -31,7 +31,7 @@ const UpdateWorkoutDialog = ({
 			setError("You must be logged in to add a workout");
 			return;
 		}
-		const res = await fetch(api_base + "/api/workouts/" + workout._id, {
+		const res = await fetch(api_base + "/api/workouts/" + workout.id, {
 			method: "PUT",
 			body: JSON.stringify({ title, load, reps }),
 			headers: {

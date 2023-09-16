@@ -22,7 +22,7 @@ const WorkoutDetails = ( { workout }: WorkoutDetailsProps) => {
         if(!user){
             return;
         }
-        const res = await fetch(api_base + "/api/workouts/" + workout._id, {
+        const res = await fetch(api_base + "/api/workouts/" + workout.id, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${user.token}`
@@ -39,7 +39,7 @@ const WorkoutDetails = ( { workout }: WorkoutDetailsProps) => {
         if (!user) {
             return;
         }
-        const res = await fetch(api_base + "/api/workouts/" + workout._id, {
+        const res = await fetch(api_base + "/api/workouts/" + workout.id, {
             method: "PUT",
             body: JSON.stringify(updatedWorkout),
             headers: {
