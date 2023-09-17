@@ -5,7 +5,7 @@ import UserRouter from "./user/routes/user.routes";
 import WorkoutRouter from "./workout/routes/workout.routes";
 import AppError from "./utils/AppError";
 import { mongoose } from "@typegoose/typegoose";
-import { FitLogUserDataSource, FitlogCoreDataSource } from "./utils/pgres.datasource";
+import { FitlogCoreDataSource } from "./utils/pgres.datasource";
 import RoutineRouter from "./routine/routes/routine.routes";
 dotenv.config();
 
@@ -16,7 +16,7 @@ const mongoURL = process.env.MONGO_URI ? process.env.MONGO_URI : "";
 //         console.log("Listening on port " + process.env.PORT || 8081);
 //     })
 // });
-Promise.all([FitlogCoreDataSource.initialize(), FitLogUserDataSource.initialize()])
+FitlogCoreDataSource.initialize()
     .then(async () => {
         const lineSeperator = "----------------------------------------";
         const app = express();

@@ -2,10 +2,10 @@ import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 // import { UserModel } from "../models/user.model";
-import { FitLogUserDataSource } from "../../utils/pgres.datasource";
+import { FitlogCoreDataSource } from "../../utils/pgres.datasource";
 import { User } from "../entities/user.entity";
 
-const UserRepository = FitLogUserDataSource.getRepository(User);
+const UserRepository = FitlogCoreDataSource.getRepository(User);
 
 const createToken = (_id: string) => {
     const token = jwt.sign({ _id }, process.env.SECRET || "");

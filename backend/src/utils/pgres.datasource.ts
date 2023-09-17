@@ -13,17 +13,6 @@ export const FitlogCoreDataSource = new DataSource({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE_CORE,
-    entities: [Workout, Routine],
-    synchronize: true
-});
-
-export const FitLogUserDataSource = new DataSource({
-    type: "postgres",
-    host: process.env.FITLOG_CORE_DB_HOST,
-    port: port,
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE_CORE,
-    entities: [User],
+    entities: [Workout, Routine, User],
     synchronize: true
 });
