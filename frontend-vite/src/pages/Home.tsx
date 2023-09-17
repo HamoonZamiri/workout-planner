@@ -6,6 +6,7 @@ import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
 import { api_base } from "../utils/constants";
 import { useLogout } from "../hooks/useLogout";
 
+const UNAUTHORIZED = 401;
 const Home = () => {
     const {state, dispatch} = useWorkoutsContext();
     const { workouts } = state;
@@ -23,7 +24,7 @@ const Home = () => {
             if (res.ok) {
                 dispatch({type: "SET_WORKOUTS", payload: json.data})
             }
-            if(res.status === 401) {
+            if(res.status === UNAUTHORIZED) {
                 logout();
             }
         }

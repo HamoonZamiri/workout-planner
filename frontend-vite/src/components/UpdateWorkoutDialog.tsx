@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Workout } from "../utils/types";
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext";
 import { useAuthContext } from "../hooks/useAuthContext";
@@ -16,14 +16,20 @@ const UpdateWorkoutDialog = ({
 	open,
 	setOpen,
 }: UpdateWorkoutDialogProps) => {
-	const [title, setTitle] = useState(workout.title);
-	const [load, setLoad] = useState(workout.load + "");
-	const [reps, setReps] = useState(workout.reps + "");
+	const [title, setTitle] = useState("");
+	const [load, setLoad] = useState("");
+	const [reps, setReps] = useState("");
 	const [error, setError] = useState("");
 	const [emptyFields, setEmptyFields] = useState<string[]>([]);
 	const { dispatch } = useWorkoutsContext();
 	const { state } = useAuthContext();
 	const { user } = state;
+
+	useEffect(() => {
+		setTitle(workout.title);
+		setLoad(workout.load.toString());
+		setReps(workout.reps.toString());
+	}, [workout]);
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
