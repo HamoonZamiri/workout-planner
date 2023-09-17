@@ -19,6 +19,7 @@ type UpdateWorkoutRequestBody = {
     title?: string;
     load?: number;
     reps?: number;
+    sets?: number;
 };
 
 const getAllWorkoutsHandler = async (req: TypeSafeRequest<{}, {}, {}>, res: TypeSafeResponse<Workout[]>, next: NextFunction) => {
@@ -71,8 +72,8 @@ const updateWorkoutHandler = async (req: TypeSafeRequest<{id: string}, UpdateWor
     ) => {
     try {
         const workoutId = req.params.id;
-        const {title, load, reps } = req.body;
-        const updatedWorkout = {_id: workoutId, title, load, reps};
+        const {title, load, reps, sets } = req.body;
+        const updatedWorkout = {_id: workoutId, title, load, reps, sets};
         const successfulUpdate = await WorkoutService.updateWorkout(req.body.userId, workoutId, updatedWorkout);
         if (!successfulUpdate) {
             throw new Error("Something went wrong while trying to update the workout!");
