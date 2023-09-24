@@ -60,25 +60,27 @@ const WorkoutDetails = ( { workout }: WorkoutDetailsProps) => {
                 border-inherit border-4 rounded-md p-2 sm:flex-shrink-0 sm:w-[350px] "
             >
                 <h4 className="text-xl font-semibold flex justify-center">{workout.title}</h4>
-                <div className="flex gap-4 justify-center">
-                    <p><strong>Load (kg): </strong>{workout.load}</p>
-                    <div className="flex gap-1">
-                        <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, load: workout.load - loadInc})}><AiFillMinusCircle /></div>
-                        <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, load: workout.load + loadInc})}><AiFillPlusCircle /></div>
+                <div className="flex flex-col items-center">
+                    <div className="flex gap-4">
+                        <p>Load (kg): {workout.load}</p>
+                        <div className="flex gap-1">
+                            <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, load: workout.load - loadInc})}><AiFillMinusCircle /></div>
+                            <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, load: workout.load + loadInc})}><AiFillPlusCircle /></div>
+                        </div>
                     </div>
-                </div>
-                <div className="flex gap-4 justify-center">
-                    <p><strong>Reps: </strong>{workout.reps}</p>
-                    <div className="flex gap-1">
-                        <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, reps: workout.reps - repInc})}><AiFillMinusCircle /></div>
-                        <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, reps: workout.reps + repInc})}><AiFillPlusCircle /></div>
+                    <div className="flex gap-4">
+                        <p>Reps: {workout.reps}</p>
+                        <div className="flex gap-1">
+                            <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, reps: workout.reps - repInc})}><AiFillMinusCircle /></div>
+                            <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, reps: workout.reps + repInc})}><AiFillPlusCircle /></div>
+                        </div>
                     </div>
-                </div>
-                <div className="flex gap-4 justify-center">
-                    <p><strong>Sets: </strong>{workout.sets}</p>
-                    <div className="flex gap-1">
-                        <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, sets: workout.sets - repInc})}><AiFillMinusCircle /></div>
-                        <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, sets: workout.sets + repInc})}><AiFillPlusCircle /></div>
+                    <div className="flex gap-4">
+                        <p>Sets: {workout.sets}</p>
+                        <div className="flex gap-1">
+                            <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, sets: workout.sets - repInc})}><AiFillMinusCircle /></div>
+                            <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, sets: workout.sets + repInc})}><AiFillPlusCircle /></div>
+                        </div>
                     </div>
                 </div>
                 <div className="flex justify-between">

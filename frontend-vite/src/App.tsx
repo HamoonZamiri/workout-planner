@@ -4,6 +4,7 @@ import { Navbar } from "./components/Navbar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import RoutinePage from "./pages/Routine";
 
 function App() {
   const { state } = useAuthContext();
@@ -25,6 +26,10 @@ function App() {
           <Route
             path="/signup"
             element={!user ? <Signup />: <Navigate to="/" />}
+          />
+          <Route
+            path="/routine"
+            element={user ? <RoutinePage /> : <Navigate to="/login" />}
           />
         </Routes>
 

@@ -19,6 +19,7 @@ const UpdateWorkoutDialog = ({
 	const [title, setTitle] = useState("");
 	const [load, setLoad] = useState("");
 	const [reps, setReps] = useState("");
+	const [sets, setSets] = useState("");
 	const [error, setError] = useState("");
 	const [emptyFields, setEmptyFields] = useState<string[]>([]);
 	const { dispatch } = useWorkoutsContext();
@@ -29,6 +30,7 @@ const UpdateWorkoutDialog = ({
 		setTitle(workout.title);
 		setLoad(workout.load.toString());
 		setReps(workout.reps.toString());
+		setSets(workout.sets.toString());
 	}, [workout]);
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -39,7 +41,7 @@ const UpdateWorkoutDialog = ({
 		}
 		const res = await fetch(api_base + "/api/workouts/" + workout.id, {
 			method: "PUT",
-			body: JSON.stringify({ title, load, reps }),
+			body: JSON.stringify({ title, load, reps, sets }),
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${user.token}`,
@@ -113,6 +115,19 @@ const UpdateWorkoutDialog = ({
 						/>
 						<p className="text-red-300">
 							{emptyFields.includes("reps") && "This field is required"}
+						</p>
+					</div>
+					<div>
+						<label># of Sets:</label>
+						<input
+							className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+                            placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
+							type="text"
+							onChange={(event) => setSets(event.target.value)}
+							value={sets}
+						/>
+						<p className="text-red-300">
+							{emptyFields.includes("sets") && "This field is required"}
 						</p>
 					</div>
 					<button
