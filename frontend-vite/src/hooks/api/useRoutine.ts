@@ -10,27 +10,26 @@ export const useRoutine = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string| undefined>("");
 
-	const getRoutines = async () => {
-		if(!user) {
-			setIsLoading(true);
-			return;
-		}
-		const res = await fetch(`${api_base}/api/routines/${user.id}`, {
-			headers: {
-				Authorization: `Bearer ${user.token}`,
-				"Content-Type": "application/json",
-			},
-		});
-
-		const json: ServerResponse<Routine[]> = await res.json();
-		if(!res.ok) {
-			setError(json.error);
-		}
-		setData(json);
-		setError("");
-	};
-
 	useEffect(() => {
+		const getRoutines = async () => {
+			if(!user) {
+				setIsLoading(true);
+				return;
+			}
+			const res = await fetch(`${api_base}/api/routines/${user.id}`, {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+					"Content-Type": "application/json",
+				},
+			});
+
+			const json: ServerResponse<Routine[]> = await res.json();
+			if(!res.ok) {
+				setError(json.error);
+			}
+			setData(json);
+			setError("");
+		};
 		getRoutines();
 	}, [user]);
 
