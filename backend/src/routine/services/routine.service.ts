@@ -37,7 +37,13 @@ const findRoutineById = async (routineId: string) => {
 }
 
 const findUserRoutines = async (userId: string) => {
-    return RoutineRepository.findBy({userId});
+    return RoutineRepository.find(
+        {where: {
+            userId,
+
+        },
+        relations: {workouts: true}
+    });
 };
 
 const findRoutineByTitle = async (title: string) => {
