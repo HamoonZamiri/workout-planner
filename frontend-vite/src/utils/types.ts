@@ -26,4 +26,5 @@ export type Routine = {
 export type ServerResponse<T> = {
     message: string;
     data: T
+    error?: string;
 }

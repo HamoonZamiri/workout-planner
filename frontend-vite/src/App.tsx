@@ -8,8 +8,8 @@ import RoutinePage from "./pages/Routine";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 function App() {
-  const { state } = useAuthContext();
-  const { user } = state;
+  const context = useAuthContext();
+  const user = context.state.user;
 
   const queryClient = new QueryClient()
   return (
