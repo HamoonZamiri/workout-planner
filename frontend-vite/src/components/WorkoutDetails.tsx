@@ -1,95 +1,155 @@
 import { useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { useWorkoutsContext } from "../hooks/useWorkoutsContext";
 import { Workout } from "../utils/types";
 import { api_base } from "../utils/constants";
-import { FaHammer } from "react-icons/fa"
-import {AiFillPlusCircle, AiFillMinusCircle} from "react-icons/ai"
+import { FaHammer } from "react-icons/fa";
+import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 import UpdateWorkoutDialog from "./UpdateWorkoutDialog";
-import { BsTrash } from "react-icons/bs"
+import { BsTrash } from "react-icons/bs";
+import useRoutinesContext from "../hooks/useRoutinesContext";
 type WorkoutDetailsProps = {
-    workout: Workout;
+	workout: Workout;
+	routineId: string;
 };
-const WorkoutDetails = ( { workout }: WorkoutDetailsProps) => {
-    const [open, setOpen] = useState(false);
-    const loadInc = 5; //value to increment load by with buttons
-    const repInc = 1; //value to increment reps by with buttons
-    const { state } = useAuthContext()
-    const { user } = state;
 
-    const { dispatch } = useWorkoutsContext();
-    const handleClick = async () => {
-        if(!user){
-            return;
-        }
-        const res = await fetch(api_base + "/api/workouts/" + workout.id, {
-            method: "DELETE",
-            headers: {
-                "Authorization": `Bearer ${user.token}`
-            }
-        })
-        const json = await res.json()
+const WorkoutDetails = ({ routineId, workout }: WorkoutDetailsProps) => {
+	const [open, setOpen] = useState(false);
+	const loadInc = 5; //value to increment load by with buttons
+	const repInc = 1; //value to increment reps by with buttons
+	const { state } = useAuthContext();
+	const { user } = state;
 
-        if(res.ok){
-            dispatch({type: "DELETE_WORKOUT", payload: json.data})
-        }
-    }
+	const { dispatch } = useRoutinesContext();
+	const handleClick = async () => {
+		if (!user) {
+			return;
+		}
+		const res = await fetch(api_base + "/api/workouts/" + workout.id, {
+			method: "DELETE",
+			headers: {
+				Authorization: `Bearer ${user.token}`,
+			},
+		});
+		await res.json();
 
-    const handleChange = async (updatedWorkout: Workout) => {
-        if (!user) {
-            return;
-        }
-        const res = await fetch(api_base + "/api/workouts/" + workout.id, {
-            method: "PUT",
-            body: JSON.stringify(updatedWorkout),
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${user.token}`
-            }
-        })
-        const json = await res.json();
-        if(res.ok){
-            dispatch({type: "UPDATE_WORKOUT", payload: json.data});
-        }
+		if (res.ok) {
+			dispatch({
+				type: "DELETE_WORKOUT",
+				payload: { routineId, workout },
+			});
+		}
+	};
 
-    }
-    return (
-        <div className="relative">
-            <div
-                className="grid grid-cols-1 bg-slate-100 hover:bg-slate-200 border-solid
-                border-inherit border-4 rounded-md p-2 sm:flex-shrink-0 sm:w-[350px] "
-            >
-                <h4 className="text-xl font-semibold flex justify-center">{workout.title}</h4>
-                <div className="flex flex-col items-center">
-                    <div className="flex gap-4">
-                        <p>Load (kg): {workout.load}</p>
-                        <div className="flex gap-1">
-                            <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, load: workout.load - loadInc})}><AiFillMinusCircle /></div>
-                            <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, load: workout.load + loadInc})}><AiFillPlusCircle /></div>
-                        </div>
-                    </div>
-                    <div className="flex gap-4">
-                        <p>Reps: {workout.reps}</p>
-                        <div className="flex gap-1">
-                            <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, reps: workout.reps - repInc})}><AiFillMinusCircle /></div>
-                            <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, reps: workout.reps + repInc})}><AiFillPlusCircle /></div>
-                        </div>
-                    </div>
-                    <div className="flex gap-4">
-                        <p>Sets: {workout.sets}</p>
-                        <div className="flex gap-1">
-                            <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, sets: workout.sets - repInc})}><AiFillMinusCircle /></div>
-                            <div className="cursor-pointer flex items-center" onClick={() => handleChange({...workout, sets: workout.sets + repInc})}><AiFillPlusCircle /></div>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex justify-between">
-                    <FaHammer className="cursor-pointer" onClick={() => setOpen(true)} />
-                    <BsTrash className="cursor-pointer" onClick={handleClick} />
-                </div>
-            </div>
-            <UpdateWorkoutDialog open={open} setOpen={setOpen} workout={workout}/>
-        </div>
-    );
+	const handleChange = async (updatedWorkout: Workout) => {
+		if (!user) {
+			return;
+		}
+		const res = await fetch(api_base + "/api/workouts/" + workout.id, {
+			method: "PUT",
+			body: JSON.stringify(updatedWorkout),
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${user.token}`,
+			},
+		});
+		const json = await res.json();
+		console.log(json);
+		if (res.ok) {
+			const payload = { routineId, workout: updatedWorkout}
+			console.log(payload);
+			dispatch({
+				type: "UPDATE_WORKOUT",
+				payload: {routineId, workout: updatedWorkout}
+			});
+		}
+	};
+	return (
+		
+		<div className="relative">
+			<div
+				className="grid grid-cols-1 bg-slate-100 border-solid
+                border-[#a7dbd8] border-4 rounded-md p-2 sm:flex-shrink-0 sm:w-[350px] "
+			>
+				<h4 className="text-xl font-semibold flex justify-center">
+					{workout.title}
+				</h4>
+
+				<div className="flex flex-col items-center">
+					<div className="flex gap-4">
+						<p>Load (kg): {workout.load}</p>
+						<div className="flex gap-1">
+							<div
+								className="cursor-pointer flex items-center"
+								onClick={() =>
+									handleChange({ ...workout, load: workout.load - loadInc })
+								}
+							>
+								<AiFillMinusCircle />
+							</div>
+							<div
+								className="cursor-pointer flex items-center"
+								onClick={() =>
+									handleChange({ ...workout, load: workout.load + loadInc })
+								}
+							>
+								<AiFillPlusCircle />
+							</div>
+						</div>
+					</div>
+
+					<div className="flex gap-4">
+						<p>Reps: {workout.reps}</p>
+						<div className="flex gap-1">
+							<div
+								className="cursor-pointer flex items-center"
+								onClick={() =>
+									handleChange({ ...workout, reps: workout.reps - repInc })
+								}
+							>
+								<AiFillMinusCircle />
+							</div>
+							<div
+								className="cursor-pointer flex items-center"
+								onClick={() =>
+									handleChange({ ...workout, reps: workout.reps + repInc })
+								}
+							>
+								<AiFillPlusCircle />
+							</div>
+						</div>
+					</div>
+
+					<div className="flex gap-4">
+						<p>Sets: {workout.sets}</p>
+						<div className="flex gap-1">
+							<div
+								className="cursor-pointer flex items-center"
+								onClick={() =>
+									handleChange({ ...workout, sets: workout.sets - repInc })
+								}
+							>
+								<AiFillMinusCircle />
+							</div>
+
+							<div
+								className="cursor-pointer flex items-center"
+								onClick={() =>
+									handleChange({ ...workout, sets: workout.sets + repInc })
+								}
+							>
+								<AiFillPlusCircle />
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<div className="flex justify-between">
+					<FaHammer className="cursor-pointer" onClick={() => setOpen(true)} />
+					<BsTrash className="cursor-pointer" onClick={handleClick} />
+				</div>
+			</div>
+			<UpdateWorkoutDialog routineId={routineId} open={open} setOpen={setOpen} workout={workout} />
+		</div>
+	);
 };
 export default WorkoutDetails;

@@ -1,10 +1,15 @@
 import { useState } from "react"
-import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
 import { useAuthContext } from "../hooks/useAuthContext"
 import { api_base } from "../utils/constants";
+import useRoutinesContext from "../hooks/useRoutinesContext";
+import { ServerResponse, Workout } from "../utils/types";
 
-const WorkoutForm = () => {
-    const {dispatch} = useWorkoutsContext();
+type WorkoutFormProps = {
+    routineId: string;
+}
+
+const WorkoutForm = ({routineId}: WorkoutFormProps) => {
+    const {dispatch} = useRoutinesContext();
     const [title, setTitle] = useState("");
     const [load, setLoad] = useState("");
     const [reps, setReps] = useState("");
@@ -29,11 +34,11 @@ const WorkoutForm = () => {
                 "Authorization": `Bearer ${user.token}`
             }
         })
-        const json = await res.json()
+        const json: ServerResponse<Workout> = await res.json()
 
         if(!res.ok) {
-            setError(json.error)
-            setEmptyFields(json.emptyFields)
+            setError(json.error ? json.error : "Something went wrong")
+            setEmptyFields(json.emptyFields ? json.emptyFields : [])
         }
         if(res.ok){
             setError("")
@@ -41,7 +46,8 @@ const WorkoutForm = () => {
             setTitle("")
             setLoad("")
             setReps("")
-            dispatch({type: "CREATE_WORKOUT", payload: json.data})
+            const payload = {routineId, workout: json.data}
+            dispatch({type: "CREATE_WORKOUT", payload})
         }
     }
     return (
