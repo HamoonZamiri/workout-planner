@@ -1,15 +1,15 @@
-import { NextFunction } from "express";
+import { NextFunction, Request } from "express";
 import { TypeSafeRequest, TypeSafeResponse } from "../../utils/express.types";
 import { Routine } from "../entities/routine.entity";
 import RoutineService from "../services/routine.service";
-type CreateRoutineBody = {
-    title: string;
-    description: string;
-}
-const postRoutineHandler = async (req: TypeSafeRequest<{userId: string}, CreateRoutineBody, {}>, res: TypeSafeResponse<Routine>, next: NextFunction) => {
+import { zParse } from "../../utils/zod";
+import { CreateRoutineRequest } from "../routine.types";
+
+const postRoutineHandler = async (req: Request, res: TypeSafeResponse<Routine>, next: NextFunction) => {
     try {
-        const { title, description } = req.body;
-        const routine = await RoutineService.createRoutine(title, description, req.params.userId);
+        const { body, params } = await zParse(CreateRoutineRequest, req);
+        const title = body.title, description = body.description, userId = params.userId, timeToComplete = body.timeToComplete;
+        const routine = await RoutineService.createRoutine(title, description, userId, timeToComplete);
         res.status(200).json({ message: "Routine created successfully", data: routine });
     } catch(err) {
         next(err);

@@ -37,6 +37,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "^20.5.7",
     "@types/nodemon": "^1.19.2",
-    "@types/validator": "^13.11.1"
+    "@types/validator": "^13.11.1",
+    "zod": "^3.22.4"
   }
 }
