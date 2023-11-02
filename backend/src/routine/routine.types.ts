@@ -1,4 +1,8 @@
 import { z } from "zod";
+const UserMiddleware = z.object({
+    userId: z.string().uuid(),
+    email: z.string().email()
+});
 
 const CreateRoutineSchema = z.object({
     title: z.string().min(1),
@@ -6,9 +10,18 @@ const CreateRoutineSchema = z.object({
     timeToComplete: z.string().transform(val => Number(val)),
 })
 
-export const CreateRoutineRequest = z.object({
-    body: CreateRoutineSchema,
+export const CreateRoutineRequest =
+    z.object({
+        body: CreateRoutineSchema.merge(UserMiddleware)
+    });
+
+export const GetRoutinesRequest = z.object({
+    body: UserMiddleware,
+});
+
+export const AddWorkoutToRoutineRequest = z.object({
     params: z.object({
-        userId: z.string().uuid()
+        routineId: z.string().uuid(),
+        workoutId: z.string().uuid()
     })
 });

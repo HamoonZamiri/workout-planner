@@ -3,8 +3,8 @@ import { useAuthContext } from "../useAuthContext";
 import { api_base } from "../../utils/constants";
 import { useQuery } from "react-query";
 
-const getRoutines = async (userId: string, token: string) => {
-	const res = await fetch(`${api_base}/api/routines/${userId}`, {
+const getRoutines = async (token: string) => {
+	const res = await fetch(`${api_base}/api/routines/`, {
 		headers: {
 			Authorization: `Bearer ${token}`,
 			"Content-Type": "application/json",
@@ -22,14 +22,13 @@ export const useRoutine = () => {
 	const user = context.state.user;
 
 	// setting these vars to empty string so React query doesn't complain that they're undefined
-	const id = user ? user.id : "";
 	const token = user ? user.token : "";
 
 	const { data, error, isError, isLoading } =
 		useQuery<ServerResponse<Routine[]>>({
-			queryKey: ["routines", id, token],
-			queryFn: () => getRoutines(id, token),
-			enabled: !!id && !!token,
+			queryKey: ["routines", token],
+			queryFn: () => getRoutines(token),
+			enabled: !!token,
 		})
 
 	return { queryData: data, error, isError, isLoading };

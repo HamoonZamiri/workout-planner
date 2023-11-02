@@ -1,4 +1,4 @@
-import { NextFunction } from "express";
+import { NextFunction, Request } from "express";
 import { TypeSafeRequest, TypeSafeResponse } from "../../utils/express.types";
 import WorkoutService from "../services/workout.service";
 import { getEmptyFields } from "../../utils/emptyfields";
@@ -22,7 +22,7 @@ type UpdateWorkoutRequestBody = {
     sets?: number;
 };
 
-const getAllWorkoutsHandler = async (req: TypeSafeRequest<{}, {}, {}>, res: TypeSafeResponse<Workout[]>, next: NextFunction) => {
+const getAllWorkoutsHandler = async (_: Request, res: TypeSafeResponse<Workout[]>, next: NextFunction) => {
     try {
         const workouts = await WorkoutService.findWorkouts();
         res.status(200).json({ message: "Workouts found successfully", data: workouts })

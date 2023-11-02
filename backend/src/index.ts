@@ -4,18 +4,10 @@ import dotenv from "dotenv";
 import UserRouter from "./user/routes/user.routes";
 import WorkoutRouter from "./workout/routes/workout.routes";
 import AppError from "./utils/AppError";
-import { mongoose } from "@typegoose/typegoose";
 import { FitlogCoreDataSource } from "./utils/pgres.datasource";
 import RoutineRouter from "./routine/routes/routine.routes";
 dotenv.config();
 
-const mongoURL = process.env.MONGO_URI ? process.env.MONGO_URI : "";
-// mongoose.connect(mongoURL)
-// .then(() => {
-//     app.listen(process.env.PORT || 8081, () => {
-//         console.log("Listening on port " + process.env.PORT || 8081);
-//     })
-// });
 FitlogCoreDataSource.initialize()
     .then(async () => {
         const lineSeperator = "----------------------------------------";
@@ -25,7 +17,7 @@ FitlogCoreDataSource.initialize()
         app.use(express.json());
         app.use(cors());
 
-        app.use((req: Request, res: Response, next: NextFunction) => {
+        app.use((req: Request, _: Response, next: NextFunction) => {
             console.log(lineSeperator);
             console.log(`url: ${req.path}`);
             console.log(`method: ${req.method}`);
@@ -34,7 +26,7 @@ FitlogCoreDataSource.initialize()
         })
 
         // health check
-        app.get("/", (req, res) => {
+        app.get("/", (_, res) => {
             res.send("Health Check");
         });
 
@@ -45,7 +37,7 @@ FitlogCoreDataSource.initialize()
 
         // error handling
         app.use(
-            (error: AppError, req: Request, res: Response, next: NextFunction) => {
+            (error: AppError, _: Request, res: Response, __: NextFunction): void => {
                 console.log(error.message);
                 res.status(error.statuscode ? error.statuscode : 400).json({ "error": error.message });
                 return;
