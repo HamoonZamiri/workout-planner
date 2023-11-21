@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-	Workout,
-	WorkoutFormSchema,
-} from "../utils/types";
+import { Workout, WorkoutFormSchema } from "../utils/types";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { api_base } from "../utils/constants";
 import { Dialog } from "@headlessui/react";
@@ -88,7 +85,6 @@ const UpdateWorkoutDialog = ({
 					className="rounded-lg border bg-white p-3 w-[400px] grid grid-cols-1 gap-8 hover:cursor-default"
 					onSubmit={handleSubmit}
 				>
-
 					<Dialog.Title className="font-semibold text-xl">
 						Edit Workout
 					</Dialog.Title>
@@ -103,7 +99,8 @@ const UpdateWorkoutDialog = ({
 							value={title}
 						/>
 						<p className="text-red-300">
-							{emptyFields.includes("title") && "This field is required"}
+							{emptyFields.includes("title") &&
+								"This field is required"}
 						</p>
 					</div>
 
@@ -117,7 +114,8 @@ const UpdateWorkoutDialog = ({
 							value={load}
 						/>
 						<p className="text-red-300">
-							{emptyFields.includes("load") && "This field is required"}
+							{emptyFields.includes("load") &&
+								"This field is required"}
 						</p>
 					</div>
 
@@ -131,7 +129,8 @@ const UpdateWorkoutDialog = ({
 							value={reps}
 						/>
 						<p className="text-red-300">
-							{emptyFields.includes("reps") && "This field is required"}
+							{emptyFields.includes("reps") &&
+								"This field is required"}
 						</p>
 					</div>
 
@@ -145,7 +144,8 @@ const UpdateWorkoutDialog = ({
 							value={sets}
 						/>
 						<p className="text-red-300">
-							{emptyFields.includes("sets") && "This field is required"}
+							{emptyFields.includes("sets") &&
+								"This field is required"}
 						</p>
 					</div>
 

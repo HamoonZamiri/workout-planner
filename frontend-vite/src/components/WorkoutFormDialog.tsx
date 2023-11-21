@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { api_base } from "../utils/constants";
 import useRoutinesContext from "../hooks/useRoutinesContext";
-import { ServerResponse, Workout, WorkoutFormSchema, } from "../utils/types";
+import { ServerResponse, Workout, WorkoutFormSchema } from "../utils/types";
 import { Dialog } from "@headlessui/react";
 
 type WorkoutFormProps = {
@@ -17,7 +17,7 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 	const [load, setLoad] = useState("");
 	const [reps, setReps] = useState("");
 	const [error, setError] = useState("");
-    const [sets, setSets] = useState("");
+	const [sets, setSets] = useState("");
 	const [emptyFields, setEmptyFields] = useState<string[]>([]);
 	const { state } = useAuthContext();
 	const { user } = state;
@@ -28,7 +28,7 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 			setError("You must be logged in to add a workout");
 			return;
 		}
-        const body = { title, load, reps, sets };
+		const body = { title, load, reps, sets };
 		const parsedBody = WorkoutFormSchema.safeParse(body);
 		if (!parsedBody.success) {
 			setError(parsedBody.error.issues[0].message);
@@ -55,10 +55,10 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 			setTitle("");
 			setLoad("");
 			setReps("");
-            setSets("");
+			setSets("");
 			const payload = { routineId, workout: json.data };
 			dispatch({ type: "CREATE_WORKOUT", payload });
-            setOpen(false);
+			setOpen(false);
 		}
 	};
 	return (
@@ -68,8 +68,14 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 			onClose={() => setOpen(false)}
 		>
 			<Dialog.Panel>
-				<form className="grid grid-cols-1 gap-8 rounded-lg border bg-white p-3 w-[400px]" onSubmit={handleSubmit}>
-					<h3 className="font-semibold text-2xl">Add a New Exercise</h3>
+				<form
+					className="grid grid-cols-1 gap-8 rounded-lg border bg-white p-3 w-[400px]"
+					onSubmit={handleSubmit}
+				>
+					<h3 className="font-semibold text-2xl">
+						Add a New Exercise
+					</h3>
+
 					<div>
 						<label>Exercise Name:</label>
 						<input
@@ -81,9 +87,11 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 							// className={emptyFields && emptyFields.includes("title") ? "error" : ""}
 						/>
 						<p className="text-red-300">
-							{emptyFields.includes("title") && "This field is required"}
+							{emptyFields.includes("title") &&
+								"This field is required"}
 						</p>
 					</div>
+
 					<div>
 						<label>Load (kg):</label>
 						<input
@@ -95,9 +103,11 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 							// className={emptyFields && emptyFields.includes("load") ? "error" : ""}
 						/>
 						<p className="text-red-300">
-							{emptyFields.includes("load") && "This field is required"}
+							{emptyFields.includes("load") &&
+								"This field is required"}
 						</p>
 					</div>
+
 					<div>
 						<label># of Reps:</label>
 						<input
@@ -109,10 +119,12 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 							// className={ emptyFields && emptyFields.includes("reps") ? "error" : "" }
 						/>
 						<p className="text-red-300">
-							{emptyFields.includes("reps") && "This field is required"}
+							{emptyFields.includes("reps") &&
+								"This field is required"}
 						</p>
 					</div>
-                    <div>
+
+					<div>
 						<label># of Sets:</label>
 						<input
 							className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
@@ -123,9 +135,11 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 							// className={ emptyFields && emptyFields.includes("reps") ? "error" : "" }
 						/>
 						<p className="text-red-300">
-							{emptyFields.includes("sets") && "This field is required"}
+							{emptyFields.includes("sets") &&
+								"This field is required"}
 						</p>
 					</div>
+
 					<button className="w-full bg-blue-100 hover:bg-blue-200 rounded-lg h-10">
 						Add Workout
 					</button>

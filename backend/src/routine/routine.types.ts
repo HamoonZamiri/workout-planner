@@ -6,8 +6,8 @@ const UserMiddleware = z.object({
 
 const CreateRoutineSchema = z.object({
     title: z.string().min(1),
-    description: z.string().min(10).max(200),
-    timeToComplete: z.string().transform(val => Number(val)),
+    description: z.string().min(5).max(200),
+    timeToComplete: z.number().min(1).int(),
 })
 
 export const CreateRoutineRequest =

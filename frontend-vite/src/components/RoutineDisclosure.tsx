@@ -33,7 +33,7 @@ const RoutineDisclosure = ({ routine }: RoutineDisclosureProps) => {
 
 					<div className="w-1/2 border-solid border-gray-400 border p-5">
 						<p className="text-gray-500">Number of Exercises</p>
-						<p className="font-bold text-3xl">{routine.workouts.length}</p>
+						<p className="font-bold text-3xl">{routine.workouts ? routine.workouts.length : 0}</p>
 					</div>
 				</section>
 
