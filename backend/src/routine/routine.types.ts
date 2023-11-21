@@ -19,9 +19,17 @@ export const GetRoutinesRequest = z.object({
     body: UserMiddleware,
 });
 
-export const AddWorkoutToRoutineRequest = z.object({
+export const idRequest  = z.object({
     params: z.object({
         routineId: z.string().uuid(),
-        workoutId: z.string().uuid()
     })
 });
+
+export const UpdateRoutineRequest = z.object({
+    params: z.object({
+        routineId: z.string().uuid()
+    }),
+    body: CreateRoutineSchema.partial()
+})
+
+export type RoutineUpdateFields = z.infer<typeof UpdateRoutineRequest>["body"];

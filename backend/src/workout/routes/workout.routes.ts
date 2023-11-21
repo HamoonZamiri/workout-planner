@@ -6,17 +6,15 @@ const WorkoutRouter = Express.Router();
 
 WorkoutRouter.use(requireAuth);
 
-WorkoutRouter.get("/", WorkoutController.getAllWorkoutsHandler);
-
 WorkoutRouter.route("/")
-    .get(WorkoutController.getAllWorkoutsHandler)
-    .post(WorkoutController.createWorkoutHandler);
+    .get(WorkoutController.getAll)
+    .post(WorkoutController.post);
 
-WorkoutRouter.get("/mine", WorkoutController.getWorkoutsByUserIdHandler);
+WorkoutRouter.get("/mine", WorkoutController.getMine);
 
 WorkoutRouter.route("/:id")
-    .get(WorkoutController.getWorkoutByIdHandler)
-    .delete(WorkoutController.deleteWorkoutHandler)
-    .put(WorkoutController.updateWorkoutHandler);
+    .get(WorkoutController.getById)
+    .delete(WorkoutController._delete)
+    .put(WorkoutController.put);
 
 export default WorkoutRouter;

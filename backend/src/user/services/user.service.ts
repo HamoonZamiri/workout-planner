@@ -12,7 +12,7 @@ const createToken = (_id: string) => {
     return token;
 }
 
-const signupUser = async(email: string, password: string) => {
+const post = async(email: string, password: string) => {
     if(!email || !password){
         throw new Error("Email and Password are required");
     }
@@ -35,7 +35,7 @@ const signupUser = async(email: string, password: string) => {
     return UserRepository.save(user);
 };
 
-const loginUser = async(email: string, password: string) => {
+const login = async(email: string, password: string) => {
     if(!email || !password){
         throw new Error("Email and Password are required");
     }
@@ -50,8 +50,8 @@ const loginUser = async(email: string, password: string) => {
     return user;
 };
 
-const findUserById = async(id: string) => {
-    const user = UserRepository.findOneBy({id})
+const getById = async(id: string) => {
+const user = await UserRepository.findOneBy({id})
     if(!user){
         throw new Error("User not found");
     }
@@ -60,8 +60,8 @@ const findUserById = async(id: string) => {
 
 const UserService = {
     createToken,
-    signupUser,
-    loginUser,
-    findUserById
+    post,
+    login,
+    getById,
 }
 export default UserService;

@@ -3,47 +3,118 @@ import { TypeSafeResponse } from "../../utils/express.types";
 import { Routine } from "../entities/routine.entity";
 import RoutineService from "../services/routine.service";
 import { zParse } from "../../utils/zod";
-import { AddWorkoutToRoutineRequest, CreateRoutineRequest, GetRoutinesRequest } from "../routine.types";
+import {
+	CreateRoutineRequest,
+	GetRoutinesRequest,
+	UpdateRoutineRequest,
+	idRequest,
+} from "../routine.types";
+import { DeleteResult } from "typeorm";
 
-const postRoutineHandler = async (req: Request, res: TypeSafeResponse<Routine>, next: NextFunction) => {
-    try {
-        const { body } = await zParse(CreateRoutineRequest, req);
-        const title = body.title
-        const description = body.description
-        const userId = body.userId, timeToComplete = body.timeToComplete;
-        const routine = await RoutineService.createRoutine(title, description, userId, timeToComplete);
-        res.status(200).json({ message: "Routine created successfully", data: routine });
-    } catch (err) {
-        next(err);
-    }
-}
+const post = async (
+	req: Request,
+	res: TypeSafeResponse<Routine>,
+	next: NextFunction
+) => {
+	try {
+		const { body } = await zParse(CreateRoutineRequest, req);
+		const { title, description, userId, timeToComplete } = body;
 
-const getUserRoutinesHandler = async (req: Request, res: TypeSafeResponse<Routine[]>, next: NextFunction) => {
-    try {
-        const { body } = await zParse(GetRoutinesRequest, req);
-        const routines = await RoutineService.findUserRoutines(body.userId);
-        res.status(200).json({ message: "Routines found successfully", data: routines });
-    } catch (err) {
-        next(err);
-    }
+		const routine = await RoutineService.post(
+			title,
+			description,
+			userId,
+			timeToComplete
+		);
+		res.status(200).json({
+			message: "Routine created successfully",
+			data: routine,
+		});
+	} catch (err) {
+		next(err);
+	}
 };
 
-const addWorkoutToRoutineHandler = async (req: Request, res: TypeSafeResponse<Routine>, next: NextFunction) => {
-    try {
-        const { params } = await zParse(AddWorkoutToRoutineRequest, req);
-        const routine = await
-            RoutineService.addWorkoutToRoutine(params.routineId,
-                params.workoutId);
-        res.status(200).json({ message: "Workout added to routine successfully", data: routine });
-    } catch (err) {
-        next(err);
-    }
-}
+const getMine = async (
+	req: Request,
+	res: TypeSafeResponse<Routine[]>,
+	next: NextFunction
+) => {
+	try {
+		const { body } = await zParse(GetRoutinesRequest, req);
+		const routines = await RoutineService.getMine(body.userId);
+		res.status(200).json({
+			message: "Routines found successfully",
+			data: routines,
+		});
+	} catch (err) {
+		next(err);
+	}
+};
 
+const getAll = async (
+	_: Request,
+	res: TypeSafeResponse<Routine[]>,
+	next: NextFunction
+) => {
+	try {
+		const routines = await RoutineService.getAll();
+		res.status(200).json({
+			message: "Routines found successfully",
+			data: routines,
+		});
+	} catch (err) {
+		next(err);
+	}
+};
+
+const put = async (
+	req: Request,
+	res: TypeSafeResponse<Routine>,
+	next: NextFunction
+) => {
+	try {
+		const { body, params } = await zParse(UpdateRoutineRequest, req);
+		const updatedRoutine = await RoutineService.put(
+			params.routineId,
+			req.body.userId,
+			body
+		);
+		res.status(200).json({
+			message: "Routine updated successfully",
+			data: updatedRoutine,
+		});
+	} catch (err) {
+		next(err);
+	}
+};
+
+const _delete = async (
+	req: Request,
+	res: TypeSafeResponse<DeleteResult>,
+	next: NextFunction
+) => {
+	try {
+		const { params } = await zParse(idRequest, req);
+		const deleted = await RoutineService._delete(
+			params.routineId,
+			req.body.userId
+		);
+		res.status(200).json({
+			message: "Routine deleted successfully",
+			data: deleted,
+		});
+	} catch (err) {
+		next(err);
+	}
+};
 
 const RoutineController = {
-    postRoutineHandler,
-    getUserRoutinesHandler,
-    addWorkoutToRoutineHandler
+	post,
+	getMine,
+	getAll,
+	put,
+	_delete,
 };
+
 export default RoutineController;

@@ -1,50 +1,74 @@
-import { NextFunction } from "express";
+import { NextFunction, Request } from "express";
 import UserService from "../services/user.service";
-import AppError from "../../utils/AppError";
-import { TypeSafeRequest, TypeSafeResponse } from "../../utils/express.types";
-
-// types
-type LoginRequestBody = {
-    email: string;
-    password: string;
-}
-type SignupRequestBody = LoginRequestBody;
-type UserDTO = {
-    id: string;
-    email: string;
-    token: string;
-}
+import { TypeSafeResponse } from "../../utils/express.types";
+import { GetByIdRequestDTO, LoginRequestDTO, SignupRequestDTO, UserDTO, UserLoginDTO } from "../user.types";
+import { zParse } from "../../utils/zod";
 
 // controller handlers
-const loginHandler = async(req: TypeSafeRequest<{}, LoginRequestBody, {}>, res: TypeSafeResponse<UserDTO>, next: NextFunction) => {
+const login = async (
+	req: Request,
+	res: TypeSafeResponse<UserLoginDTO>,
+	next: NextFunction
+) => {
+	try {
+        const { body } = await zParse(LoginRequestDTO, req);
+
+        const user = await UserService.login(body.email, body.password);
+		const token = UserService.createToken(user.id);
+
+		res.status(200).json({
+			message: "User logged in successfully",
+			data: { id: user.id, email: user.email, token },
+		});
+
+	} catch (err) {
+		next(err);
+	}
+};
+
+const post = async (
+	req: Request,
+	res: TypeSafeResponse<UserLoginDTO>,
+	next: NextFunction
+) => {
+	try {
+        const { body } = await zParse(SignupRequestDTO, req);
+		const { email, password } = body;
+
+		const user = await UserService.post(email, password);
+		const token = UserService.createToken(user.id);
+
+		res.status(200).json({
+			message: "User created successfully",
+			data: { id: user.id, email: user.email, token },
+		});
+
+	} catch (err) {
+		next(err);
+	}
+};
+
+const getById = async (
+	req: Request,
+	res: TypeSafeResponse<UserDTO>,
+	next: NextFunction
+) => {
     try {
-        const { email, password } = req.body;
-        const user = await UserService.loginUser(email, password);
-        if (!user) {
-            throw new AppError(404, "User not found");
-        }
-        const token = UserService.createToken(user.id);
-        res.status(200).json({"message": "User logged in successfully", data: {id: user.id, email: user.email, token}});
-    }
-    catch(err) {
+        const { params } = await zParse(GetByIdRequestDTO, req);
+        const user = await UserService.getById(params.userId);
+        res.status(200).json({
+            message: "User found successfully",
+            data: { id: user.id, email: user.email },
+        });
+    } catch (err) {
         next(err);
     }
 };
 
-const signupHandler = async(req: TypeSafeRequest<{}, SignupRequestBody, {}>, res: TypeSafeResponse<UserDTO>, next: NextFunction) => {
-    try {
-        const { email, password } = req.body;
-        const user = await UserService.signupUser(email, password);
-        const token = UserService.createToken(user.id);
-        res.status(200).json({message: "User created successfully", data: {id: user.id, email: user.email, token}});
-    }
-    catch(err) {
-        next(err);
-    }
-}
-
 const UserController = {
-    loginHandler,
-    signupHandler,
-}
+	login,
+	post,
+    getById,
+};
+
 export default UserController;

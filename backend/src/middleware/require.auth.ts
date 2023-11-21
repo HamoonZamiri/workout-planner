@@ -16,7 +16,7 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
         if(typeof _id === "string") {
             throw new Error("Invalid token");
         }
-        const user = await UserService.findUserById(_id._id);
+        const user = await UserService.getById(_id._id);
         if(!user) {
             throw new Error("User not found");
         }

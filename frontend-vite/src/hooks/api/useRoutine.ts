@@ -15,7 +15,7 @@ const getRoutines = async (token: string) => {
 		throw new Error(json.error);
 	}
 	return json;
-}
+};
 
 export const useRoutine = () => {
 	const context = useAuthContext();
@@ -24,13 +24,13 @@ export const useRoutine = () => {
 	// setting these vars to empty string so React query doesn't complain that they're undefined
 	const token = user ? user.token : "";
 
-	const { data, error, isError, isLoading } =
-		useQuery<ServerResponse<Routine[]>>({
-			queryKey: ["routines", token],
-			queryFn: () => getRoutines(token),
-			enabled: !!token,
-		})
+	const { data, error, isError, isLoading } = useQuery<
+		ServerResponse<Routine[]>
+	>({
+		queryKey: ["routines", token],
+		queryFn: () => getRoutines(token),
+		enabled: !!token,
+	});
 
 	return { queryData: data, error, isError, isLoading };
-
 };
