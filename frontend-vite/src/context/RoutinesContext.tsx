@@ -8,7 +8,7 @@ type ACTIONTYPE =
 	| { type: "SET_ROUTINES"; payload: Routine[] }
 	| { type: "CREATE_ROUTINE"; payload: Routine}
 	| { type: "UPDATE_ROUTINE"; payload: Routine }
-	| { type: "DELETE_ROUTINE"; payload: Routine }
+	| { type: "DELETE_ROUTINE"; payload: {routineId: string} }
     | {type: "ADD_WORKOUT"; payload: {routineId: string, workout: Workout}}
     | {type: "CREATE_WORKOUT"; payload: {routineId: string, workout: Workout}}
     | {type: "UPDATE_WORKOUT"; payload: {routineId: string, workout: Workout}}
@@ -32,7 +32,7 @@ const routinesReducer = (prevState: RoutineContextType, action: ACTIONTYPE) => {
             };
         case "DELETE_ROUTINE":
             return {
-                routines: prevState.routines.filter(r => r.id !== action.payload.id)
+                routines: prevState.routines.filter(r => r.id !== action.payload.routineId)
             };
         case "UPDATE_ROUTINE":
             return {

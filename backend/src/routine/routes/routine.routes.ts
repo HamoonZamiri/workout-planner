@@ -7,12 +7,13 @@ const RoutineRouter = Express.Router();
 RoutineRouter.use(requireAuth);
 
 RoutineRouter.route("/")
-    .get(RoutineController.getAll)
-    .post(RoutineController.post);
+	.get(RoutineController.getAll)
+	.post(RoutineController.post);
 
-RoutineRouter.route("/mine")
-    .get(RoutineController.getMine);
+RoutineRouter.route("/mine").get(RoutineController.getMine);
 
-RoutineRouter.route("/:routineId").delete(RoutineController._delete);
+RoutineRouter.route("/:routineId")
+	.delete(RoutineController._delete)
+	.put(RoutineController.put);
 
 export default RoutineRouter;

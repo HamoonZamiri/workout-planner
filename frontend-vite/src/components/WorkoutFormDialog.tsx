@@ -37,29 +37,31 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 
 		const res = await fetch(api_base + "/api/workouts", {
 			method: "POST",
-			body: JSON.stringify(parsedBody.data),
+			body: JSON.stringify({...(parsedBody.data), routineId}),
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${user.token}`,
 			},
 		});
+
 		const json: ServerResponse<Workout> = await res.json();
 
 		if (!res.ok) {
 			setError(json.error ? json.error : "Something went wrong");
 			setEmptyFields(json.emptyFields ? json.emptyFields : []);
+			return;
 		}
-		if (res.ok) {
-			setError("");
-			setEmptyFields([]);
-			setTitle("");
-			setLoad("");
-			setReps("");
-			setSets("");
-			const payload = { routineId, workout: json.data };
-			dispatch({ type: "CREATE_WORKOUT", payload });
-			setOpen(false);
-		}
+
+		setError("");
+		setEmptyFields([]);
+		setTitle("");
+		setLoad("");
+		setReps("");
+		setSets("");
+		const payload = { routineId, workout: json.data };
+		dispatch({ type: "CREATE_WORKOUT", payload });
+		setOpen(false);
+
 	};
 	return (
 		<Dialog
