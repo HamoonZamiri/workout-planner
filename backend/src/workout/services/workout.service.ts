@@ -1,73 +1,103 @@
-import { mongoose } from "@typegoose/typegoose";
-import { Workout, WorkoutModel } from "../models/workout.model"
+import { FitlogCoreDataSource } from "../../utils/pgres.datasource";
+import { Workout } from "../entities/workout.entity";
+import RoutineService from "../../routine/services/routine.service";
+import { CreateWorkoutData, UpdateWorkoutFields } from "../workout.types";
 
-type PartialWorkout = Partial<{title: string, load: number, reps: number}>;
-const findWorkouts = async() => {
-return WorkoutModel.find();
-}
+const WorkoutRepository = FitlogCoreDataSource.getRepository(Workout);
 
-const findUserWorkouts = async(user_id: string) => {
-    return WorkoutModel.find({user_id});
+const getAll = async () => {
+	return WorkoutRepository.find();
 };
 
-const createWorkout = async(title: string, reps: number, load: number, user_id: string) => {
-    return WorkoutModel.create({title, reps, load, user_id});
-}
+const getMine = async (userId: string) => {
+	return WorkoutRepository.findBy({ userId });
+};
 
-const updateWorkout = async (userId: string, workoutId: string, workoutUpdate: PartialWorkout) => {
-    let workout = await WorkoutModel.findById(workoutId);
-    if (!workout) {
-        throw new Error("Workout was not found");
-    }
-    if (workout.user_id !== userId) {
-        console.log(workout.user_id, userId);
-        throw new Error("Workout does not belong to this user");
-    }
-    if (workoutUpdate.title) {
-        workout.title = workoutUpdate.title;
-    }
-    if (workoutUpdate.reps) {
-        workout.reps = workoutUpdate.reps;
-    }
-    if (workoutUpdate.load) {
-        workout.load = workoutUpdate.load;
-    }
-    const updated = await WorkoutModel.findByIdAndUpdate({_id: workoutId}, workout, {new: true});
-    if (!updated) {
-        throw new Error("Something went wrong while trying to update the workout!");
-    }
-    return updated;
-}
+const post = async (data: CreateWorkoutData) => {
+	const workout = WorkoutRepository.create(data);
 
-const deleteWorkout = async (userId: string, workoutId: string) => {
-    const workout = await WorkoutModel.findById(workoutId);
-    if (!workout) {
-        throw new Error("Workout was not found!");
-    }
-    if (workout.user_id !== userId) {
-        throw new Error("User does not own this workout");
-    }
-    const deleted = await WorkoutModel.findByIdAndDelete(workoutId);
-    if (!deleted) {
-        throw new Error("Something went wrong while trying to delete the workout!");
-    }
-    return deleted;
-}
+	let routine = await RoutineService.getById(data.routineId);
 
-const findWorkoutById = async (workoutId: string) => {
-    const workout = await WorkoutModel.findById(workoutId);
-    if (!workout) {
-        throw new Error("Workout was not found!");
-    }
-    return workout;
-}
+	if (!routine) {
+		routine = await RoutineService.getByTitle("Default");
+	}
+
+	workout.routine = routine;
+	return WorkoutRepository.save(workout);
+};
+
+const put = async (
+	userId: string,
+	workoutId: string,
+	workoutUpdate: UpdateWorkoutFields
+) => {
+	let workout = await WorkoutRepository.findOneBy({ id: workoutId });
+	if (!workout) {
+		throw new Error("Workout was not found");
+	}
+	if (workout.userId !== userId) {
+		throw new Error("Workout does not to you");
+	}
+	workout = { ...workout, ...workoutUpdate } as Workout;
+	return WorkoutRepository.save(workout);
+};
+
+const patchRoutine = async (
+	userId: string,
+	workoutId: string,
+	routineId: string
+) => {
+	let workout = await WorkoutRepository.findOneBy({ id: workoutId });
+	if (!workout) {
+		throw new Error("Workout was not found");
+	}
+	if (workout.userId !== userId) {
+		throw new Error("Workout does not belong to this user");
+	}
+	const routine = await RoutineService.getById(routineId);
+	workout.routine = routine;
+	return WorkoutRepository.save(workout);
+};
+
+const _delete = async (userId: string, workoutId: string) => {
+	const workout = await WorkoutRepository.findOneBy({ id: workoutId });
+	if (!workout) {
+		throw new Error("Workout was not found!");
+	}
+	if (workout.userId !== userId) {
+		throw new Error("User does not own this workout");
+	}
+	const deleted = await WorkoutRepository.delete({ id: workoutId });
+	if (!deleted) {
+		throw new Error(
+			"Something went wrong while trying to delete the workout!"
+		);
+	}
+	return deleted;
+};
+
+const getById = async (workoutId: string) => {
+	const workout = await WorkoutRepository.findOne({
+		where: {
+			id: workoutId,
+		},
+		relations: { routine: true },
+	});
+
+	if (!workout) {
+		throw new Error("Workout was not found!");
+	}
+	return workout;
+};
+
 const WorkoutService = {
-    findWorkouts,
-    findUserWorkouts,
-    findWorkoutById,
-    createWorkout,
-    updateWorkout,
-    deleteWorkout,
-}
+	getAll,
+	getMine,
+	getById,
+	post,
+	put,
+	_delete,
+	patchRoutine,
+};
 
 export default WorkoutService;

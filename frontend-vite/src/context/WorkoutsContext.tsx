@@ -16,6 +16,7 @@ export const WorkoutsContext = createContext<{
 }>({ state: { workouts: [] }, dispatch: () => null });
 
 const workoutsReducer = (prevState: WorkoutsContextType, action: ACTIONTYPE) => {
+
     switch (action.type) {
         case "SET_WORKOUTS":
             return {
@@ -27,11 +28,11 @@ const workoutsReducer = (prevState: WorkoutsContextType, action: ACTIONTYPE) => 
             };
         case "DELETE_WORKOUT":
             return {
-                workouts: prevState.workouts.filter(w => w._id !== action.payload._id)
+                workouts: prevState.workouts.filter(w => w.id !== action.payload.id)
             };
         case "UPDATE_WORKOUT":
             return {
-                workouts: prevState.workouts.map(w => w._id === action.payload._id ? action.payload : w)
+                workouts: prevState.workouts.map(w => w.id === action.payload.id ? action.payload : w)
             };
         default:
             return prevState;

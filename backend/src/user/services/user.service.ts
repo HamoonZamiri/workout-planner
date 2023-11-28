@@ -1,15 +1,18 @@
 import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { UserModel } from "../models/user.model";
-import {ObjectId} from "mongoose";
+// import { UserModel } from "../models/user.model";
+import { FitlogCoreDataSource } from "../../utils/pgres.datasource";
+import { User } from "../entities/user.entity";
+
+const UserRepository = FitlogCoreDataSource.getRepository(User);
 
 const createToken = (_id: string) => {
     const token = jwt.sign({ _id }, process.env.SECRET || "");
     return token;
 }
 
-const signupUser = async(email: string, password: string) => {
+const post = async(email: string, password: string) => {
     if(!email || !password){
         throw new Error("Email and Password are required");
     }
@@ -22,21 +25,21 @@ const signupUser = async(email: string, password: string) => {
         throw new Error("Password is not strong enough");
     }
 
-    const exists = await UserModel.findOne({ email });
+    const exists = await UserRepository.findOneBy({email});
     if(exists) {
         throw new Error("Email already exists");
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const user = await UserModel.create({ email, password: hashedPassword });
-    return user;
+    const user = await UserRepository.create({ email, password: hashedPassword });
+    return UserRepository.save(user);
 };
 
-const loginUser = async(email: string, password: string) => {
+const login = async(email: string, password: string) => {
     if(!email || !password){
         throw new Error("Email and Password are required");
     }
-    const user = await UserModel.findOne({ email });
+    const user = await UserRepository.findOneBy({ email });
     if(!user){
         throw new Error(`No user found with email ${email}`);
     }
@@ -47,9 +50,18 @@ const loginUser = async(email: string, password: string) => {
     return user;
 };
 
+const getById = async(id: string) => {
+const user = await UserRepository.findOneBy({id})
+    if(!user){
+        throw new Error("User not found");
+    }
+    return user;
+}
+
 const UserService = {
     createToken,
-    signupUser,
-    loginUser,
+    post,
+    login,
+    getById,
 }
 export default UserService;

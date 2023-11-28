@@ -1,39 +1,26 @@
-import { useEffect, useState } from "react";
-import { Workout, WorkoutFormSchema } from "../utils/types";
+import { useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { api_base } from "../utils/constants";
-import { Dialog } from "@headlessui/react";
 import useRoutinesContext from "../hooks/useRoutinesContext";
+import { ServerResponse, Workout, WorkoutFormSchema } from "../utils/types";
+import { Dialog } from "@headlessui/react";
 
-type UpdateWorkoutDialogProps = {
+type WorkoutFormProps = {
 	routineId: string;
-	workout: Workout;
 	open: boolean;
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const UpdateWorkoutDialog = ({
-	workout,
-	open,
-	setOpen,
-	routineId,
-}: UpdateWorkoutDialogProps) => {
+const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
+	const { dispatch } = useRoutinesContext();
 	const [title, setTitle] = useState("");
 	const [load, setLoad] = useState("");
 	const [reps, setReps] = useState("");
-	const [sets, setSets] = useState("");
 	const [error, setError] = useState("");
+	const [sets, setSets] = useState("");
 	const [emptyFields, setEmptyFields] = useState<string[]>([]);
-	const { dispatch } = useRoutinesContext();
 	const { state } = useAuthContext();
 	const { user } = state;
-
-	useEffect(() => {
-		setTitle(workout.title);
-		setLoad(workout.load.toString());
-		setReps(workout.reps.toString());
-		setSets(workout.sets.toString());
-	}, [workout, error]);
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -48,32 +35,34 @@ const UpdateWorkoutDialog = ({
 			return;
 		}
 
-		const res = await fetch(api_base + "/api/workouts/" + workout.id, {
-			method: "PUT",
-			body: JSON.stringify(parsedBody.data),
+		const res = await fetch(api_base + "/api/workouts", {
+			method: "POST",
+			body: JSON.stringify({...(parsedBody.data), routineId}),
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${user.token}`,
 			},
 		});
-		const json = await res.json();
-		if (!res.ok) {
-			setError(json.error);
-			setEmptyFields(json.emptyFields);
-		}
-		if (res.ok) {
-			setError("");
-			setEmptyFields([]);
-			const updatedWorkout: Workout = json.data;
-			const payload = { routineId, workout: updatedWorkout };
-			dispatch({
-				type: "UPDATE_WORKOUT",
-				payload,
-			});
-			setOpen(false);
-		}
-	};
 
+		const json: ServerResponse<Workout> = await res.json();
+
+		if (!res.ok) {
+			setError(json.error ? json.error : "Something went wrong");
+			setEmptyFields(json.emptyFields ? json.emptyFields : []);
+			return;
+		}
+
+		setError("");
+		setEmptyFields([]);
+		setTitle("");
+		setLoad("");
+		setReps("");
+		setSets("");
+		const payload = { routineId, workout: json.data };
+		dispatch({ type: "CREATE_WORKOUT", payload });
+		setOpen(false);
+
+	};
 	return (
 		<Dialog
 			className="absolute inset-0 h-screen flex justify-center items-center hover:cursor-pointer bg-gray-600 z-10 w-screen  bg-opacity-90 rounded-lg p-4"
@@ -82,21 +71,22 @@ const UpdateWorkoutDialog = ({
 		>
 			<Dialog.Panel>
 				<form
-					className="rounded-lg border bg-white p-3 w-[400px] grid grid-cols-1 gap-8 hover:cursor-default"
+					className="grid grid-cols-1 gap-8 rounded-lg border bg-white p-3 w-[400px]"
 					onSubmit={handleSubmit}
 				>
-					<Dialog.Title className="font-semibold text-xl">
-						Edit Workout
-					</Dialog.Title>
+					<h3 className="font-semibold text-2xl">
+						Add a New Exercise
+					</h3>
 
 					<div>
 						<label>Exercise Name:</label>
 						<input
 							className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
-                            placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
+                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
 							type="text"
 							onChange={(event) => setTitle(event.target.value)}
 							value={title}
+							// className={emptyFields && emptyFields.includes("title") ? "error" : ""}
 						/>
 						<p className="text-red-300">
 							{emptyFields.includes("title") &&
@@ -108,10 +98,11 @@ const UpdateWorkoutDialog = ({
 						<label>Load (kg):</label>
 						<input
 							className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
-                            placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
+                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
 							type="text"
 							onChange={(event) => setLoad(event.target.value)}
 							value={load}
+							// className={emptyFields && emptyFields.includes("load") ? "error" : ""}
 						/>
 						<p className="text-red-300">
 							{emptyFields.includes("load") &&
@@ -123,10 +114,11 @@ const UpdateWorkoutDialog = ({
 						<label># of Reps:</label>
 						<input
 							className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
-                            placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
+                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
 							type="text"
 							onChange={(event) => setReps(event.target.value)}
 							value={reps}
+							// className={ emptyFields && emptyFields.includes("reps") ? "error" : "" }
 						/>
 						<p className="text-red-300">
 							{emptyFields.includes("reps") &&
@@ -138,10 +130,11 @@ const UpdateWorkoutDialog = ({
 						<label># of Sets:</label>
 						<input
 							className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
-                            placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
+                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
 							type="text"
 							onChange={(event) => setSets(event.target.value)}
 							value={sets}
+							// className={ emptyFields && emptyFields.includes("reps") ? "error" : "" }
 						/>
 						<p className="text-red-300">
 							{emptyFields.includes("sets") &&
@@ -149,14 +142,14 @@ const UpdateWorkoutDialog = ({
 						</p>
 					</div>
 
-					<button className="w-full bg-blue-100 hover:bg-blue-200 rounded-lg h-10 p-2">
-						Update {workout.title}
+					<button className="w-full bg-blue-100 hover:bg-blue-200 rounded-lg h-10">
+						Add Workout
 					</button>
-
 					{error && <div className="text-red-300">{error}</div>}
 				</form>
 			</Dialog.Panel>
 		</Dialog>
 	);
 };
-export default UpdateWorkoutDialog;
+
+export default WorkoutFormDialog;
