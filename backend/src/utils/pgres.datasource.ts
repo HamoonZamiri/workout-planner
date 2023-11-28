@@ -14,5 +14,5 @@ export const FitlogCoreDataSource = new DataSource({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE_CORE,
     entities: [Workout, Routine, User],
-    synchronize: true
+    synchronize: process.env.NODE_ENV === "development",
 });
