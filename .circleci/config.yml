@@ -19,6 +19,7 @@ jobs:
           name: "Say hello"
           command: "echo Hello, World!"
   build_and_test:
+    working_directory: ~/backend
     executor: node/default
     steps:
       - checkout
@@ -34,7 +35,7 @@ jobs:
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  build_test_workflow:
     jobs:
       - say-hello
       - build_and_test
