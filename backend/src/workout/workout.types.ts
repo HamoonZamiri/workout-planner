@@ -11,8 +11,10 @@ export const GetWorkoutByIdRequest = z.object({
 export const CreateWorkoutSchema = z.object({
 	title: z.string(),
 	load: z.number(),
-	reps: z.number(),
-	sets: z.number(),
+	repsLow: z.number(),
+	repsHigh: z.number(),
+	setsLow: z.number(),
+	setsHigh: z.number(),
 	routineId: z.string().uuid(),
 });
 
