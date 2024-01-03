@@ -45,7 +45,7 @@ const DeleteRoutineDialog = ({
 			open={isOpen}
 			onClose={() => setIsOpen(false)}
 		>
-			<Dialog.Panel>
+			<Dialog.Panel className="text-center">
 				<div className="rounded-lg border bg-white p-3 w-[400px] grid grid-cols-1 gap-4 hover:cursor-default">
 					<Dialog.Title className="font-semibold text-center text-xl">
 						Delete Routine

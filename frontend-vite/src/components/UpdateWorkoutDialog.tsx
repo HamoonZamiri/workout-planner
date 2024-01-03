@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Workout, WorkoutFormSchema } from "../utils/types";
+import { Workout, WorkoutFormData, WorkoutFormSchema } from "../utils/types";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { api_base } from "../utils/constants";
 import { Dialog } from "@headlessui/react";
 import useRoutinesContext from "../hooks/useRoutinesContext";
+import { handleChange } from "../utils/forms";
 
 type UpdateWorkoutDialogProps = {
 	routineId: string;
@@ -12,27 +13,36 @@ type UpdateWorkoutDialogProps = {
 	setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+const initialFormData = (workout: Workout): WorkoutFormData => {
+	return {
+		title: workout.title,
+		load: workout.load.toString(),
+		repsHigh: workout.repsHigh.toString(),
+		repsLow: workout.repsLow.toString(),
+		setsHigh: workout.setsHigh.toString(),
+		setsLow: workout.setsLow.toString(),
+	};
+};
+
 const UpdateWorkoutDialog = ({
 	workout,
 	open,
 	setOpen,
 	routineId,
 }: UpdateWorkoutDialogProps) => {
-	const [title, setTitle] = useState("");
-	const [load, setLoad] = useState("");
-	const [reps, setReps] = useState("");
-	const [sets, setSets] = useState("");
+	const [form, setForm] = useState<WorkoutFormData>(initialFormData(workout));
 	const [error, setError] = useState("");
-	const [emptyFields, setEmptyFields] = useState<string[]>([]);
 	const { dispatch } = useRoutinesContext();
 	const { state } = useAuthContext();
 	const { user } = state;
 
 	useEffect(() => {
-		setTitle(workout.title);
-		setLoad(workout.load.toString());
-		setReps(workout.reps.toString());
-		setSets(workout.sets.toString());
+		setForm((prev) => ({ ...prev, title: workout.title }));
+		setForm((prev) => ({ ...prev, load: workout.load.toString() }));
+		setForm((prev) => ({ ...prev, repsHigh: workout.repsHigh.toString() }));
+		setForm((prev) => ({ ...prev, repsLow: workout.repsLow.toString() }));
+		setForm((prev) => ({ ...prev, setsHigh: workout.setsHigh.toString() }));
+		setForm((prev) => ({ ...prev, setsLow: workout.setsLow.toString() }));
 	}, [workout, error]);
 
 	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -41,8 +51,7 @@ const UpdateWorkoutDialog = ({
 			setError("You must be logged in to add a workout");
 			return;
 		}
-		const body = { title, load, reps, sets };
-		const parsedBody = WorkoutFormSchema.safeParse(body);
+		const parsedBody = WorkoutFormSchema.safeParse(form);
 		if (!parsedBody.success) {
 			setError(parsedBody.error.issues[0].message);
 			return;
@@ -59,20 +68,17 @@ const UpdateWorkoutDialog = ({
 		const json = await res.json();
 		if (!res.ok) {
 			setError(json.error);
-			setEmptyFields(json.emptyFields);
+			return;
 		}
-		if (res.ok) {
-			setError("");
-			setEmptyFields([]);
-			const updatedWorkout: Workout = json.data;
-			const payload = { routineId, workout: updatedWorkout };
-			dispatch({
-				type: "UPDATE_WORKOUT",
-				payload,
-			});
-			setOpen(false);
-		}
-	};
+		setError("");
+		const updatedWorkout: Workout = json.data;
+		const payload = { routineId, workout: updatedWorkout };
+		dispatch({
+			type: "UPDATE_WORKOUT",
+			payload,
+		});
+		setOpen(false);
+		};
 
 	return (
 		<Dialog
@@ -95,13 +101,11 @@ const UpdateWorkoutDialog = ({
 							className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
                             placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
 							type="text"
-							onChange={(event) => setTitle(event.target.value)}
-							value={title}
+							onChange={(event) =>
+								handleChange(event, setForm, "title")
+							}
+							value={form.title}
 						/>
-						<p className="text-red-300">
-							{emptyFields.includes("title") &&
-								"This field is required"}
-						</p>
 					</div>
 
 					<div>
@@ -110,28 +114,52 @@ const UpdateWorkoutDialog = ({
 							className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
                             placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
 							type="text"
-							onChange={(event) => setLoad(event.target.value)}
-							value={load}
+							onChange={(event) =>
+								handleChange(event, setForm, "load")
+							}
+							value={form.load}
 						/>
-						<p className="text-red-300">
-							{emptyFields.includes("load") &&
-								"This field is required"}
-						</p>
+					</div>
+
+					<div className="flex justify-between">
+						<div>
+							<label># of Reps (min):</label>
+							<input
+								className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+                            placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
+								type="text"
+								onChange={(event) =>
+									handleChange(event, setForm, "repsLow")
+								}
+								value={form.repsLow}
+							/>
+						</div>
+
+						<div>
+							<label># of Reps (max):</label>
+							<input
+								className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+                            placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
+								type="text"
+								onChange={(event) =>
+									handleChange(event, setForm, "repsHigh")
+								}
+								value={form.repsHigh}
+							/>
+						</div>
 					</div>
 
 					<div>
-						<label># of Reps:</label>
+						<label># of Sets (min):</label>
 						<input
 							className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
                             placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
 							type="text"
-							onChange={(event) => setReps(event.target.value)}
-							value={reps}
+							onChange={(event) =>
+								handleChange(event, setForm, "setsLow")
+							}
+							value={form.setsLow}
 						/>
-						<p className="text-red-300">
-							{emptyFields.includes("reps") &&
-								"This field is required"}
-						</p>
 					</div>
 
 					<div>
@@ -140,13 +168,11 @@ const UpdateWorkoutDialog = ({
 							className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
                             placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
 							type="text"
-							onChange={(event) => setSets(event.target.value)}
-							value={sets}
+							onChange={(event) =>
+								handleChange(event, setForm, "setsHigh")
+							}
+							value={form.setsHigh}
 						/>
-						<p className="text-red-300">
-							{emptyFields.includes("sets") &&
-								"This field is required"}
-						</p>
 					</div>
 
 					<button className="w-full bg-blue-100 hover:bg-blue-200 rounded-lg h-10 p-2">

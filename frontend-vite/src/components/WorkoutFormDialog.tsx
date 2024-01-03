@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { api_base } from "../utils/constants";
 import useRoutinesContext from "../hooks/useRoutinesContext";
-import { ServerResponse, Workout, WorkoutFormSchema } from "../utils/types";
+import { WorkoutFormData, ServerResponse, Workout, WorkoutFormSchema, initialFormData } from "../utils/types";
 import { Dialog } from "@headlessui/react";
+import { handleChange } from "../utils/forms";
 
 type WorkoutFormProps = {
 	routineId: string;
@@ -13,11 +14,8 @@ type WorkoutFormProps = {
 
 const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 	const { dispatch } = useRoutinesContext();
-	const [title, setTitle] = useState("");
-	const [load, setLoad] = useState("");
-	const [reps, setReps] = useState("");
+	const [form, setForm] = useState<WorkoutFormData>(initialFormData);
 	const [error, setError] = useState("");
-	const [sets, setSets] = useState("");
 	const [emptyFields, setEmptyFields] = useState<string[]>([]);
 	const { state } = useAuthContext();
 	const { user } = state;
@@ -28,8 +26,7 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 			setError("You must be logged in to add a workout");
 			return;
 		}
-		const body = { title, load, reps, sets };
-		const parsedBody = WorkoutFormSchema.safeParse(body);
+		const parsedBody = WorkoutFormSchema.safeParse(form);
 		if (!parsedBody.success) {
 			setError(parsedBody.error.issues[0].message);
 			return;
@@ -37,7 +34,7 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 
 		const res = await fetch(api_base + "/api/workouts", {
 			method: "POST",
-			body: JSON.stringify({...(parsedBody.data), routineId}),
+			body: JSON.stringify({ ...parsedBody.data, routineId }),
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${user.token}`,
@@ -54,14 +51,10 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 
 		setError("");
 		setEmptyFields([]);
-		setTitle("");
-		setLoad("");
-		setReps("");
-		setSets("");
+		setForm(initialFormData);
 		const payload = { routineId, workout: json.data };
 		dispatch({ type: "CREATE_WORKOUT", payload });
 		setOpen(false);
-
 	};
 	return (
 		<Dialog
@@ -84,8 +77,10 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 							className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
                     placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
 							type="text"
-							onChange={(event) => setTitle(event.target.value)}
-							value={title}
+							onChange={(event) =>
+								handleChange(event, setForm, "title")
+							}
+							value={form.title}
 							// className={emptyFields && emptyFields.includes("title") ? "error" : ""}
 						/>
 						<p className="text-red-300">
@@ -95,13 +90,13 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 					</div>
 
 					<div>
-						<label>Load (kg):</label>
+						<label>Load (lbs):</label>
 						<input
 							className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
                     placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
 							type="text"
-							onChange={(event) => setLoad(event.target.value)}
-							value={load}
+							onChange={(event) => handleChange(event, setForm, "load")}
+							value={form.load}
 							// className={emptyFields && emptyFields.includes("load") ? "error" : ""}
 						/>
 						<p className="text-red-300">
@@ -111,13 +106,13 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 					</div>
 
 					<div>
-						<label># of Reps:</label>
+						<label># of Reps (min):</label>
 						<input
 							className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
                     placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
 							type="text"
-							onChange={(event) => setReps(event.target.value)}
-							value={reps}
+							onChange={(event) => handleChange(event, setForm, "repsLow")}
+							value={form.repsLow}
 							// className={ emptyFields && emptyFields.includes("reps") ? "error" : "" }
 						/>
 						<p className="text-red-300">
@@ -127,13 +122,45 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
 					</div>
 
 					<div>
-						<label># of Sets:</label>
+						<label># of Reps (max):</label>
 						<input
 							className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
                     placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
 							type="text"
-							onChange={(event) => setSets(event.target.value)}
-							value={sets}
+							onChange={(event) => handleChange(event, setForm, "repsHigh")}
+							value={form.repsHigh}
+							// className={ emptyFields && emptyFields.includes("reps") ? "error" : "" }
+						/>
+						<p className="text-red-300">
+							{emptyFields.includes("reps") &&
+								"This field is required"}
+						</p>
+					</div>
+
+					<div>
+						<label># of Sets (min):</label>
+						<input
+							className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
+							type="text"
+							onChange={(event) => handleChange(event, setForm, "setsLow")}
+							value={form.setsLow}
+							// className={ emptyFields && emptyFields.includes("reps") ? "error" : "" }
+						/>
+						<p className="text-red-300">
+							{emptyFields.includes("sets") &&
+								"This field is required"}
+						</p>
+					</div>
+
+					<div>
+						<label># of Sets (max):</label>
+						<input
+							className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300
+                    placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-200 sm:text-sm sm:leading-6"
+							type="text"
+							onChange={(event) => handleChange(event, setForm, "setsHigh")}
+							value={form.setsHigh}
 							// className={ emptyFields && emptyFields.includes("reps") ? "error" : "" }
 						/>
 						<p className="text-red-300">

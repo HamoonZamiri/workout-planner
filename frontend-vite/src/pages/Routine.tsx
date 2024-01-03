@@ -27,7 +27,7 @@ const RoutinePage = () => {
 				return <RoutineDisclosure routine={routine} key={routine.id} />;
 			})}
 			<button
-				className="mt-6 p-2 text-center rounded-md bg-green-200 hover:bg-green-300"
+				className="font-semibold mt-6 p-2 text-center rounded-md bg-green-200 hover:bg-green-300"
 				onClick={() => setOpenCreateRoutine(true)}
 			>
 				Create a Routine
