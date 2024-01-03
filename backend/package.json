@@ -4,6 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "typeorm": "typeorm-ts-node-esm",
     "test": "jest",
     "build": "tsc --build",
     "start": "node build/index.js",
