@@ -1,20 +1,35 @@
-import { Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { BaseModel } from "../../utils/base.entity";
 import { Routine } from "../../routine/entities/routine.entity";
+
+export type ExerciseWeightType = "lbs" | "kg";
 
 @Entity()
 export class Workout extends BaseModel {
     @Column({ nullable: false })
     title: string;
 
-    @Column({ nullable: false })
-    reps: number;
+    @Column({ default: 4 })
+    repsLow: number;
+
+    @Column({ default: 12 })
+    repsHigh: number;
 
     @Column({ nullable: false })
     load: number;
 
-    @Column({ nullable: false })
-    sets: number;
+    @Column({
+        type: "enum",
+        enum: ["lbs", "kg"],
+        default: "lbs",
+    })
+    weightType: ExerciseWeightType;
+
+    @Column({ default: 1 })
+    setsLow: number;
+
+    @Column({ default: 3 })
+    setsHigh: number;
 
     @Column({ nullable: false })
     userId: string;
@@ -24,4 +39,10 @@ export class Workout extends BaseModel {
         { onDelete: "CASCADE" }
     )
     routine: Routine;
+
+    @ManyToOne(() => Workout, (workout) => workout.alternateWorkouts)
+    mainWorkout: Workout;
+
+    @OneToMany(() => Workout, (workout) => workout.mainWorkout)
+    alternateWorkouts: Workout[];
 }

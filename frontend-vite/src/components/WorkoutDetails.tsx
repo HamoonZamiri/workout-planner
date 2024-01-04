@@ -3,7 +3,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { Workout } from "../utils/types";
 import { api_base } from "../utils/constants";
 import { FaHammer } from "react-icons/fa";
-import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
+// import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 import UpdateWorkoutDialog from "./UpdateWorkoutDialog";
 import { BsTrash } from "react-icons/bs";
 import useRoutinesContext from "../hooks/useRoutinesContext";
@@ -14,8 +14,8 @@ type WorkoutDetailsProps = {
 
 const WorkoutDetails = ({ routineId, workout }: WorkoutDetailsProps) => {
 	const [open, setOpen] = useState(false);
-	const loadInc = 5; //value to increment load by with buttons
-	const repInc = 1; //value to increment reps by with buttons
+	// const loadInc = 5; //value to increment load by with buttons
+	// const repInc = 1; //value to increment reps by with buttons
 	const { state } = useAuthContext();
 	const { user } = state;
 
@@ -40,44 +40,45 @@ const WorkoutDetails = ({ routineId, workout }: WorkoutDetailsProps) => {
 		}
 	};
 
-	const handleChange = async (updatedWorkout: Workout) => {
-		if (!user) {
-			return;
-		}
-		const res = await fetch(api_base + "/api/workouts/" + workout.id, {
-			method: "PUT",
-			body: JSON.stringify(updatedWorkout),
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${user.token}`,
-			},
-		});
-		const json = await res.json();
-		console.log(json);
-		if (res.ok) {
-			const payload = { routineId, workout: updatedWorkout}
-			console.log(payload);
-			dispatch({
-				type: "UPDATE_WORKOUT",
-				payload: {routineId, workout: updatedWorkout}
-			});
-		}
-	};
+	// const handleChange = async (updatedWorkout: Workout) => {
+	// 	if (!user) {
+	// 		return;
+	// 	}
+	// 	const res = await fetch(api_base + "/api/workouts/" + workout.id, {
+	// 		method: "PUT",
+	// 		body: JSON.stringify(updatedWorkout),
+	// 		headers: {
+	// 			"Content-Type": "application/json",
+	// 			Authorization: `Bearer ${user.token}`,
+	// 		},
+	// 	});
+	// 	const json = await res.json();
+	// 	console.log(json);
+	// 	if (res.ok) {
+	// 		const payload = { routineId, workout: updatedWorkout}
+	// 		console.log(payload);
+	// 		dispatch({
+	// 			type: "UPDATE_WORKOUT",
+	// 			payload: {routineId, workout: updatedWorkout}
+	// 		});
+	// 	}
+	// };
+
 	return (
-		
+
 		<div className="relative">
 			<div
-				className="grid grid-cols-1 bg-slate-100 border-solid
+				className="grid grid-cols-1 justify-items-center bg-slate-100 border-solid
                 border-[#a7dbd8] border-4 rounded-md p-2 sm:flex-shrink-0 sm:w-[350px] "
 			>
 				<h4 className="text-xl font-semibold flex justify-center">
 					{workout.title}
 				</h4>
 
-				<div className="flex flex-col items-center">
-					<div className="flex gap-4">
-						<p>Load (kg): {workout.load}</p>
-						<div className="flex gap-1">
+				<div className="">
+					<div className="">
+						<p>Load: {workout.load} {workout.weightType}</p>
+						{/* <div className="flex gap-1">
 							<div
 								className="cursor-pointer flex items-center"
 								onClick={() =>
@@ -94,35 +95,17 @@ const WorkoutDetails = ({ routineId, workout }: WorkoutDetailsProps) => {
 							>
 								<AiFillPlusCircle />
 							</div>
-						</div>
+						</div> */}
 					</div>
 
 					<div className="flex gap-4">
-						<p>Reps: {workout.reps}</p>
-						<div className="flex gap-1">
-							<div
-								className="cursor-pointer flex items-center"
-								onClick={() =>
-									handleChange({ ...workout, reps: workout.reps - repInc })
-								}
-							>
-								<AiFillMinusCircle />
-							</div>
-							<div
-								className="cursor-pointer flex items-center"
-								onClick={() =>
-									handleChange({ ...workout, reps: workout.reps + repInc })
-								}
-							>
-								<AiFillPlusCircle />
-							</div>
-						</div>
+						<p>Reps: {workout.repsLow} - {workout.repsHigh}</p>
 					</div>
 
 					<div className="flex gap-4">
-						<p>Sets: {workout.sets}</p>
+						<p>Sets: {workout.setsLow} - {workout.setsHigh}</p>
 						<div className="flex gap-1">
-							<div
+							{/* <div
 								className="cursor-pointer flex items-center"
 								onClick={() =>
 									handleChange({ ...workout, sets: workout.sets - repInc })
@@ -138,12 +121,12 @@ const WorkoutDetails = ({ routineId, workout }: WorkoutDetailsProps) => {
 								}
 							>
 								<AiFillPlusCircle />
-							</div>
+							</div> */}
 						</div>
 
 					</div>
 				</div>
-				<div className="flex justify-between">
+				<div className="flex justify-between justify-self-stretch">
 					<FaHammer className="cursor-pointer" onClick={() => setOpen(true)} />
 					<BsTrash className="cursor-pointer" onClick={handleClick} />
 				</div>

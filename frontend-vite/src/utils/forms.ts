@@ -10,3 +10,14 @@ export const handleNumericInputChange = <T>(
     }
     setState((prevState) => ({ ...prevState, [key]: value }));
   };
+
+export const handleChange = <TForm>(
+	event: React.ChangeEvent<HTMLInputElement>,
+	setForm: React.Dispatch<React.SetStateAction<TForm>>,
+	formKey: keyof TForm
+): void => {
+	setForm((prev) => ({
+		...prev,
+		[formKey]: event.target.value,
+	}));
+};

@@ -70,8 +70,6 @@ const post = async (
 		const emptyFields = getEmptyFields(parsedRequest.body, [
 			"title",
 			"load",
-			"reps",
-			"sets",
 		]);
 
 		if (emptyFields.length > 0) {
