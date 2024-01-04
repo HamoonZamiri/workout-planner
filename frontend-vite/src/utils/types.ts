@@ -66,8 +66,7 @@ const WorkoutSchema = z.object({
 	id: z.string().uuid(),
 	createdAt: z.string().datetime(),
 	updatedAt: z.string().datetime(),
-	routineId: z.string().uuid(),
-	mainWorkout: z.string().uuid(),
+	mainWorkout: z.string().uuid().optional(),
 	weightType: z.enum(["lbs", "kg"]),
 });
 
