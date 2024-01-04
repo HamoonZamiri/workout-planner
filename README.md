@@ -48,7 +48,7 @@ Navigate to the backend folder, in your terminal run `npm install`. Run npm run 
 
 ## Architecture
 ![Alt text](assets/architecture.png)
-![Alt text](image.png)
+![Alt text](dbdiagram.png)
 ## Database Diagram
 
 ![Database Diagram](assets/dbdiagram.png)
