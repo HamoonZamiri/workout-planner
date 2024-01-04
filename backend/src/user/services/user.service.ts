@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 // import { UserModel } from "../models/user.model";
 import { FitlogCoreDataSource } from "../../utils/pgres.datasource";
 import { User } from "../entities/user.entity";
+import RoutineService from "../../routine/services/routine.service";
 
 const UserRepository = FitlogCoreDataSource.getRepository(User);
 
@@ -32,7 +33,7 @@ const isValidPassword = (password: string | null): boolean => {
 	return true;
 };
 
-const post = async (email: string, password: string) => {
+const post = async (email: string, password: string): Promise<User> => {
 	if (!isValidEmail(email)) {
 		throw new Error("Email is not valid");
 	}
@@ -54,7 +55,9 @@ const post = async (email: string, password: string) => {
 		email,
 		password: hashedPassword,
 	});
-	return UserRepository.save(user);
+	const newUser = await UserRepository.save(user);
+	await RoutineService.post("Default", "This is the default routine", newUser.id, 60)
+	return newUser;
 };
 
 const login = async (email: string, password: string) => {
