@@ -5,7 +5,10 @@ import { RoutineUpdateFields } from "../routine.types";
 const RoutineRepository = FitlogCoreDataSource.getRepository(Routine);
 
 const getAll = async () => {
-	return RoutineRepository.find({ relations: { workouts: true } });
+	// return RoutineRepository.find({ relations: { workouts: true }});
+	return RoutineRepository.createQueryBuilder("routine")
+		.where("routine.title != :title", { title: "Default"})
+		.getMany();
 };
 
 const post = async (
