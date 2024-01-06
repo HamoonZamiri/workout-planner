@@ -24,6 +24,7 @@ const post = async (data: CreateWorkoutData): Promise<Workout> => {
 	}
 
 	workout.routine = routine;
+	workout.mainWorkout = workout;
 	return WorkoutRepository.save(workout);
 };
 
