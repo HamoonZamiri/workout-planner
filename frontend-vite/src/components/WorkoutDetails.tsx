@@ -7,10 +7,24 @@ import { FaHammer } from "react-icons/fa";
 import UpdateWorkoutDialog from "./UpdateWorkoutDialog";
 import { BsTrash } from "react-icons/bs";
 import useRoutinesContext from "../hooks/useRoutinesContext";
+
 type WorkoutDetailsProps = {
 	workout: Workout;
 	routineId: string;
 };
+
+type DisplayRangeProps = {
+	type: "Sets" | "Reps";
+	low: number;
+	high: number;
+}
+
+const DisplayRange = (props: DisplayRangeProps): JSX.Element => {
+	if (props.low === props.high) {
+		return <p>{props.type}: {props.low}</p>
+	}
+	return <p>{props.type}: {props.low} - {props.high}</p>
+}
 
 const WorkoutDetails = ({ routineId, workout }: WorkoutDetailsProps) => {
 	const [open, setOpen] = useState(false);
@@ -99,11 +113,11 @@ const WorkoutDetails = ({ routineId, workout }: WorkoutDetailsProps) => {
 					</div>
 
 					<div className="flex gap-4">
-						<p>Reps: {workout.repsLow} - {workout.repsHigh}</p>
+						<DisplayRange type="Reps" low={workout.repsLow} high={workout.repsHigh} />
 					</div>
 
 					<div className="flex gap-4">
-						<p>Sets: {workout.setsLow} - {workout.setsHigh}</p>
+						<DisplayRange type="Sets" low={workout.setsLow} high={workout.setsHigh} />
 						<div className="flex gap-1">
 							{/* <div
 								className="cursor-pointer flex items-center"

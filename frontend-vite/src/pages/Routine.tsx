@@ -25,7 +25,7 @@ const RoutinePage = () => {
 	if (!routines) return <></>;
 
 	return (
-		<div className="grid grid-cols-1 justify-items-center">
+		<div className="grid grid-cols-1 justify-items-center mb-4">
 			<h2 className="font-semibold text-2xl">Routines</h2>
 
 			{routines.map((routine) => {
