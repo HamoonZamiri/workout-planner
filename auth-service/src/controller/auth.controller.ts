@@ -148,6 +148,18 @@ async function authenticate(
   }
 }
 
+async function getAllUsers(req: Request, res: Response, next: NextFunction) {
+  try {
+    const users = await AuthService.getAllUsers();
+    res.status(200).json({
+      message: "Users fetched successfully",
+      data: users,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 const AuthController = {
   login,
   signup,

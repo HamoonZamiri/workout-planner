@@ -129,11 +129,17 @@ function authenticate(jwtToken: string): string {
   }
 }
 
+// function for testing purposes
+function getAllUsers() {
+  return repository.find();
+}
+
 const AuthService = {
   signup,
   login,
   refresh,
   authenticate,
+  getAllUsers,
 };
 
 export default AuthService;
