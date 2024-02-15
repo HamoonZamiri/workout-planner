@@ -7,7 +7,7 @@ export const AuthDataSource = new DataSource({
   port: 5432,
   username: "postgres",
   password: "postgres",
-  database: "auth-service",
+  database: "auth_service",
   synchronize: true,
   entities: [AuthUser],
 });
