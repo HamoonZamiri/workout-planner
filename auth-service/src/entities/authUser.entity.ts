@@ -14,6 +14,11 @@ export class AuthUser extends BaseDbEntity {
     this.email = email;
     this.password = password;
     this.refreshToken = randomUUID();
+
+    // set default expiry of refresh token to 3 days ahead
+    this.refreshTokenExpiration = new Date(
+      Date.now() + 3 * 24 * 60 * 60 * 1000,
+    );
   }
 
   @Index("email")
@@ -25,4 +30,7 @@ export class AuthUser extends BaseDbEntity {
 
   @Column({ nullable: false })
   refreshToken: string;
+
+  @Column({ nullable: false })
+  refreshTokenExpiration: Date;
 }
