@@ -165,6 +165,7 @@ const AuthController = {
   signup,
   refresh,
   authenticate,
+  getAllUsers,
 };
 
 export default AuthController;

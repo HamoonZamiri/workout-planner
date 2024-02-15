@@ -9,5 +9,5 @@ export const AuthDataSource = new DataSource({
   password: "postgres",
   database: "auth_service",
   synchronize: true,
-  entities: [AuthUser],
+  entities: [__dirname + "/../**/*.entity.{js,ts}"],
 });

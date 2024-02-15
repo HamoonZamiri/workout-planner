@@ -12,7 +12,7 @@ dotenv.config();
 const repository = AuthDataSource.getRepository(AuthUser);
 
 function createJWTToken(userId: string) {
-  const token = jwt.sign(userId, process.env.JWT_SECRET || "", {
+  const token = jwt.sign({ id: userId }, process.env.JWT_SECRET || "", {
     expiresIn: "1h",
   });
   return token;
@@ -122,7 +122,9 @@ async function refresh(
 
 function authenticate(jwtToken: string): string {
   try {
-    const id = jwt.verify(jwtToken, process.env.JWT_SECRET || "") as string;
+    const { id } = jwt.verify(jwtToken, process.env.JWT_SECRET || "") as {
+      id: string;
+    };
     return id;
   } catch (error) {
     throw new AppError(401, "Invalid token");

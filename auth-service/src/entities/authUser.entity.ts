@@ -1,7 +1,8 @@
-import { Column, Index } from "typeorm";
+import { Column, Entity, Index } from "typeorm";
 import { BaseDbEntity } from "./base.entity";
 import { randomUUID } from "crypto";
 
+@Entity("auth_user")
 export class AuthUser extends BaseDbEntity {
   constructor(
     id: string,
