@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { AuthDataSource } from "./db/datasource";
 import AuthRouter from "./routes/auth.routes";
 import AppError from "./utils/AppError";
+import morgan from "morgan";
 dotenv.config();
 
 AuthDataSource.initialize().then(async () => {
@@ -11,6 +12,7 @@ AuthDataSource.initialize().then(async () => {
 
   app.use(express.json());
   app.use(cors());
+  app.use(morgan("dev"));
 
   app.get("/", (_: Request, res: Response) => {
     res.send("Hello World");
