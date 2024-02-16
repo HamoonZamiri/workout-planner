@@ -2,3 +2,6 @@
 auth-service/node_modules
 auth-service/dist
 auth-service/.env
+api-gateway/dist
+api-gateway/node_modules
+api-gateway/.env
