@@ -5,7 +5,7 @@ const AuthRouter = Express.Router();
 AuthRouter.post("/signup", AuthController.signup);
 AuthRouter.post("/login", AuthController.login);
 AuthRouter.post("/refresh", AuthController.refresh);
-AuthRouter.post("/authenticate/:id", AuthController.authenticate);
+AuthRouter.post("/authenticate", AuthController.authenticate);
 AuthRouter.get("/users", AuthController.getAllUsers);
 
 export default AuthRouter;

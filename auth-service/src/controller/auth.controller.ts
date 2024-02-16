@@ -96,6 +96,7 @@ async function refresh(
       body.refreshToken,
       params.id,
     );
+
     res.status(200).json({
       message: "Token refreshed successfully",
       data: {
@@ -109,16 +110,13 @@ async function refresh(
 }
 
 const AuthenticateRequestSchema = z.object({
-  params: z.object({
-    id: z.string(),
-  }),
   headers: z.object({
     authorization: z.string(),
   }),
 });
 
 type AuthenticateResponse = {
-  valid: boolean;
+  userId: string;
 };
 
 async function authenticate(
@@ -127,20 +125,14 @@ async function authenticate(
   next: NextFunction,
 ) {
   try {
-    const { params, headers } = await zodParse(AuthenticateRequestSchema, req);
+    const { headers } = await zodParse(AuthenticateRequestSchema, req);
     const token = headers.authorization.split(" ")[1];
     const userId = AuthService.authenticate(token || "");
-    if (userId !== params.id) {
-      throw new AppError(
-        401,
-        "Invalid token user is accessing another user's data",
-      );
-    }
 
     res.status(200).json({
       message: "Token authenticated successfully",
       data: {
-        valid: true,
+        userId,
       },
     });
   } catch (err) {
