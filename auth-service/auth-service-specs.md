@@ -16,15 +16,15 @@ auth_user - duplicated user just including core information needed for JWT token
 
 ## Endpoints
 
-| Method | Resource            | Description                                                                  | Body            | Returns              |
-| ------ | ------------------- | ---------------------------------------------------------------------------- | --------------- | -------------------- |
-| POST   | /api/login          | Logs the user in by validating their email and password                      | email, password | JWT token            |
-| POST   | /api/match/:user_id | Ensures the user represented by the auth token matches the url param user_id | None            | True if user matches |
-| POST   | /api/signup         | Creates a new user and logs them in automatically                            | email, password | JWT token            |
+| Method | Resource               | Description                                                     | Body            | Returns                     |
+| ------ | ---------------------- | --------------------------------------------------------------- | --------------- | --------------------------- |
+| POST   | /api/auth/login        | Logs the user in by validating their email and password         | email, password | JWT and refresh token       |
+| POST   | /api/auth/refresh/:id  | Creates new access token and updates refresh token for user     | None            | Returns both tokens         |
+| POST   | /api/auth/signup       | Creates a new user and logs them in automatically               | email, password | user, refresh and JWT token |
+| POST   | /api/auth/authenticate | Checks JWT token in http header to ensure user is authenticated | None            | The users id                |
 
 ---
 
 ## Events
 
 - Publishes user_created event when a user signs up
-

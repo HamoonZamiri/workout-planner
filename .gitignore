@@ -1,1 +1,4 @@
 .DS_Store
+auth-service/node_modules
+auth-service/dist
+auth-service/.env
