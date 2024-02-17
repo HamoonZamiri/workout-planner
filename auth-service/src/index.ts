@@ -7,7 +7,8 @@ import AppError from "./utils/AppError";
 import morgan from "morgan";
 dotenv.config();
 
-AuthDataSource.initialize().then(async () => {
+export default async function initializeApp() {
+  await AuthDataSource.initialize();
   const app = express();
 
   app.use(express.json());
@@ -27,7 +28,12 @@ AuthDataSource.initialize().then(async () => {
     });
   });
 
-  app.listen(process.env.PORT || 8081, () => {
+  const server = app.listen(process.env.PORT || 8081, () => {
     console.log("Listening on port " + (process.env.PORT || 8081));
   });
-});
+
+  return server;
+}
+if (process.env.NODE_ENV !== "test") {
+  initializeApp();
+}
