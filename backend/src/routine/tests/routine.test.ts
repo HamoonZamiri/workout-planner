@@ -13,6 +13,11 @@ const HTTP = {
   DELETE: "DELETE",
 } as const;
 
+type APIResponse<T> = {
+  message: string;
+  data: T;
+};
+
 const CORE_SERVICE_URL = process.env.CORE_SERVICE || "http://localhost:8082";
 
 describe("Routine module integration tests", () => {
@@ -56,7 +61,7 @@ describe("Routine module integration tests", () => {
     );
 
     expect(res.status).toBe(200);
-    const json = await res.json();
+    const json = (await res.json()) as APIResponse<Routine[]>;
     expect(json.data.length).toBe(1);
   });
 });
