@@ -35,6 +35,7 @@ describe("Routine module integration tests", () => {
     server.close();
   });
 
+  let routine: Routine;
   test("Create a routine", async () => {
     const res = await fetch(`${CORE_SERVICE_URL}/api/core/routine`, {
       method: HTTP.POST,
@@ -50,6 +51,8 @@ describe("Routine module integration tests", () => {
     });
 
     expect(res.status).toBe(201);
+    const json = (await res.json()) as APIResponse<Routine>;
+    routine = json.data;
   });
 
   test("Get my routines", async () => {
@@ -63,5 +66,82 @@ describe("Routine module integration tests", () => {
     expect(res.status).toBe(200);
     const json = (await res.json()) as APIResponse<Routine[]>;
     expect(json.data.length).toBe(1);
+  });
+
+  test("Get all routines", async () => {
+    const res = await fetch(`${CORE_SERVICE_URL}/api/core/routine/`, {
+      headers: {
+        "x-user-id": userId,
+      },
+      method: HTTP.GET,
+    });
+
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as APIResponse<Routine[]>;
+    expect(json.data.length).toBe(1);
+  });
+
+  test("Update a routine", async () => {
+    const res = await fetch(
+      `${CORE_SERVICE_URL}/api/core/routine/${routine.id}`,
+      {
+        method: HTTP.PUT,
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": userId,
+        },
+        body: JSON.stringify({
+          title: "Updated Test Routine",
+        }),
+      },
+    );
+
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as APIResponse<Routine>;
+    expect(json.data.title).toBe("Updated Test Routine");
+  });
+
+  test("Update routine which does not belong to me", async () => {
+    const res = await fetch(
+      `${CORE_SERVICE_URL}/api/core/routine/${routine.id}`,
+      {
+        method: HTTP.PUT,
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": randomUUID(),
+        },
+        body: JSON.stringify({
+          title: "Updated Test Routine",
+        }),
+      },
+    );
+    expect(res.status).toBe(401);
+  });
+
+  test("Delete routine that does not belong to me", async () => {
+    const res = await fetch(
+      `${CORE_SERVICE_URL}/api/core/routine/${routine.id}`,
+      {
+        method: HTTP.DELETE,
+        headers: {
+          "x-user-id": randomUUID(),
+        },
+      },
+    );
+    expect(res.status).toBe(401);
+  });
+
+  test("Delete routine", async () => {
+    const res = await fetch(
+      `${CORE_SERVICE_URL}/api/core/routine/${routine.id}`,
+      {
+        method: HTTP.DELETE,
+        headers: {
+          "x-user-id": userId,
+        },
+      },
+    );
+
+    expect(res.status).toBe(200);
   });
 });
