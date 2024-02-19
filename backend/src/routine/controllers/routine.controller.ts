@@ -17,8 +17,10 @@ const post = async (
   next: NextFunction,
 ) => {
   try {
-    const { body } = await zParse(CreateRoutineRequest, req);
-    const { title, description, userId, timeToComplete } = body;
+    console.log(req.headers);
+    const { body, headers } = await zParse(CreateRoutineRequest, req);
+    const { title, description, timeToComplete } = body;
+    const userId = headers["x-user-id"];
 
     const routine = await RoutineService.post(
       title,
@@ -41,8 +43,9 @@ const getMine = async (
   next: NextFunction,
 ) => {
   try {
-    const { params } = await zParse(GetRoutinesRequest, req);
-    const routines = await RoutineService.getMine(params.userId);
+    const { headers } = await zParse(GetRoutinesRequest, req);
+    const userId = headers["x-user-id"];
+    const routines = await RoutineService.getMine(userId);
     res.status(200).json({
       message: "Routines found successfully",
       data: routines,
@@ -74,10 +77,10 @@ const put = async (
   next: NextFunction,
 ) => {
   try {
-    const { body, params } = await zParse(UpdateRoutineRequest, req);
+    const { body, headers, params } = await zParse(UpdateRoutineRequest, req);
     const updatedRoutine = await RoutineService.put(
       params.routineId,
-      params.userId,
+      headers["x-user-id"],
       body,
     );
     res.status(200).json({
@@ -95,10 +98,10 @@ const _delete = async (
   next: NextFunction,
 ) => {
   try {
-    const { params } = await zParse(idRequest, req);
+    const { params, headers } = await zParse(idRequest, req);
     const deleted = await RoutineService._delete(
       params.routineId,
-      params.userId,
+      headers["x-user-id"],
     );
     res.status(200).json({
       message: "Routine deleted successfully",

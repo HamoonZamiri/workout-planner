@@ -40,12 +40,12 @@ describe("Routine module integration tests", () => {
       method: HTTP.POST,
       headers: {
         "Content-Type": "application/json",
+        "x-user-id": userId,
       },
       body: JSON.stringify({
         title: "Test Routine",
         description: "Test Description",
         timeToComplete: 60,
-        userId,
       }),
     });
 
@@ -53,12 +53,12 @@ describe("Routine module integration tests", () => {
   });
 
   test("Get my routines", async () => {
-    const res = await fetch(
-      `${CORE_SERVICE_URL}/api/core/routine/mine/${userId}`,
-      {
-        method: HTTP.GET,
+    const res = await fetch(`${CORE_SERVICE_URL}/api/core/routine/mine/`, {
+      headers: {
+        "x-user-id": userId,
       },
-    );
+      method: HTTP.GET,
+    });
 
     expect(res.status).toBe(200);
     const json = (await res.json()) as APIResponse<Routine[]>;

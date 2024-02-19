@@ -1,6 +1,6 @@
 import { z } from "zod";
 const UserMiddleware = z.object({
-  userId: z.string().uuid(),
+  "x-user-id": z.string().uuid(),
 });
 
 const CreateRoutineSchema = z.object({
@@ -10,24 +10,25 @@ const CreateRoutineSchema = z.object({
 });
 
 export const CreateRoutineRequest = z.object({
-  body: CreateRoutineSchema.merge(UserMiddleware),
+  headers: UserMiddleware,
+  body: CreateRoutineSchema,
 });
 
 export const GetRoutinesRequest = z.object({
-  params: UserMiddleware,
+  headers: UserMiddleware,
 });
 
 export const idRequest = z.object({
+  headers: UserMiddleware,
   params: z.object({
-    userId: z.string().uuid(),
     routineId: z.string().uuid(),
   }),
 });
 
 export const UpdateRoutineRequest = z.object({
+  headers: UserMiddleware,
   params: z.object({
     routineId: z.string().uuid(),
-    userId: z.string().uuid(),
   }),
   body: CreateRoutineSchema.partial(),
 });

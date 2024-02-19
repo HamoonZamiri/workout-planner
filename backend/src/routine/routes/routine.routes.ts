@@ -9,9 +9,9 @@ RoutineRouter.route("/")
   .get(RoutineController.getAll)
   .post(RoutineController.post);
 
-RoutineRouter.route("/mine/:userId").get(RoutineController.getMine);
+RoutineRouter.route("/mine").get(RoutineController.getMine);
 
-RoutineRouter.route("/:userId/:routineId")
+RoutineRouter.route("/:routineId")
   .delete(RoutineController._delete)
   .put(RoutineController.put);
 
