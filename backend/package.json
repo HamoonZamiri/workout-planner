@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "typeorm": "typeorm-ts-node-esm",
-    "test": "jest",
+    "test:routine": "jest ./src/routine/tests/routine.test.ts",
+    "test:workout": "jest ./src/workout/tests/workout.test.ts",
     "build": "tsc --build",
     "start": "node build/index.js",
     "dev": "nodemon build/index.js",
