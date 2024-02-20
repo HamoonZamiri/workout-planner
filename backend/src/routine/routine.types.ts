@@ -1,6 +1,6 @@
 import { z } from "zod";
 const UserMiddleware = z.object({
-  "x-user-id": z.string().uuid(),
+  "user-id": z.string().uuid(),
 });
 
 const CreateRoutineSchema = z.object({

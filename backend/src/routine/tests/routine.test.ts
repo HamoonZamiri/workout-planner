@@ -4,21 +4,8 @@ import initializeApp from "../../index";
 import { FitlogCoreDataSource } from "../../utils/pgres.datasource";
 import { Routine } from "../entities/routine.entity";
 import { randomUUID } from "crypto";
+import { CORE_SERVICE_URL, APIResponse, HTTP } from "../../constants";
 dotenv.config();
-
-const HTTP = {
-  GET: "GET",
-  POST: "POST",
-  PUT: "PUT",
-  DELETE: "DELETE",
-} as const;
-
-type APIResponse<T> = {
-  message: string;
-  data: T;
-};
-
-const CORE_SERVICE_URL = process.env.CORE_SERVICE || "http://localhost:8082";
 
 describe("Routine module integration tests", () => {
   let server: Server<typeof IncomingMessage, typeof ServerResponse>;
@@ -41,7 +28,7 @@ describe("Routine module integration tests", () => {
       method: HTTP.POST,
       headers: {
         "Content-Type": "application/json",
-        "x-user-id": userId,
+        "user-id": userId,
       },
       body: JSON.stringify({
         title: "Test Routine",
@@ -58,7 +45,7 @@ describe("Routine module integration tests", () => {
   test("Get my routines", async () => {
     const res = await fetch(`${CORE_SERVICE_URL}/api/core/routine/mine/`, {
       headers: {
-        "x-user-id": userId,
+        "user-id": userId,
       },
       method: HTTP.GET,
     });
@@ -71,7 +58,7 @@ describe("Routine module integration tests", () => {
   test("Get all routines", async () => {
     const res = await fetch(`${CORE_SERVICE_URL}/api/core/routine/`, {
       headers: {
-        "x-user-id": userId,
+        "user-id": userId,
       },
       method: HTTP.GET,
     });
@@ -88,7 +75,7 @@ describe("Routine module integration tests", () => {
         method: HTTP.PUT,
         headers: {
           "Content-Type": "application/json",
-          "x-user-id": userId,
+          "user-id": userId,
         },
         body: JSON.stringify({
           title: "Updated Test Routine",
@@ -108,7 +95,7 @@ describe("Routine module integration tests", () => {
         method: HTTP.PUT,
         headers: {
           "Content-Type": "application/json",
-          "x-user-id": randomUUID(),
+          "user-id": randomUUID(),
         },
         body: JSON.stringify({
           title: "Updated Test Routine",
@@ -124,7 +111,7 @@ describe("Routine module integration tests", () => {
       {
         method: HTTP.DELETE,
         headers: {
-          "x-user-id": randomUUID(),
+          "user-id": randomUUID(),
         },
       },
     );
@@ -137,7 +124,7 @@ describe("Routine module integration tests", () => {
       {
         method: HTTP.DELETE,
         headers: {
-          "x-user-id": userId,
+          "user-id": userId,
         },
       },
     );
