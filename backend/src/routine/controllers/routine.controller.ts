@@ -17,7 +17,6 @@ const post = async (
   next: NextFunction,
 ) => {
   try {
-    console.log(req.headers);
     const { body, headers } = await zParse(CreateRoutineRequest, req);
     const { title, description, timeToComplete } = body;
     const userId = headers["user-id"];
