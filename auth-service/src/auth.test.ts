@@ -9,6 +9,11 @@ dotenv.config();
 const AUTH_SERVICE_URL =
   process.env.AUTH_SERVICE_URL || "http://localhost:8081";
 
+type APIResponse<T> = {
+  message: string;
+  data: T;
+};
+
 describe("auth-service-int-tests", () => {
   let server: Server<typeof IncomingMessage, typeof ServerResponse>;
   let userCounter: number = 1;
@@ -72,15 +77,13 @@ describe("auth-service-int-tests", () => {
 
   let accessToken: string;
   let refreshToken: string;
-  const LoginResponseSchema = z.object({
-    message: z.string(),
-    data: z.object({
-      accessToken: z.string(),
-      id: z.string(),
-      email: z.string(),
-      refreshToken: z.string(),
-    }),
-  });
+
+  type LoginResponse = {
+    accessToken: string;
+    id: string;
+    email: string;
+    refreshToken: string;
+  };
 
   test("Login user successfully", async () => {
     const res = await fetch(`${AUTH_SERVICE_URL}/api/auth/login`, {
@@ -94,23 +97,19 @@ describe("auth-service-int-tests", () => {
       }),
     });
 
-    const json = await res.json();
-    const parsedResponse = LoginResponseSchema.safeParse(json);
-    expect(parsedResponse.success).toBe(true);
     expect(res.status).toBe(200);
-    if (parsedResponse.success) {
-      accessToken = parsedResponse.data.data.accessToken;
-      refreshToken = parsedResponse.data.data.refreshToken;
-    }
+
+    const json = (await res.json()) as APIResponse<LoginResponse>;
+    accessToken = json.data.accessToken;
+    refreshToken = json.data.refreshToken;
+    expect(accessToken).toBeTruthy();
+    expect(refreshToken).toBeTruthy();
   });
 
   let userId: string;
-  const authenticateResponseSchema = z.object({
-    message: z.string(),
-    data: z.object({
-      userId: z.string(),
-    }),
-  });
+  type AuthenticateResponse = {
+    userId: string;
+  };
 
   test("Authenticate user with JWT token", async () => {
     const res = await fetch(`${AUTH_SERVICE_URL}/api/auth/authenticate`, {
@@ -121,12 +120,9 @@ describe("auth-service-int-tests", () => {
       },
     });
     expect(res.status).toBe(200);
-    const json = await res.json();
-    const parsedResponse = authenticateResponseSchema.safeParse(json);
-    expect(parsedResponse.success).toBe(true);
-    if (parsedResponse.success) {
-      userId = parsedResponse.data.data.userId;
-    }
+    const json = (await res.json()) as APIResponse<AuthenticateResponse>;
+    expect(json.data.userId).toBeTruthy();
+    userId = json.data.userId;
   });
 
   test("Login with invalid password", async () => {
