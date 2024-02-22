@@ -5,3 +5,4 @@ auth-service/.env
 api-gateway/dist
 api-gateway/node_modules
 api-gateway/.env
+frontend-vite/.env
