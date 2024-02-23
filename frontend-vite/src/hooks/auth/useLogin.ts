@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { useAuthContext } from "../context/useAuthContext";
 import { api_base } from "../../utils/constants";
-import { APIResponse } from "../../utils/types";
+import { createServerResponseSchema } from "../../utils/types";
 import { useCookies } from "react-cookie";
+import { z } from "zod";
 
-type LoginResponse = {
-  accessToken: string;
-  refreshToken: string;
-  email: string;
-  id: string;
-};
+const LoginSchema = z.object({
+  accessToken: z.string(),
+  refreshToken: z.string(),
+  email: z.string(),
+  id: z.string(),
+});
+
+const LoginResponseSchema = createServerResponseSchema(LoginSchema);
 
 export const useLogin = () => {
   const [error, setError] = useState<string | null>(null);
@@ -32,14 +35,16 @@ export const useLogin = () => {
       body: JSON.stringify({ email, password }),
     });
 
-    const json = (await res.json()) as APIResponse<LoginResponse>;
-    if (!res.ok && json.error) {
+    const json = await res.json();
+    const parsedJson = LoginResponseSchema.parse(json);
+
+    if (!res.ok && parsedJson.error) {
       setIsLoading(false);
-      setError(json.error);
+      setError(parsedJson.error);
     } else {
       setIsLoading(false);
-      setCookie("user", json.data, { path: "/" });
-      dispatch({ type: "LOGIN", payload: json.data });
+      setCookie("user", parsedJson.data, { path: "/" });
+      dispatch({ type: "LOGIN", payload: parsedJson.data });
     }
   };
 
