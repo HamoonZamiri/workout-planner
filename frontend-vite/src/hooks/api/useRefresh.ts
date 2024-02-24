@@ -1,12 +1,15 @@
 import { useCookies } from "react-cookie";
 import { api_base } from "../../utils/constants";
-import { APIResponse } from "../../utils/types";
+import { createServerResponseSchema } from "../../utils/types";
 import { useAuthContext } from "../context/useAuthContext";
+import { z } from "zod";
 
-type RefreshResponse = {
-  accessToken: string;
-  refreshToken: string;
-};
+const RefreshSchema = z.object({
+  accessToken: z.string(),
+  refreshToken: z.string(),
+});
+
+const RefreshResponseSchema = createServerResponseSchema(RefreshSchema);
 
 function useRefresh() {
   const { state, dispatch } = useAuthContext();
@@ -28,17 +31,18 @@ function useRefresh() {
     if (!res.ok) {
       return null;
     }
-    const json = (await res.json()) as APIResponse<RefreshResponse>;
+    const json = await res.json();
+    const parsedJson = RefreshResponseSchema.parse(json);
     setCookie(
       "user",
       {
         ...user,
-        accessToken: json.data.accessToken,
-        refreshToken: json.data.refreshToken,
+        accessToken: parsedJson.data.accessToken,
+        refreshToken: parsedJson.data.refreshToken,
       },
       { path: "/" },
     );
-    dispatch({ type: "REFRESH", payload: json.data });
+    dispatch({ type: "REFRESH", payload: parsedJson.data });
     return json.data.accessToken;
   }
 
