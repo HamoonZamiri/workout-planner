@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { useAuthContext } from "../context/useAuthContext";
 import { api_base } from "../../utils/constants";
-import { APIResponse } from "../../utils/types";
+import { createServerResponseSchema } from "../../utils/types";
 import { useCookies } from "react-cookie";
+import { z } from "zod";
 
-type SignupResponse = {
-  accessToken: string;
-  refreshToken: string;
-  email: string;
-  id: string;
-};
+const SignupSchema = z.object({
+  accessToken: z.string(),
+  refreshToken: z.string(),
+  email: z.string(),
+  id: z.string(),
+});
+
+const SignupResponseSchema = createServerResponseSchema(SignupSchema);
 
 export const useSignup = () => {
   const [error, setError] = useState<string | null>(null);
@@ -34,15 +37,16 @@ export const useSignup = () => {
       body: JSON.stringify({ email, password }),
     });
 
-    const json = (await res.json()) as APIResponse<SignupResponse>;
+    const json = await res.json();
+    const parsedJson = SignupResponseSchema.parse(json);
 
     if (!res.ok) {
       setIsLoading(false);
-      setError(json.error || "");
+      setError(parsedJson.error || "");
     } else {
       setIsLoading(false);
-      setCookie("user", json.data, { path: "/" });
-      dispatch({ type: "LOGIN", payload: json.data });
+      setCookie("user", parsedJson.data, { path: "/" });
+      dispatch({ type: "LOGIN", payload: parsedJson.data });
     }
   };
   return { signup, error, setError, isLoading };
