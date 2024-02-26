@@ -1,8 +1,9 @@
 # FitLog
 
 ## Introduction
-
-Welcome to the Workout Planner Application! This is a powerful tool designed to help you organize and track your fitness journey. Whether you're a seasoned athlete or just getting started on your fitness goals, this PERN (PostgreSQL, Express, React, Node.js) stack application provides an intuitive and efficient way to plan, record, and analyze your workouts. With features like customizable workout routines, progress tracking, and social sharing, achieving your fitness objectives has never been easier. This README serves as your comprehensive guide to getting started with our application, including installation instructions, usage guidelines, and additional resources to make the most out of your fitness journey. Let's embark on this journey together towards a healthier and fitter you! 💪🏋️‍♂️🏋️‍♀️
+Welcome to FitLog! This application initially started as a simple MERN app but its evolved over the years. From JavaScript to TypeScript, from MongoDB
+to PostgreSQL, and from monolith to microservices. The original monolithic version of the app is available on the main branch. The app is currently being
+refactored to a microservices architecture so some things in this document may be outdated.
 
 ## Feature Set
 
@@ -53,10 +54,6 @@ Navigate to the backend folder, in your terminal run `npm install`. Run npm run 
 ## Database Diagram
 
 ![Database Diagram](assets/dbdiagram.png)
-
-## Technologies Used:
-
-The choice of the MERN stack for our workout planner application was driven by a combination of flexibility, scalability, and developer-friendliness. MongoDB, a NoSQL database, provides the agility required to store complex fitness data, allowing us to adapt and expand our data model as our application evolves. Express, a minimal and robust Node.js web application framework, allows for efficient routing and handling of HTTP requests. React, with its component-based architecture, offers a dynamic and responsive user interface that aligns seamlessly with the needs of fitness enthusiasts who require real-time updates and interactivity. Node.js, as the runtime environment, enables server-side JavaScript execution, ensuring a consistent language throughout the stack. Together, the MERN stack empowers us to deliver a modern, performant, and feature-rich workout planner that's ready to meet the demands of both novice and experienced users in their fitness journeys.
 
 ## Deployement:
 
