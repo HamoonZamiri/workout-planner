@@ -1,6 +1,6 @@
 import { Dialog } from "@headlessui/react";
 import { useAuthContext } from "../hooks/context/useAuthContext";
-import { api_base } from "../utils/constants";
+import constants from "../utils/constants";
 import useRoutinesContext from "../hooks/context/useRoutinesContext";
 import { useState } from "react";
 
@@ -22,13 +22,16 @@ const DeleteRoutineDialog = ({
   const routineDispatch = useRoutinesContext().dispatch;
   const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const res = await fetch(`${api_base}/api/core/routine/${routineId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+    const res = await fetch(
+      `${constants.api_base}/api/core/routine/${routineId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       },
-    });
+    );
     const json = await res.json();
     if (!res.ok) {
       setError(json.error);

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "../hooks/context/useAuthContext";
 import { Workout } from "../utils/types";
-import { api_base } from "../utils/constants";
+import constants from "../utils/constants";
 import { FaHammer } from "react-icons/fa";
 // import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";
 import UpdateWorkoutDialog from "./UpdateWorkoutDialog";
@@ -46,12 +46,15 @@ const WorkoutDetails = ({ routineId, workout }: WorkoutDetailsProps) => {
     if (!user) {
       return;
     }
-    const res = await fetch(api_base + "/api/core/workout/" + workout.id, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${user.accessToken}`,
+    const res = await fetch(
+      constants.api_base + "/api/core/workout/" + workout.id,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
       },
-    });
+    );
     await res.json();
 
     if (res.ok) {

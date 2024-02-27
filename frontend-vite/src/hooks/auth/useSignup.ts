@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuthContext } from "../context/useAuthContext";
-import { api_base } from "../../utils/constants";
+import constants from "../../utils/constants";
 import { createServerResponseSchema } from "../../utils/types";
 import { useCookies } from "react-cookie";
 import { z } from "zod";
@@ -29,7 +29,7 @@ export const useSignup = () => {
     setIsLoading(true);
     setError(null);
 
-    const res = await fetch(api_base + "/api/auth/signup", {
+    const res = await fetch(constants.api_base + "/api/auth/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

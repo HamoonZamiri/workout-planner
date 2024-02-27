@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuthContext } from "../hooks/context/useAuthContext";
-import { api_base } from "../utils/constants";
+import constants from "../utils/constants";
 import useRoutinesContext from "../hooks/context/useRoutinesContext";
 import {
   WorkoutFormData,
@@ -38,7 +38,7 @@ const WorkoutFormDialog = ({ routineId, open, setOpen }: WorkoutFormProps) => {
       return;
     }
 
-    const res = await fetch(api_base + "/api/core/workout", {
+    const res = await fetch(constants.api_base + "/api/core/workout", {
       method: "POST",
       body: JSON.stringify({ ...parsedBody.data, routineId }),
       headers: {

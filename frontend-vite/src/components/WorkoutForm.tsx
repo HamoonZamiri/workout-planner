@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuthContext } from "../hooks/context/useAuthContext";
-import { api_base } from "../utils/constants";
+import constants from "../utils/constants";
 import useRoutinesContext from "../hooks/context/useRoutinesContext";
 import { APIResponse, Workout } from "../utils/types";
 
@@ -26,7 +26,7 @@ const WorkoutForm = ({ routineId }: WorkoutFormProps) => {
     }
     const workout = { title, load, reps };
 
-    const res = await fetch(api_base + "/api/core/workout", {
+    const res = await fetch(constants.api_base + "/api/core/workout", {
       method: "POST",
       body: JSON.stringify(workout),
       headers: {
@@ -104,4 +104,3 @@ const WorkoutForm = ({ routineId }: WorkoutFormProps) => {
 };
 
 export default WorkoutForm;
-

@@ -1,7 +1,7 @@
 import { RoutineSchema, createServerResponseSchema } from "../../utils/types";
 import useZodFetch from "./useZodFetch";
 import { useAuthContext } from "../context/useAuthContext";
-import { api_base } from "../../utils/constants";
+import constants from "../../utils/constants";
 import { useQuery } from "react-query";
 import { z } from "zod";
 
@@ -22,11 +22,15 @@ export const useAllRoutines = () => {
   >({
     queryKey: ["routines", token],
     queryFn: () =>
-      zodFetch(`${api_base}/api/core/routine/`, ServerResponseSchema, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      zodFetch(
+        `${constants.api_base}/api/core/routine/`,
+        ServerResponseSchema,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      }),
+      ),
     enabled: !!token,
   });
 
@@ -50,11 +54,15 @@ export const useMyRoutines = () => {
   >({
     queryKey: ["routines", token],
     queryFn: () =>
-      zodFetch(`${api_base}/api/core/routine/mine`, ServerResponseSchema, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      zodFetch(
+        `${constants.api_base}/api/core/routine/mine`,
+        ServerResponseSchema,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      }),
+      ),
     enabled: !!token,
   });
 

@@ -1,5 +1,5 @@
 import { useCookies } from "react-cookie";
-import { api_base } from "../../utils/constants";
+import constants from "../../utils/constants";
 import { createServerResponseSchema } from "../../utils/types";
 import { useAuthContext } from "../context/useAuthContext";
 import { z } from "zod";
@@ -21,13 +21,16 @@ function useRefresh() {
     if (!user || !user.refreshToken) {
       return null;
     }
-    const res = await fetch(api_base + "/api/auth/refresh/" + user.id, {
-      headers: {
-        "Content-Type": "application/json",
+    const res = await fetch(
+      constants.api_base + "/api/auth/refresh/" + user.id,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ refreshToken: user.refreshToken }),
       },
-      method: "POST",
-      body: JSON.stringify({ refreshToken: user.refreshToken }),
-    });
+    );
     if (!res.ok) {
       return null;
     }

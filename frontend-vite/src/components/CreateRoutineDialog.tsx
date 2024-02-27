@@ -1,6 +1,6 @@
 import { Dialog } from "@headlessui/react";
 import { useState } from "react";
-import { api_base } from "../utils/constants";
+import constants from "../utils/constants";
 import useRoutinesContext from "../hooks/context/useRoutinesContext";
 
 type CreateRoutineDialogProps = {
@@ -39,7 +39,7 @@ const CreateRoutineDialog = ({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const res = await fetch(api_base + "/api/core/routine", {
+    const res = await fetch(constants.api_base + "/api/core/routine", {
       method: "POST",
       body: JSON.stringify(routineForm),
       headers: {

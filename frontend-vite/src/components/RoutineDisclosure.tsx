@@ -5,7 +5,7 @@ import WorkoutDetails from "./WorkoutDetails";
 import WorkoutFormDialog from "./WorkoutFormDialog";
 import { useState } from "react";
 import { handleNumericInputChange } from "../utils/forms";
-import { api_base } from "../utils/constants";
+import constants from "../utils/constants";
 import { useAuthContext } from "../hooks/context/useAuthContext";
 import useRoutinesContext from "../hooks/context/useRoutinesContext";
 import DeleteRoutineDialog from "./DeleteRoutineDialog";
@@ -60,14 +60,17 @@ const RoutineDisclosure = ({ routine }: RoutineDisclosureProps) => {
     key: keyof Data,
     setter: React.Dispatch<React.SetStateAction<boolean>>,
   ): Promise<void> => {
-    const res = await fetch(`${api_base}/api/core/routine/${routine.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${userContext?.state.user?.accessToken}`,
+    const res = await fetch(
+      `${constants.api_base}/api/core/routine/${routine.id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userContext?.state.user?.accessToken}`,
+        },
+        body: JSON.stringify({ [key]: data[key] }),
       },
-      body: JSON.stringify({ [key]: data[key] }),
-    });
+    );
     const json = await res.json();
     if (!res.ok) {
       setError(json.error);

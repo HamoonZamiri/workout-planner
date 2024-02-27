@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Workout, WorkoutFormData, WorkoutFormSchema } from "../utils/types";
 import { useAuthContext } from "../hooks/context/useAuthContext";
-import { api_base } from "../utils/constants";
+import constants from "../utils/constants";
 import { Dialog } from "@headlessui/react";
 import useRoutinesContext from "../hooks/context/useRoutinesContext";
 import { handleChange } from "../utils/forms";
@@ -57,14 +57,17 @@ const UpdateWorkoutDialog = ({
       return;
     }
 
-    const res = await fetch(api_base + "/api/core/workout/" + workout.id, {
-      method: "PUT",
-      body: JSON.stringify(parsedBody.data),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${user.accessToken}`,
+    const res = await fetch(
+      constants.api_base + "/api/core/workout/" + workout.id,
+      {
+        method: "PUT",
+        body: JSON.stringify(parsedBody.data),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.accessToken}`,
+        },
       },
-    });
+    );
     const json = await res.json();
     if (!res.ok) {
       setError(json.error);
