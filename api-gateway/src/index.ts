@@ -4,6 +4,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import { createProxyMiddleware, fixRequestBody } from "http-proxy-middleware";
 import { authMiddleware } from "./middleware";
+import constants from "./constants";
 dotenv.config();
 
 const app = express();
@@ -14,7 +15,7 @@ app.use(morgan("dev"));
 
 const authProxy = createProxyMiddleware("/api/auth", {
   changeOrigin: true,
-  target: process.env.AUTH_SERVICE,
+  target: constants.AUTH_SERVICE,
   //onProxyReq: fixRequestBody
 });
 app.use("/api/auth", authProxy);
@@ -23,7 +24,7 @@ app.use(authMiddleware);
 
 const coreProxy = createProxyMiddleware("/api/core", {
   changeOrigin: true,
-  target: process.env.CORE_SERVICE,
+  target: constants.CORE_SERVICE,
   //onProxyReq: fixRequestBody
 });
 app.use("/api/core", coreProxy);

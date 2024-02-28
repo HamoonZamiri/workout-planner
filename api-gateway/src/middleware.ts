@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { APIResponse } from "./constants";
+import { APIResponse } from "./types";
+import constants from "./constants";
 export async function authMiddleware(
   req: Request,
   res: Response,
@@ -10,7 +11,7 @@ export async function authMiddleware(
     return res.status(401).json({ message: "Unauthorized, token not found!" });
   }
   const authRes = await fetch(
-    `${process.env.AUTH_SERVICE}/api/auth/authenticate`,
+    `${constants.AUTH_SERVICE}/api/auth/authenticate`,
     {
       method: "POST",
       headers: {
