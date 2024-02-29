@@ -4,8 +4,12 @@ import initializeApp from "../../index";
 import { FitlogCoreDataSource } from "../../utils/pgres.datasource";
 import { Routine } from "../entities/routine.entity";
 import { randomUUID } from "crypto";
-import { CORE_SERVICE_URL, APIResponse, HTTP } from "../../constants";
+import constants from "../../utils/constants";
+import { APIResponse } from "../../utils/express.types";
 dotenv.config();
+
+const HTTP = constants.HTTP;
+const CORE_SERVICE_URL = constants.CORE_SERVICE_URL;
 
 describe("Routine module integration tests", () => {
   let server: Server<typeof IncomingMessage, typeof ServerResponse>;
