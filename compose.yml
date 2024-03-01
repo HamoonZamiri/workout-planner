@@ -1,0 +1,19 @@
+services:
+  fitlog-api-gateway:
+    container_name: fitlog-api-gateway
+    build:
+      context: ./api-gateway
+    ports:
+      - "8080:8080"
+  fitlog_core-service:
+    container_name: fitlog_core
+    build:
+      context: ./backend
+    ports:
+      - "8082:8082"
+  fitlog-auth-service:
+    container_name: fitlog-auth-service
+    build:
+      context: ./auth-service
+    ports:
+      - "8081:8081"
