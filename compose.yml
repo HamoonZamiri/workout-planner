@@ -1,19 +1,24 @@
 services:
-  fitlog-api-gateway:
-    container_name: fitlog-api-gateway
+  fitlog_api_gateway:
+    container_name: fitlog_api_gateway
     build:
       context: ./api-gateway
     ports:
       - "8080:8080"
-  fitlog_core-service:
-    container_name: fitlog_core
+    env_file:
+      - ./api-gateway/.env.compose
+  fitlog_core_service:
+    container_name: fitlog_core_service
     build:
       context: ./backend
     ports:
       - "8082:8082"
-  fitlog-auth-service:
-    container_name: fitlog-auth-service
+    env_file:
+      - ./backend/.env.compose
+  fitlog_auth_service:
+    container_name: fitlog_auth_service
     build:
       context: ./auth-service
     ports:
       - "8081:8081"
+    env_file: ./auth-service/.env.compose
