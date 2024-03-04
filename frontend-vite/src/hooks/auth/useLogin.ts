@@ -17,13 +17,10 @@ const LoginResponseSchema = createServerResponseSchema(LoginSchema);
 export const useLogin = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [cookies, setCookie] = useCookies(["user"]);
+  const setCookie = useCookies(["user"])[1];
   const { dispatch } = useAuthContext();
 
   const login = async (email: string, password: string) => {
-    if (cookies.user) {
-      return;
-    }
     setIsLoading(true);
     setError(null);
 

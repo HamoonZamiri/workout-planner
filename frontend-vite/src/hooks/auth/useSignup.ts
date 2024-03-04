@@ -18,14 +18,10 @@ export const useSignup = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [cookie, setCookie] = useCookies(["user"]);
+  const setCookie = useCookies(["user"])[1];
   const { dispatch } = useAuthContext();
 
   const signup = async (email: string, password: string) => {
-    if (cookie.user) {
-      return;
-    }
-
     setIsLoading(true);
     setError(null);
 
