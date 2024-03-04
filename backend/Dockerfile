@@ -6,7 +6,7 @@ RUN npm install
 RUN npm install -g typescript
 
 RUN npm run build
-EXPOSE 8081
+EXPOSE 8082
 
 CMD [ "node", "build/index.js" ]
 USER node

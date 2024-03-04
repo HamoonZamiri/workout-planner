@@ -6,3 +6,7 @@ api-gateway/dist
 api-gateway/node_modules
 api-gateway/.env
 frontend-vite/.env
+api-gateway/.env.compose
+auth-service/.env.compose
+backend/.env.compose
+.env
