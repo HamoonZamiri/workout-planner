@@ -1,4 +1,13 @@
 services:
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init-scripts:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
   fitlog_api_gateway:
     container_name: fitlog_api_gateway
     build:
@@ -7,6 +16,8 @@ services:
       - "8080:8080"
     env_file:
       - ./api-gateway/.env.compose
+    depends_on:
+      - db
   fitlog_core_service:
     container_name: fitlog_core_service
     build:
@@ -15,6 +26,8 @@ services:
       - "8082:8082"
     env_file:
       - ./backend/.env.compose
+    depends_on:
+      - db
   fitlog_auth_service:
     container_name: fitlog_auth_service
     build:
@@ -22,3 +35,7 @@ services:
     ports:
       - "8081:8081"
     env_file: ./auth-service/.env.compose
+    depends_on:
+      - db
+volumes:
+  pgdata:

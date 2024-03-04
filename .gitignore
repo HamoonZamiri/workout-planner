@@ -9,3 +9,4 @@ frontend-vite/.env
 api-gateway/.env.compose
 auth-service/.env.compose
 backend/.env.compose
+.env
