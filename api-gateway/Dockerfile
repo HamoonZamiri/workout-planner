@@ -7,5 +7,5 @@ RUN yarn
 RUN yarn build
 EXPOSE 8080
 
-CMD [ "node", "dist/index.js" ]
+CMD [ "node", "dist/src/index.js" ]
 USER node
