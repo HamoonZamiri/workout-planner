@@ -45,5 +45,6 @@ services:
     env_file: ./auth-service/.env.compose
     depends_on:
       - db
+      - mq
 volumes:
   pgdata:
