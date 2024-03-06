@@ -5,13 +5,15 @@ import { AuthDataSource } from "./db/datasource";
 import AuthRouter from "./routes/auth.routes";
 import AppError from "./utils/AppError";
 import morgan from "morgan";
-import { connectToRabbit } from "./mq";
+import { MQService, connectToRabbit } from "./mq";
 dotenv.config();
+
+export let mqService: MQService | undefined;
 
 export default async function initializeApp() {
   await AuthDataSource.initialize();
 
-  const mqService = await connectToRabbit();
+  mqService = await connectToRabbit();
   if (!mqService) {
     throw new Error("Failed to connect to RabbitMQ");
   }

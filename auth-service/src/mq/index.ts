@@ -1,7 +1,7 @@
 import amqp from "amqplib";
 import constants from "../utils/constants";
 
-class MQService {
+export class MQService {
   private connection: amqp.Connection;
   private channel: amqp.Channel;
 
