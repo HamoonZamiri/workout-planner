@@ -30,7 +30,9 @@ export async function connectToRabbit() {
   try {
     const connection = await amqp.connect(constants.RABBITMQ_URL);
     const channel = await connection.createChannel();
-    return new MQService(connection, channel);
+    const mqService = new MQService(connection, channel);
+    mqService.initializeExchanges(["user_created"]);
+    return mqService;
   } catch (e) {
     console.error(e);
   }
