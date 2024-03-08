@@ -6,39 +6,30 @@ import AppError from "./utils/AppError";
 import { FitlogCoreDataSource } from "./utils/pgres.datasource";
 import RoutineRouter from "./routine/routes/routine.routes";
 import morgan from "morgan";
-import amqp from "amqplib";
-import constants from "./utils/constants";
-import { handleUserCreated } from "./routine/services/routine.service";
+import { exchangeList } from "./mq/EventConsumer";
+import MQEventConsumer from "./mq/MQEventConsumer";
+import { connectToMQ } from "./mq/connect";
 dotenv.config();
 
-export async function connectToMQ() {
-  try {
-    const connection = await amqp.connect(constants.RABBITMQ_URL);
-    const channel = await connection.createChannel();
-    return { connection, channel };
-  } catch (err) {
-    console.error(err);
-  }
-}
 export default async function initializeApp() {
   await FitlogCoreDataSource.initialize();
-  const connectionResult = await connectToMQ();
-  if (connectionResult === undefined) {
+
+  const connection = await connectToMQ();
+  if (connection === undefined) {
     throw new Error("Failed to connect to RabbitMQ");
   }
 
-  const { channel } = connectionResult;
-  await channel.assertExchange("user_created", "fanout", { durable: false });
-  const assertQueue = await channel.assertQueue("", { exclusive: true });
-  await channel.bindQueue(assertQueue.queue, "user_created", "");
+  const eventConsumers = await Promise.all(
+    exchangeList.map(async (exchange) => {
+      const channel = await connection.createChannel();
+      return new MQEventConsumer(connection, channel, exchange);
+    }),
+  );
 
-  channel.consume(assertQueue.queue, async (message) => {
-    if (message === null) {
-      console.log("Null message was received");
-      return;
-    }
-    await handleUserCreated(message);
+  eventConsumers.forEach((consumer) => {
+    consumer.consume();
   });
+
   const app = express();
 
   // middleware
