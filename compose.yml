@@ -1,4 +1,12 @@
 services:
+  mq:
+    image: rabbitmq:3.13
+    container_name: mq
+    ports:
+      - "5672:5672"
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
   db:
     image: postgres:latest
     ports:
@@ -28,6 +36,7 @@ services:
       - ./backend/.env.compose
     depends_on:
       - db
+      - mq
   fitlog_auth_service:
     container_name: fitlog_auth_service
     build:
@@ -37,5 +46,6 @@ services:
     env_file: ./auth-service/.env.compose
     depends_on:
       - db
+      - mq
 volumes:
   pgdata:

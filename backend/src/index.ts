@@ -6,10 +6,30 @@ import AppError from "./utils/AppError";
 import { FitlogCoreDataSource } from "./utils/pgres.datasource";
 import RoutineRouter from "./routine/routes/routine.routes";
 import morgan from "morgan";
+import { exchangeList } from "./mq/EventConsumer";
+import MQEventConsumer from "./mq/MQEventConsumer";
+import { connectToMQ } from "./mq/connect";
 dotenv.config();
 
 export default async function initializeApp() {
   await FitlogCoreDataSource.initialize();
+
+  const connection = await connectToMQ();
+  if (connection === undefined) {
+    throw new Error("Failed to connect to RabbitMQ");
+  }
+
+  const eventConsumers = await Promise.all(
+    exchangeList.map(async (exchange) => {
+      const channel = await connection.createChannel();
+      return new MQEventConsumer(connection, channel, exchange);
+    }),
+  );
+
+  eventConsumers.forEach((consumer) => {
+    consumer.consume();
+  });
+
   const app = express();
 
   // middleware

@@ -6,6 +6,7 @@ import validator from "validator";
 import bcrypt from "bcrypt";
 import { randomUUID } from "crypto";
 import AppError from "../utils/AppError";
+import { mqService } from "..";
 
 dotenv.config();
 
@@ -56,6 +57,12 @@ async function signup(
   });
 
   const savedUser = await repository.save(user);
+
+  mqService?.sendMessage(
+    JSON.stringify({ email: savedUser.email, id: savedUser.id }),
+    "user_created",
+  );
+
   return {
     user: savedUser,
     accessToken: createJWTToken(user.id),

@@ -2,6 +2,7 @@ import { FitlogCoreDataSource } from "../../utils/pgres.datasource";
 import { Routine } from "../entities/routine.entity";
 import { RoutineUpdateFields } from "../routine.types";
 import AppError from "../../utils/AppError";
+import amqp from "amqplib";
 
 const RoutineRepository = FitlogCoreDataSource.getRepository(Routine);
 
@@ -81,6 +82,10 @@ const _delete = async (routineId: string, userId: string) => {
 
   return RoutineRepository.delete({ id: routineId });
 };
+
+export async function handleUserCreated(message: amqp.ConsumeMessage) {
+  console.log("User created: ", JSON.parse(message.content.toString()));
+}
 
 const RoutineService = {
   post,

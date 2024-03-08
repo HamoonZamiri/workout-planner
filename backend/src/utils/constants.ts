@@ -17,6 +17,7 @@ const nonProd = env === "development" || env === "test";
 const DB_USERNAME = process.env.DB_USERNAME || "postgres";
 const DB_PASSWORD = process.env.DB_PASSWORD || "postgres";
 const DB_PORT = process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432;
+const RABBITMQ_URL = process.env.RABBITMQ_URL || "amqp://localhost";
 
 const HTTP = {
   GET: "GET",
@@ -28,6 +29,7 @@ const HTTP = {
 const CORE_SERVICE_URL = process.env.CORE_SERVICE || "http://localhost:8082";
 
 const constants = {
+  RABBITMQ_URL,
   CORE_SERVICE_URL,
   HTTP,
   nonProd,
