@@ -3,6 +3,7 @@ import { Routine } from "../entities/routine.entity";
 import { RoutineUpdateFields } from "../routine.types";
 import AppError from "../../utils/AppError";
 import amqp from "amqplib";
+import WorkoutService from "../../workout/services/workout.service";
 
 const RoutineRepository = FitlogCoreDataSource.getRepository(Routine);
 
@@ -84,7 +85,21 @@ const _delete = async (routineId: string, userId: string) => {
 };
 
 export async function handleUserCreated(message: amqp.ConsumeMessage) {
-  console.log("User created: ", JSON.parse(message.content.toString()));
+  const messageContent = message.content.toString();
+  const user = JSON.parse(messageContent) as { id: string; email: string };
+  const routine = await post("Default", "Default routine", user.id, 0);
+  await WorkoutService.post(
+    {
+      title: "Bench Press",
+      routineId: routine.id,
+      setsLow: 3,
+      setsHigh: 5,
+      repsLow: 10,
+      repsHigh: 12,
+      load: 135,
+    },
+    user.id,
+  );
 }
 
 const RoutineService = {

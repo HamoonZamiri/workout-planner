@@ -4,9 +4,11 @@ services:
     container_name: mq
     ports:
       - "5672:5672"
+      - "15672:15672"
     volumes:
       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    restart: always
   db:
     image: postgres:latest
     ports:
@@ -16,6 +18,7 @@ services:
       - pgdata:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    restart: always
   fitlog_api_gateway:
     container_name: fitlog_api_gateway
     build:
@@ -26,6 +29,8 @@ services:
       - ./api-gateway/.env.compose
     depends_on:
       - db
+      - mq
+    restart: always
   fitlog_core_service:
     container_name: fitlog_core_service
     build:
@@ -37,6 +42,7 @@ services:
     depends_on:
       - db
       - mq
+    restart: always
   fitlog_auth_service:
     container_name: fitlog_auth_service
     build:
@@ -47,5 +53,6 @@ services:
     depends_on:
       - db
       - mq
+    restart: always
 volumes:
   pgdata:
