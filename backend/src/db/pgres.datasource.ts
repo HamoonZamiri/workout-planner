@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { DataSource } from "typeorm";
-import constants from "./constants";
+import constants from "../utils/constants";
 dotenv.config();
 
 export const FitlogCoreDataSource = new DataSource({

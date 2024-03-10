@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { IncomingMessage, Server, ServerResponse } from "http";
 import initializeApp from "../../index";
-import { FitlogCoreDataSource } from "../../utils/pgres.datasource";
+import { FitlogCoreDataSource } from "../../db/pgres.datasource";
 import { Routine } from "../entities/routine.entity";
 import { randomUUID } from "crypto";
 import constants from "../../utils/constants";

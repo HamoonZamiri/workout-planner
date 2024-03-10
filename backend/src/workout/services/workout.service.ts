@@ -1,4 +1,4 @@
-import { FitlogCoreDataSource } from "../../utils/pgres.datasource";
+import { FitlogCoreDataSource } from "../../db/pgres.datasource";
 import { Workout } from "../entities/workout.entity";
 import RoutineService from "../../routine/services/routine.service";
 import { CreateWorkoutData, UpdateWorkoutFields } from "../workout.types";

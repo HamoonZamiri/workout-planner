@@ -2,7 +2,7 @@ import { IncomingMessage, Server, ServerResponse } from "http";
 import initializeApp from "../../index";
 import { randomUUID } from "crypto";
 import { Routine } from "../../routine/entities/routine.entity";
-import { FitlogCoreDataSource } from "../../utils/pgres.datasource";
+import { FitlogCoreDataSource } from "../../db/pgres.datasource";
 import { Workout } from "../entities/workout.entity";
 import constants from "../../utils/constants";
 import { APIResponse } from "../../utils/express.types";

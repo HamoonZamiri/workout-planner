@@ -1,4 +1,4 @@
-import { FitlogCoreDataSource } from "../../utils/pgres.datasource";
+import { FitlogCoreDataSource } from "../../db/pgres.datasource";
 import { Routine } from "../entities/routine.entity";
 import { RoutineUpdateFields } from "../routine.types";
 import AppError from "../../utils/AppError";
