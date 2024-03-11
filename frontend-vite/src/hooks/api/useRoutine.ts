@@ -1,4 +1,5 @@
-import { RoutineSchema, createServerResponseSchema } from "../../utils/types";
+import { createServerResponseSchema } from "../../schemas/ServerResponse";
+import { RoutineSchema } from "../../schemas/Routine";
 import useZodFetch from "./useZodFetch";
 import { useAuthContext } from "../context/useAuthContext";
 import constants from "../../utils/constants";

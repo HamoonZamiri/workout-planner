@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuthContext } from "../hooks/context/useAuthContext";
-import { Workout } from "../utils/types";
+import { Workout } from "../schemas/Workout";
 import constants from "../utils/constants";
 import { FaHammer } from "react-icons/fa";
 // import { AiFillPlusCircle, AiFillMinusCircle } from "react-icons/ai";

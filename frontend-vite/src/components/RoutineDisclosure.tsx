@@ -1,5 +1,5 @@
 import { Disclosure } from "@headlessui/react";
-import { Routine } from "../utils/types";
+import { Routine } from "../schemas/Routine";
 import { BsArrow90DegDown } from "react-icons/bs";
 import WorkoutDetails from "./WorkoutDetails";
 import WorkoutFormDialog from "./WorkoutFormDialog";

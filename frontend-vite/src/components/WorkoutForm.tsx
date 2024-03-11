@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useAuthContext } from "../hooks/context/useAuthContext";
 import constants from "../utils/constants";
 import useRoutinesContext from "../hooks/context/useRoutinesContext";
-import { APIResponse, Workout } from "../utils/types";
+import { APIResponse } from "../utils/types";
+import { Workout } from "../schemas/Workout";
 
 type WorkoutFormProps = {
   routineId: string;

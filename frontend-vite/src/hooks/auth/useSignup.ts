@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuthContext } from "../context/useAuthContext";
 import constants from "../../utils/constants";
-import { createServerResponseSchema } from "../../utils/types";
+import { createServerResponseSchema } from "../../schemas/ServerResponse";
 import { useCookies } from "react-cookie";
 import { z } from "zod";
 

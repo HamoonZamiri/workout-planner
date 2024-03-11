@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Workout, WorkoutFormData, WorkoutFormSchema } from "../utils/types";
+import { WorkoutFormData } from "../utils/types";
+import { WorkoutFormSchema, Workout } from "../schemas/Workout";
 import { useAuthContext } from "../hooks/context/useAuthContext";
 import constants from "../utils/constants";
 import { Dialog } from "@headlessui/react";

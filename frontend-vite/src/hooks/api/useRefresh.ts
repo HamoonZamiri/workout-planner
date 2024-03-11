@@ -1,6 +1,6 @@
 import { useCookies } from "react-cookie";
 import constants from "../../utils/constants";
-import { createServerResponseSchema } from "../../utils/types";
+import { createServerResponseSchema } from "../../schemas/ServerResponse";
 import { useAuthContext } from "../context/useAuthContext";
 import { z } from "zod";
 

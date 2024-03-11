@@ -2,13 +2,8 @@ import { useState } from "react";
 import { useAuthContext } from "../hooks/context/useAuthContext";
 import constants from "../utils/constants";
 import useRoutinesContext from "../hooks/context/useRoutinesContext";
-import {
-  WorkoutFormData,
-  APIResponse,
-  Workout,
-  WorkoutFormSchema,
-  initialFormData,
-} from "../utils/types";
+import { WorkoutFormSchema, Workout } from "../schemas/Workout";
+import { WorkoutFormData, APIResponse, initialFormData } from "../utils/types";
 import { Dialog } from "@headlessui/react";
 import { handleChange } from "../utils/forms";
 
