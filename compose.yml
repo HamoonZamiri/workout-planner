@@ -26,7 +26,7 @@ services:
     ports:
       - "8080:8080"
     env_file:
-      - ./api-gateway/.env.compose
+      - ./api-gateway/.env
     depends_on:
       - db
       - mq
@@ -38,7 +38,7 @@ services:
     ports:
       - "8082:8082"
     env_file:
-      - ./backend/.env.compose
+      - ./backend/.env
     depends_on:
       - db
       - mq
@@ -49,7 +49,7 @@ services:
       context: ./auth-service
     ports:
       - "8081:8081"
-    env_file: ./auth-service/.env.compose
+    env_file: ./auth-service/.env
     depends_on:
       - db
       - mq
