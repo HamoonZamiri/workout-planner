@@ -7,7 +7,7 @@ export const RoutineSchema = z.object({
   title: z.string(),
   description: z.string(),
   userId: z.string().uuid(),
-  timeToComplete: z.number().min(1).max(240),
+  timeToComplete: z.number().min(0).max(240),
   workouts: z.array(WorkoutSchema),
 });
 
