@@ -2,30 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { z } from "zod";
 import { zodParse } from "../utils/zodParser";
 import AuthService from "../service/authUser.service";
-import AppError from "../utils/AppError";
-
-const LoginRequestSchema = z.object({
-  body: z.object({
-    email: z.string().email(),
-    password: z.string(),
-  }),
-});
-
-const SignupRequestSchema = LoginRequestSchema;
-
-type UserLoginDTO = {
-  id: string;
-  email: string;
-  accessToken: string;
-  refreshToken: string;
-};
-
-type ResponseBody<T> = {
-  message: string;
-  data: T;
-};
-
-type APIResponse<T> = Response<ResponseBody<T>>;
+import { APIResponse, UserLoginDTO } from "../types";
+import schemas from "../schemas";
 
 async function login(
   req: Request,
@@ -33,7 +11,7 @@ async function login(
   next: NextFunction,
 ) {
   try {
-    const { body } = await zodParse(LoginRequestSchema, req);
+    const { body } = await zodParse(schemas.LoginRequestSchema, req);
     const loginInfo = await AuthService.login(body.email, body.password);
     res.status(200).json({
       message: "User logged in successfully",
@@ -55,7 +33,7 @@ async function signup(
   next: NextFunction,
 ) {
   try {
-    const { body } = await zodParse(SignupRequestSchema, req);
+    const { body } = await zodParse(schemas.SignupRequestSchema, req);
     const loginInfo = await AuthService.signup(body.email, body.password);
     res.status(201).json({
       message: "User created successfully",
