@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"fmt"
@@ -26,7 +26,7 @@ func closeConnection(client *clients.WebSocketClient) {
 	delete(clientMap, client.GetUserId())
 }
 
-func handleSocketConn(w http.ResponseWriter, r *http.Request) {
+func HandleSocketConn(w http.ResponseWriter, r *http.Request) {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		fmt.Printf("Error: %s\n", err)
@@ -69,22 +69,4 @@ func handleSocketConn(w http.ResponseWriter, r *http.Request) {
 		// Print the message to the console
 		fmt.Printf("%s id=%s sent: %s to %s\n", conn.RemoteAddr(), parsedMessage.FromUser, parsedMessage.Content, parsedMessage.ToUser)
 	}
-}
-
-func startServer() {
-	http.HandleFunc("/echo", handleSocketConn)
-
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "statics/client1.html")
-	})
-	http.HandleFunc("/user2", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "statics/client2.html")
-	})
-
-	http.ListenAndServe(":8083", nil)
-}
-
-// initial implementation borrowed from https://gowebexamples.com/websockets/
-func main() {
-	startServer()
 }

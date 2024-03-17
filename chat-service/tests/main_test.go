@@ -3,10 +3,11 @@ package main
 import (
 	"testing"
 	"workout-planner/chat/clients"
+	"workout-planner/chat/config"
 )
 
 func TestTwoClients(t *testing.T) {
-	go startServer()
+	go config.StartServer()
 
 	client1, err := clients.Connect("1")
 	if err != nil {
