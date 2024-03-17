@@ -5,7 +5,7 @@ import (
 	"workout-planner/chat/api/handler"
 )
 
-func StartServer() {
+func StartServer(handler *handler.SocketHandler) {
 	http.HandleFunc("/echo", handler.HandleSocketConn)
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
