@@ -5,31 +5,35 @@ import (
 	"net/http"
 	"workout-planner/chat/clients"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
+	"github.com/jmoiron/sqlx"
 )
 
 type SocketHandler struct {
-	clientMap map[string]*clients.WebSocketClient
+	db        *sqlx.DB
+	clientMap map[uuid.UUID]*clients.WebSocketClient
 	upgrader  websocket.Upgrader
 }
 
 type Message struct {
-	FromUser string `json:"fromUser"`
-	ToUser   string `json:"toUser"`
-	Content  string `json:"content"`
+	Content  string    `json:"content"`
+	FromUser uuid.UUID `json:"fromUser"`
+	ToUser   uuid.UUID `json:"toUser"`
 }
 
-func New() *SocketHandler {
+func New(db *sqlx.DB) *SocketHandler {
 	return &SocketHandler{
-		clientMap: make(map[string]*clients.WebSocketClient),
+		clientMap: make(map[uuid.UUID]*clients.WebSocketClient),
 		upgrader: websocket.Upgrader{
 			ReadBufferSize:  1024,
 			WriteBufferSize: 1024,
 		},
+		db: db,
 	}
 }
 
-func (h *SocketHandler) CloseConnection(client *clients.WebSocketClient, userId string) {
+func (h *SocketHandler) CloseConnection(client *clients.WebSocketClient, userId uuid.UUID) {
 	if client != nil {
 		client.CloseConn()
 	}
@@ -48,12 +52,18 @@ func (h *SocketHandler) HandleSocketConn(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	userUUID, err := uuid.Parse(userId)
+	if err != nil {
+		fmt.Println("User ID not valid")
+		return
+	}
+
 	fmt.Printf("User %s connected\n", userId)
 
-	socketClient := clients.NewSocketClient(conn, userId)
-	h.clientMap[userId] = socketClient
+	socketClient := clients.NewSocketClient(conn, userUUID)
+	h.clientMap[userUUID] = socketClient
 
-	defer h.CloseConnection(socketClient, userId)
+	defer h.CloseConnection(socketClient, userUUID)
 
 	for {
 		// Read message from browser
@@ -61,7 +71,7 @@ func (h *SocketHandler) HandleSocketConn(w http.ResponseWriter, r *http.Request)
 		err := conn.ReadJSON(&parsedMessage)
 		if err != nil {
 			fmt.Println(err, "Problem reading json message")
-			h.CloseConnection(socketClient, userId)
+			h.CloseConnection(socketClient, userUUID)
 			return
 		}
 
@@ -82,6 +92,6 @@ func (h *SocketHandler) HandleSocketConn(w http.ResponseWriter, r *http.Request)
 	}
 }
 
-func (h *SocketHandler) GetClient(userId string) *clients.WebSocketClient {
+func (h *SocketHandler) GetClient(userId uuid.UUID) *clients.WebSocketClient {
 	return h.clientMap[userId]
 }

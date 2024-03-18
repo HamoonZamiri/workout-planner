@@ -3,10 +3,15 @@ package main
 import (
 	"workout-planner/chat/api/handler"
 	"workout-planner/chat/config"
+	"workout-planner/chat/database"
 )
 
-// initial implementation borrowed from https://gowebexamples.com/websockets/
 func main() {
-	handler := handler.New()
+	db, err := database.New()
+	if err != nil {
+		panic(err)
+	}
+
+	handler := handler.New(db)
 	config.StartServer(handler)
 }
