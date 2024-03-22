@@ -2,6 +2,7 @@ package database
 
 import (
 	"errors"
+	"workout-planner/chat/models"
 
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
@@ -17,19 +18,6 @@ var schema = `
     created_at timestamp default now()
   );`
 
-type Message struct {
-	Content  string    `db:"content"`
-	FromUser uuid.UUID `db:"from_user"`
-	ToUser   uuid.UUID `db:"to_user"`
-	ID       uuid.UUID `db:"id"`
-}
-
-type CreateMessage struct {
-	content string
-	from    uuid.UUID
-	to      uuid.UUID
-}
-
 func New() (*sqlx.DB, error) {
 	db, err := sqlx.Connect("postgres", "user=postgres dbname=chat_service sslmode=disable")
 	if err != nil {
@@ -39,15 +27,15 @@ func New() (*sqlx.DB, error) {
 	return db, nil
 }
 
-func NewDbMessage(from, to uuid.UUID, content string) *CreateMessage {
-	return &CreateMessage{
-		content: content,
-		from:    from,
-		to:      to,
+func NewDbMessage(from, to uuid.UUID, content string) *models.CreateMessage {
+	return &models.CreateMessage{
+		Content: content,
+		From:    from,
+		To:      to,
 	}
 }
 
-func InsertMessage(db *sqlx.DB, message CreateMessage) error {
+func InsertMessage(db *sqlx.DB, message models.CreateMessage) error {
 	_, err := db.NamedExec("INSERT INTO message (from_user, to_user, content) VALUES (:from,:to,:content)", message)
 	if err != nil {
 		return err
@@ -55,8 +43,8 @@ func InsertMessage(db *sqlx.DB, message CreateMessage) error {
 	return nil
 }
 
-func GetMessageById(db *sqlx.DB, id uuid.UUID) (*Message, error) {
-	message := Message{}
+func GetMessageById(db *sqlx.DB, id uuid.UUID) (*models.DBMessage, error) {
+	message := models.DBMessage{}
 	err := db.Get(&message, "SELECT * FROM message WHERE id = $1", id)
 	if err != nil {
 		return nil, err
@@ -64,8 +52,8 @@ func GetMessageById(db *sqlx.DB, id uuid.UUID) (*Message, error) {
 	return &message, nil
 }
 
-func GetMessageHistory(db *sqlx.DB, from, to uuid.UUID) (*[]Message, error) {
-	messages := []Message{}
+func GetMessageHistory(db *sqlx.DB, from, to uuid.UUID) (*[]models.DBMessage, error) {
+	messages := []models.DBMessage{}
 	err := db.Select(&messages, "SELECT * FROM message WHERE (from = $1 AND to = $2 OR from = $2 AND to = $1) ORDER BY created_at", from, to)
 	if err != nil {
 		return nil, err
