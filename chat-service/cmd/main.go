@@ -4,6 +4,7 @@ import (
 	"workout-planner/chat/api/handler"
 	"workout-planner/chat/config"
 	"workout-planner/chat/database"
+	"workout-planner/chat/service"
 )
 
 func main() {
@@ -11,7 +12,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	msgService := service.NewMessageService(db)
 
-	handler := handler.New(db)
+	handler := handler.New(msgService)
 	config.StartServer(handler)
 }

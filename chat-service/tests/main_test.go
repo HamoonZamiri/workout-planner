@@ -6,6 +6,7 @@ import (
 	"workout-planner/chat/clients"
 	"workout-planner/chat/config"
 	"workout-planner/chat/database"
+	"workout-planner/chat/service"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -18,7 +19,8 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	h = handler.New(db)
+	msgService := service.NewMessageService(db)
+	h = handler.New(msgService)
 	go config.StartServer(h)
 }
 

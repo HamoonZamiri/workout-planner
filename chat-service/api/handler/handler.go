@@ -4,16 +4,16 @@ import (
 	"fmt"
 	"net/http"
 	"workout-planner/chat/clients"
+	"workout-planner/chat/service"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	"github.com/jmoiron/sqlx"
 )
 
 type SocketHandler struct {
-	db        *sqlx.DB
-	clientMap map[uuid.UUID]*clients.WebSocketClient
-	upgrader  websocket.Upgrader
+	msgService service.MessageService
+	clientMap  map[uuid.UUID]*clients.WebSocketClient
+	upgrader   websocket.Upgrader
 }
 
 type Message struct {
@@ -22,14 +22,14 @@ type Message struct {
 	ToUser   uuid.UUID `json:"toUser"`
 }
 
-func New(db *sqlx.DB) *SocketHandler {
+func New(msgService service.MessageService) *SocketHandler {
 	return &SocketHandler{
 		clientMap: make(map[uuid.UUID]*clients.WebSocketClient),
 		upgrader: websocket.Upgrader{
 			ReadBufferSize:  1024,
 			WriteBufferSize: 1024,
 		},
-		db: db,
+		msgService: msgService,
 	}
 }
 
@@ -86,6 +86,7 @@ func (h *SocketHandler) HandleSocketConn(w http.ResponseWriter, r *http.Request)
 		}
 
 		// TODO: save the message to the database
+		h.msgService.SendMessage(parsedMessage.FromUser, parsedMessage.ToUser, parsedMessage.Content)
 
 		// Print the message to the console
 		fmt.Printf("%s id=%s sent: %s to %s\n", conn.RemoteAddr(), parsedMessage.FromUser, parsedMessage.Content, parsedMessage.ToUser)
