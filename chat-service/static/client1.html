@@ -5,7 +5,9 @@
 <script>
   let input = document.getElementById("input");
   let output = document.getElementById("output");
-  let socket = new WebSocket("ws://localhost:8083/echo?userId=1");
+  let socket = new WebSocket(
+    "ws://localhost:8083/echo?userId=78659bf8-4b73-41be-a80d-9056cb36bbb7",
+  );
 
   socket.onopen = function () {
     output.innerHTML += "Status: Connected\n";
@@ -21,8 +23,8 @@
 
   function send() {
     const obj = {
-      fromUser: "1",
-      toUser: "2",
+      fromUser: "78659bf8-4b73-41be-a80d-9056cb36bbb7",
+      toUser: "ff347e0d-eb03-43e5-9268-701806e8ed33",
       content: input.value,
     };
     socket.send(JSON.stringify(obj));
