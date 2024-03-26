@@ -12,14 +12,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var h *handler.SocketHandler
+var (
+	h          *handler.SocketHandler
+	msgService service.MessageService
+)
 
 func init() {
 	db, err := database.New()
 	if err != nil {
 		panic(err)
 	}
-	msgService := service.NewMessageService(db)
+	msgService = service.NewMessageService(db)
 	h = handler.New(msgService)
 	go config.StartServer(h)
 }
@@ -58,4 +61,9 @@ func TestTwoClients(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Equal(t, "Hello", message, "Message should be 'Hello'")
+
+	msgs, err := msgService.GetMessageHistory(id1, id2)
+	assert.Nil(t, err)
+
+	assert.Equal(t, 1, len(*msgs))
 }
