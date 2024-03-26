@@ -1,7 +1,7 @@
 package database
 
 import (
-	"errors"
+	"log/slog"
 	"workout-planner/chat/models"
 
 	"github.com/google/uuid"
@@ -54,12 +54,10 @@ func GetMessageById(db *sqlx.DB, id uuid.UUID) (*models.DBMessage, error) {
 
 func GetMessageHistory(db *sqlx.DB, from, to uuid.UUID) (*[]models.DBMessage, error) {
 	messages := []models.DBMessage{}
-	err := db.Select(&messages, "SELECT * FROM message WHERE (from = $1 AND to = $2 OR from = $2 AND to = $1) ORDER BY created_at", from, to)
+	err := db.Select(&messages, "SELECT * FROM message WHERE (from_user = $1 AND to_user = $2) OR (from_user = $2 AND to_user = $1) ORDER BY created_at", from, to)
 	if err != nil {
+		slog.Error("SELECT message history failed", "error", err)
 		return nil, err
-	}
-	if len(messages) == 0 {
-		return nil, errors.New("no message history found between the two users")
 	}
 
 	return &messages, nil
