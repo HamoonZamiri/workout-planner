@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log/slog"
 	"net/http"
 	"path/filepath"
 	"runtime"
@@ -20,5 +21,6 @@ func StartServer(handler *handler.SocketHandler) {
 		http.ServeFile(w, r, filepath.Join(staticDir, "client2.html"))
 	})
 
+	slog.Info("Listening on Port: 8083")
 	http.ListenAndServe(":8083", nil)
 }
