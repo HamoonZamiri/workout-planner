@@ -2,12 +2,17 @@ package handler
 
 import (
 	"fmt"
+	"log/slog"
 	"net/http"
+	"path/filepath"
+	"runtime"
 	"workout-planner/chat/clients"
+	"workout-planner/chat/config"
 	"workout-planner/chat/service"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
+	"github.com/joho/godotenv"
 )
 
 type SocketHandler struct {
@@ -30,6 +35,40 @@ func New(msgService service.MessageService) *SocketHandler {
 			WriteBufferSize: 1024,
 		},
 		msgService: msgService,
+	}
+}
+
+func (h *SocketHandler) StartServer() {
+	_, currentFile, _, _ := runtime.Caller(0)
+	staticDir := filepath.Join(filepath.Dir(currentFile), "../../static")
+	mainDir := filepath.Join(filepath.Dir(currentFile), "../../")
+
+	// load environment variables
+	err := godotenv.Load(filepath.Join(mainDir, ".env"))
+	if err != nil {
+		panic(err)
+	}
+
+	http.HandleFunc("/echo", h.HandleSocketConn)
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, filepath.Join(staticDir, "client1.html"))
+	})
+	http.HandleFunc("/user2", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, filepath.Join(staticDir, "client2.html"))
+	})
+
+	port, err := config.GetEnv("PORT")
+	if err != nil {
+		slog.Error("Error getting PORT environment variable")
+		panic(err)
+	}
+
+	addr := fmt.Sprintf(":%s", port)
+	slog.Info(fmt.Sprintf("Listening on port: %s", port))
+	err = http.ListenAndServe(addr, nil)
+	if err != nil {
+		panic(err)
 	}
 }
 

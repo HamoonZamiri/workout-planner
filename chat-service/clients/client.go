@@ -2,8 +2,10 @@ package clients
 
 import (
 	"fmt"
+	"log/slog"
 	"net/url"
 	"time"
+	"workout-planner/chat/config"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
@@ -37,7 +39,14 @@ func NewSocketClient(conn *websocket.Conn, userId uuid.UUID) *WebSocketClient {
 }
 
 func Connect(userId uuid.UUID) (*WebSocketClient, error) {
-	u := url.URL{Scheme: "ws", Host: "localhost:8083", Path: "/echo"}
+	port, err := config.GetEnv("PORT")
+	if err != nil {
+		slog.Error("Error getting PORT environment variable")
+		return nil, err
+	}
+	host := fmt.Sprintf("localhost:%s", port)
+
+	u := url.URL{Scheme: "ws", Host: host, Path: "/echo"}
 	query := u.Query()
 	query.Set("userId", userId.String())
 	u.RawQuery = query.Encode()

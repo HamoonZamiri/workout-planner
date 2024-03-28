@@ -2,9 +2,9 @@ package main
 
 import (
 	"testing"
+	"time"
 	"workout-planner/chat/api/handler"
 	"workout-planner/chat/clients"
-	"workout-planner/chat/config"
 	"workout-planner/chat/database"
 	"workout-planner/chat/service"
 
@@ -24,7 +24,8 @@ func init() {
 	}
 	msgService = service.NewMessageService(db)
 	h = handler.New(msgService)
-	go config.StartServer(h)
+	go h.StartServer()
+	time.Sleep(1 * time.Second)
 }
 
 func TestClientConnect(t *testing.T) {
