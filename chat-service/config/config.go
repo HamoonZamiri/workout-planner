@@ -1,26 +1,14 @@
 package config
 
 import (
-	"log/slog"
-	"net/http"
-	"path/filepath"
-	"runtime"
-	"workout-planner/chat/api/handler"
+	"errors"
+	"os"
 )
 
-func StartServer(handler *handler.SocketHandler) {
-	_, currentFile, _, _ := runtime.Caller(0)
-	staticDir := filepath.Join(filepath.Dir(currentFile), "../static")
-
-	http.HandleFunc("/echo", handler.HandleSocketConn)
-
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, filepath.Join(staticDir, "client1.html"))
-	})
-	http.HandleFunc("/user2", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, filepath.Join(staticDir, "client2.html"))
-	})
-
-	slog.Info("Listening on Port: 8083")
-	http.ListenAndServe(":8083", nil)
+func GetEnv(key string) (string, error) {
+	val := os.Getenv(key)
+	if val == "" {
+		return "", errors.New("environment variable not found")
+	}
+	return val, nil
 }
