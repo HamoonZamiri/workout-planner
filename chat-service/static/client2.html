@@ -1,0 +1,30 @@
+<!-- websockets.html -->
+<input id="input" type="text" />
+<button onclick="send()">Send</button>
+<pre id="output"></pre>
+<script>
+  let input = document.getElementById("input");
+  let output = document.getElementById("output");
+  let socket = new WebSocket(
+    "ws://localhost:8083/echo?userId=ff347e0d-eb03-43e5-9268-701806e8ed33",
+  );
+
+  socket.onopen = function () {
+    output.innerHTML += "Status: Connected\n";
+  };
+
+  socket.onmessage = function (e) {
+    output.innerHTML += "User 1: " + e.data + "\n";
+  };
+
+  function send() {
+    const obj = {
+      fromUser: "ff347e0d-eb03-43e5-9268-701806e8ed33",
+      toUser: "78659bf8-4b73-41be-a80d-9056cb36bbb7",
+      content: input.value,
+    };
+    socket.send(JSON.stringify(obj));
+    output.innerHTML += "Me: " + input.value + "\n";
+    input.value = "";
+  }
+</script>
